@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: chitfund-db
+    restart: always
+    environment:
+      POSTGRES_DB: chitfund_db
+      POSTGRES_USER: chitfund_admin
+      POSTGRES_PASSWORD: chitfund_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U chitfund_admin -d chitfund_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend/fastapi-app
+      dockerfile: Dockerfile
+    container_name: chitfund-backend
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://chitfund_admin:chitfund_password@db:5432/chitfund_db
+      - ENVIRONMENT=dev
+    volumes:
+      - ./backend/fastapi-app:/app
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend/angular-app
+      dockerfile: Dockerfile
+    container_name: chitfund-frontend
+    restart: always
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./frontend/angular-app:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
