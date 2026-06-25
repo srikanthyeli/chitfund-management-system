@@ -28,10 +28,22 @@ import { AuctionDetailPage } from './pages/Auctions/AuctionDetailPage';
 import { CollectionsPage } from './pages/Collections/CollectionsPage';
 import { CollectionDetailsPage } from './pages/Collections/CollectionDetailsPage';
 import { MemberPassbookPage } from './pages/Collections/MemberPassbookPage';
-import { GlobalFinancialSummaryPage } from './pages/Payouts/GlobalFinancialSummaryPage';
+import { FinancialSummaryPage } from './features/financial-summary/pages/FinancialSummaryPage';
 import { ChitFinancialSummaryPage } from './pages/Payouts/ChitFinancialSummaryPage';
 import { WinnerPayoutListPage } from './pages/Payouts/WinnerPayoutListPage';
 import { WinnerPayoutDetailPage } from './pages/Payouts/WinnerPayoutDetailPage';
+
+// Member Portal Pages
+import { MemberDashboardPage } from './features/member-portal/pages/MemberDashboardPage';
+import { MyChitsPage } from './features/member-portal/pages/MyChitsPage';
+import { MyPaymentsPage } from './features/member-portal/pages/MyPaymentsPage';
+import { MyReceiptsPage } from './features/member-portal/pages/MyReceiptsPage';
+import { MemberPassbookPage as MemberPortalPassbookPage } from './features/member-portal/pages/MemberPassbookPage';
+import { MemberAuctionResultsPage } from './features/member-portal/pages/MemberAuctionResultsPage';
+import { MyWinnerPayoutsPage } from './features/member-portal/pages/MyWinnerPayoutsPage';
+import { MemberNotificationsPage } from './features/member-portal/pages/MemberNotificationsPage';
+import { MemberProfilePage } from './features/member-portal/pages/MemberProfilePage';
+import { MyChitDetailPage } from './features/member-portal/pages/MyChitDetailPage';
 
 function App() {
   return (
@@ -72,7 +84,7 @@ function App() {
             <Route path="/organizer/members/:memberId/passbook" element={<MemberPassbookPage />} />
             
             {/* Phase 6: Financial Summary & Closure */}
-            <Route path="/organizer/financial-summary" element={<GlobalFinancialSummaryPage />} />
+            <Route path="/organizer/financial-summary" element={<FinancialSummaryPage />} />
             <Route path="/organizer/chit-groups/:chitGroupId/financial-summary" element={<ChitFinancialSummaryPage />} />
             
             {/* Phase 6.1: Winner Payout Receipt & Tracking */}
@@ -85,6 +97,20 @@ function App() {
             <Route path="/admin/organizers" element={<OrganizerList />} />
             <Route path="/admin/organizers/new" element={<CreateOrganizer />} />
             <Route path="/admin/organizers/:id" element={<div className="p-4">Organizer Detail Placeholder</div>} />
+          </Route>
+
+          {/* Member Portal Routes */}
+          <Route element={<ProtectedRoute allowedRoles={['MEMBER']} />}>
+            <Route path="/member/dashboard" element={<MemberDashboardPage />} />
+            <Route path="/member/chits" element={<MyChitsPage />} />
+            <Route path="/member/chits/:id" element={<MyChitDetailPage />} />
+            <Route path="/member/payments" element={<MyPaymentsPage />} />
+            <Route path="/member/receipts" element={<MyReceiptsPage />} />
+            <Route path="/member/passbook" element={<MemberPortalPassbookPage />} />
+            <Route path="/member/auction-results" element={<MemberAuctionResultsPage />} />
+            <Route path="/member/winner-payouts" element={<MyWinnerPayoutsPage />} />
+            <Route path="/member/notifications" element={<MemberNotificationsPage />} />
+            <Route path="/member/profile" element={<MemberProfilePage />} />
           </Route>
         </Route>
         

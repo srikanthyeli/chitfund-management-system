@@ -482,3 +482,29 @@ class ChitWinnerPayoutActivityLog(Base):
     winner_payout = relationship("ChitWinnerPayout", foreign_keys="[ChitWinnerPayoutActivityLog.winner_payout_id]")
     performed_by_user = relationship("User", foreign_keys="[ChitWinnerPayoutActivityLog.performed_by_user_id]")
 
+
+class Notification(Base, AuditMixin):
+    __tablename__ = "notifications"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    tenant_id = Column(UUID(as_uuid=True), ForeignKey("organizers.id", ondelete="CASCADE"), nullable=False, index=True)
+    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    member_id = Column(UUID(as_uuid=True), ForeignKey("members.id", ondelete="CASCADE"), nullable=True, index=True)
+    
+    notification_type = Column(String(50), nullable=False, index=True)
+    title = Column(String(200), nullable=False)
+    message = Column(Text, nullable=False)
+    
+    reference_type = Column(String(50), nullable=True)
+    reference_id = Column(String(100), nullable=True)
+    
+    is_read = Column(Boolean, nullable=False, default=False)
+    read_at = Column(DateTime, nullable=True)
+
+    organizer = relationship("Organizer", foreign_keys="[Notification.tenant_id]")
+    user = relationship("User", foreign_keys="[Notification.user_id]")
+    member = relationship("Member", foreign_keys="[Notification.member_id]")
+
+    __table_args__ = (
+        Index('idx_notifications_user_is_read', 'user_id', 'is_read'),
+    )

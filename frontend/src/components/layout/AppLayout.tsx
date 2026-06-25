@@ -32,11 +32,28 @@ export const AppLayout: React.FC = () => {
         { path: '/organizer/winner-payouts', label: 'Payouts', icon: Trophy },
         { path: '/organizer/financial-summary', label: 'Summary', icon: PieChart },
       ];
+    } else if (user?.role === 'MEMBER') {
+      return [
+        { path: '/member/dashboard', label: 'Dashboard', icon: Home, isMain: true },
+        { path: '/member/chits', label: 'My Chits', icon: Briefcase, isMain: true },
+        { path: '/member/payments', label: 'My Payments', icon: IndianRupee, isMain: true },
+        { path: '/member/receipts', label: 'My Receipts', icon: Wallet, isMain: true },
+        { path: '/member/more', label: 'More', icon: MoreHorizontal, isMain: true, isMobileOnly: true },
+        { path: '/member/passbook', label: 'My Passbook', icon: PieChart, isMore: true },
+        { path: '/member/auction-results', label: 'Auction Results', icon: Trophy, isMore: true },
+        { path: '/member/winner-payouts', label: 'Winner Payouts', icon: IndianRupee, isMore: true },
+        { path: '/member/notifications', label: 'Notifications', icon: Bell, isMore: true },
+        { path: '/member/profile', label: 'Profile', icon: Settings, isMore: true },
+      ];
     }
     return [];
   };
 
   const navItems = getNavItems();
+  const desktopNavItems = navItems.filter(i => !i.isMobileOnly);
+  const mobileBottomNavItems = navItems.filter(i => i.isMain);
+  const mobileMoreItems = navItems.filter(i => i.isMore || (!i.isMain && !i.isMobileOnly));
+
 
   return (
     <div className="flex h-screen w-full bg-gray-50 dark:bg-gray-900 overflow-hidden relative">
@@ -70,7 +87,7 @@ export const AppLayout: React.FC = () => {
         </div>
         
         <nav className={clsx("flex-1 py-4 space-y-2 overflow-y-auto", isSidebarCollapsed ? "px-2" : "px-4")}>
-          {navItems.map((item) => (
+          {desktopNavItems.map((item) => (
             <NavLink
               key={item.path}
               to={item.path}
@@ -160,7 +177,7 @@ export const AppLayout: React.FC = () => {
               </button>
             </div>
             <nav className="flex flex-col space-y-2 px-2 text-lg font-medium text-gray-700 dark:text-gray-300">
-              {navItems.slice(5).map((item) => (
+              {mobileMoreItems.map((item) => (
                 <NavLink
                   key={item.path}
                   to={item.path}
@@ -189,7 +206,7 @@ export const AppLayout: React.FC = () => {
         </div>
 
         <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 flex justify-around items-center h-16 z-20 pb-safe shadow-[0_-10px_20px_-10px_rgba(0,0,0,0.1)] overflow-x-auto px-1">
-          {navItems.slice(0, 5).map((item) => {
+          {mobileBottomNavItems.map((item) => {
             const isActive = location.pathname.startsWith(item.path);
             return (
               <NavLink

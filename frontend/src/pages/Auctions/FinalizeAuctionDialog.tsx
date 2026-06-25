@@ -41,35 +41,32 @@ const FinalizeAuctionDialog: React.FC<Props> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center" style={{ background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(4px)' }}>
-      <div
-        className="w-full sm:max-w-md rounded-t-3xl sm:rounded-2xl border p-6"
-        style={{ background: 'var(--surface-card)', borderColor: 'var(--border-subtle)' }}
-      >
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm">
+      <div className="w-full sm:max-w-md rounded-t-3xl sm:rounded-2xl border p-6 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 shadow-2xl">
         {/* Header */}
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: '#f59e0b20', color: '#f59e0b' }}>
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400">
               <AlertTriangle size={20} />
             </div>
             <div>
-              <h2 className="font-bold text-lg" style={{ color: 'var(--text-primary)' }}>Finalize Auction</h2>
-              <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>Month {auctionMonth} — This cannot be undone</p>
+              <h2 className="font-bold text-lg text-gray-900 dark:text-white">Finalize Auction</h2>
+              <p className="text-xs text-gray-500 dark:text-gray-400">Month {auctionMonth} — This cannot be undone</p>
             </div>
           </div>
-          <button onClick={onClose} className="p-2 rounded-xl hover:bg-white/10">
-            <X size={18} style={{ color: 'var(--text-secondary)' }} />
+          <button onClick={onClose} className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+            <X size={18} className="text-gray-500 dark:text-gray-400" />
           </button>
         </div>
 
         {/* Winner card */}
-        <div className="rounded-xl p-4 mb-4 border" style={{ background: '#10b98115', borderColor: '#10b98130' }}>
+        <div className="rounded-xl p-4 mb-4 border bg-emerald-50 dark:bg-emerald-900/20 border-emerald-100 dark:border-emerald-800/30">
           <div className="flex items-center gap-2 mb-3">
-            <Trophy size={16} className="text-yellow-400" />
-            <span className="font-semibold text-sm" style={{ color: 'var(--text-primary)' }}>Winner</span>
+            <Trophy size={16} className="text-yellow-500" />
+            <span className="font-semibold text-sm text-gray-900 dark:text-white">Winner</span>
           </div>
-          <p className="font-bold text-base" style={{ color: 'var(--text-primary)' }}>{winnerName}</p>
-          <p className="text-xs mt-0.5" style={{ color: 'var(--text-secondary)' }}>Highest bid: {fmt(winningDiscount)}</p>
+          <p className="font-bold text-base text-gray-900 dark:text-white">{winnerName}</p>
+          <p className="text-xs mt-0.5 text-gray-600 dark:text-gray-400">Highest bid: {fmt(winningDiscount)}</p>
         </div>
 
         {/* Summary table */}
@@ -80,26 +77,26 @@ const FinalizeAuctionDialog: React.FC<Props> = ({
             { label: 'Auction Discount', value: `- ${fmt(winningDiscount)}`, icon: <TrendingDown size={13} /> },
           ].map(row => (
             <div key={row.label} className="flex items-center justify-between text-sm">
-              <div className="flex items-center gap-2" style={{ color: 'var(--text-secondary)' }}>
+              <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
                 {row.icon} {row.label}
               </div>
-              <span style={{ color: 'var(--text-primary)' }}>{row.value}</span>
+              <span className="text-gray-900 dark:text-white font-medium">{row.value}</span>
             </div>
           ))}
-          <div className="border-t pt-2 flex items-center justify-between font-bold text-sm" style={{ borderColor: 'var(--border-subtle)' }}>
-            <span style={{ color: 'var(--text-primary)' }}>Winner Payout</span>
-            <span className="text-emerald-400">{fmt(winnerPayout)}</span>
+          <div className="border-t border-gray-200 dark:border-gray-700 pt-2 flex items-center justify-between font-bold text-sm">
+            <span className="text-gray-900 dark:text-white">Winner Payout</span>
+            <span className="text-emerald-600 dark:text-emerald-400">{fmt(winnerPayout)}</span>
           </div>
           <div className="flex items-center justify-between text-sm pt-1">
-            <div className="flex items-center gap-2" style={{ color: 'var(--text-secondary)' }}>
+            <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
               <Users size={13} /> Bonus / Share ({totalShares} shares)
             </div>
-            <span className="font-semibold" style={{ color: 'var(--accent-primary)' }}>{fmt(bonusPerShare)}</span>
+            <span className="font-semibold text-purple-600 dark:text-purple-400">{fmt(bonusPerShare)}</span>
           </div>
         </div>
 
         <div className="flex gap-3">
-          <button type="button" onClick={onClose} className="flex-1 py-3 rounded-xl border text-sm font-semibold" style={{ borderColor: 'var(--border-subtle)', color: 'var(--text-secondary)' }}>
+          <button type="button" onClick={onClose} className="flex-1 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
             Cancel
           </button>
           <button

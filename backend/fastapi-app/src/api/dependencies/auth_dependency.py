@@ -60,3 +60,12 @@ async def get_current_organizer(
     if current_user.role != "ORGANIZER":
         raise HTTPException(status_code=403, detail="Organizer role required")
     return current_user
+
+async def get_current_member(
+    current_user: User = Depends(get_current_user)
+) -> User:
+    if current_user.role != "MEMBER":
+        raise HTTPException(status_code=403, detail="Member role required")
+    if not current_user.member_id:
+        raise HTTPException(status_code=403, detail="No member profile linked to this user")
+    return current_user

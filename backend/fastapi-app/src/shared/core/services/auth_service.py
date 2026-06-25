@@ -7,6 +7,7 @@ from src.shared.core.repository.user_repository import UserRepository
 from src.shared.core.repository.organizer_repository import OrganizerRepository
 from src.shared.core.repository.user_session_repository import UserSessionRepository
 from src.shared.core.repository.login_audit_repository import LoginAuditRepository
+from src.shared.core.repository.member_repository import MemberRepository
 
 from src.shared.common.helpers.password_helper import verify_password
 from src.shared.common.helpers.jwt_helper import create_access_token, create_refresh_token, decode_token
@@ -21,6 +22,7 @@ class AuthService:
         self.organizer_repo = OrganizerRepository(db_object)
         self.session_repo = UserSessionRepository(db_object)
         self.audit_repo = LoginAuditRepository(db_object)
+        self.member_repo = MemberRepository(db_object)
 
     async def _validate_user_credentials(self, mobile: str, password: str) -> User:
         user = await self.user_repo.get_user_by_mobile(mobile)
@@ -36,9 +38,7 @@ class AuthService:
             await self.audit_repo.create_log("LOGIN_FAILED", user_id=user.id, mobile=mobile, remarks="User is inactive")
             raise HTTPException(status_code=403, detail="User is inactive")
 
-        if user.role == "MEMBER":
-            await self.audit_repo.create_log("LOGIN_FAILED", user_id=user.id, mobile=mobile, remarks="Member login not allowed in Phase 1")
-            raise HTTPException(status_code=403, detail="Member login not available")
+
 
         if user.role == "ORGANIZER" and user.organizer_id:
             org = await self.organizer_repo.get_organizer_by_id(user.organizer_id)
@@ -101,9 +101,12 @@ class AuthService:
         # Log event
         await self.audit_repo.create_log(event_type, user_id=user.id, mobile=user.mobile, device_id=device_id)
 
-        # Get organizer name if applicable
+        # Get name based on role
         name = "Platform Admin"
-        if user.organizer_id:
+        if user.role == "MEMBER" and user.member_id:
+            member = await self.member_repo.get_member_by_id_and_organizer(user.member_id, user.organizer_id)
+            if member: name = member.full_name
+        elif user.organizer_id:
             org = await self.organizer_repo.get_organizer_by_id(user.organizer_id)
             if org: name = org.name
 
@@ -169,7 +172,10 @@ class AuthService:
     
     async def get_me(self, user: User):
         name = "Platform Admin"
-        if user.organizer_id:
+        if user.role == "MEMBER" and user.member_id:
+            member = await self.member_repo.get_member_by_id_and_organizer(user.member_id, user.organizer_id)
+            if member: name = member.full_name
+        elif user.organizer_id:
             org = await self.organizer_repo.get_organizer_by_id(user.organizer_id)
             if org: name = org.name
 

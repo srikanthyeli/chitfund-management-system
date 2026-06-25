@@ -5,6 +5,8 @@ from typing import Optional
 
 from src.shared.core.repository.member_repository import MemberRepository
 from src.shared.core.repository.member_activity_log_repository import MemberActivityLogRepository
+from src.shared.core.repository.user_repository import UserRepository
+from src.shared.common.helpers.password_helper import hash_password
 from src.api.models.models import User
 from src.api.schemas.member_schema import (
     MemberCreateRequest, MemberUpdateRequest, MemberStatusRequest, MemberMobileUpdateRequest
@@ -26,6 +28,7 @@ class MemberService:
         self.db = db_object
         self.member_repo = MemberRepository(db_object)
         self.activity_repo = MemberActivityLogRepository(db_object)
+        self.user_repo = UserRepository(db_object)
 
     async def create_member(self, current_user: User, request: MemberCreateRequest):
         if current_user.role != "ORGANIZER" or not current_user.organizer_id:
@@ -83,6 +86,22 @@ class MemberService:
                 remarks="Member registered",
                 performed_by=current_user.id
             )
+            
+            # Auto-provision User account for Member
+            hashed_pw = hash_password("Member@123")
+            user_data = {
+                "organizer_id": organizer_id,
+                "member_id": member.id,
+                "mobile": member.mobile,
+                "password_hash": hashed_pw,
+                "role": "MEMBER",
+                "is_active": True,
+                "must_change_password": True
+            }
+            # Ignore if user already exists (e.g. from previous manual seeding)
+            existing_user = await self.user_repo.get_user_by_mobile(member.mobile)
+            if not existing_user:
+                await self.user_repo.create_user(user_data)
 
         return member
 

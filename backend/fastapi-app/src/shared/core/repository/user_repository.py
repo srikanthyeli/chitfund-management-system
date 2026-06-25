@@ -34,14 +34,15 @@ class UserRepository:
         user_id = user_data.get("id") or uuid.uuid4()
         now = datetime.utcnow()
         query = """
-            INSERT INTO users (id, organizer_id, mobile, password_hash, role, is_active, must_change_password, created_at, is_deleted, version)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, FALSE, 1)
+            INSERT INTO users (id, organizer_id, member_id, mobile, password_hash, role, is_active, must_change_password, created_at, is_deleted, version)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, FALSE, 1)
             RETURNING id, organizer_id, member_id, mobile, password_hash, role, is_active, last_login_at, must_change_password
         """
         row = await self.db_object.fetchrow(
             query,
             user_id,
             user_data.get("organizer_id"),
+            user_data.get("member_id"),
             user_data["mobile"],
             user_data["password_hash"],
             user_data.get("role", "MEMBER"),

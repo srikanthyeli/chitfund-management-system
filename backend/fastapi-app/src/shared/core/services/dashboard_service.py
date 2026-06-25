@@ -23,13 +23,43 @@ class DashboardService:
         member_summary = await self.member_repo.get_member_summary(current_user.organizer_id)
         total_members = member_summary.get("total_members", 0)
 
+        # Get active chits count
+        active_chits = await self.db.fetchval(
+            "SELECT COUNT(id) FROM chit_groups WHERE organizer_id = $1 AND status = 'ACTIVE' AND is_deleted = FALSE",
+            current_user.organizer_id
+        ) or 0
+
+        # Collections due today
+        collections_due_today = await self.db.fetchval(
+            "SELECT COALESCE(SUM(net_payable_amount), 0) FROM monthly_member_dues WHERE organizer_id = $1 AND due_date = CURRENT_DATE",
+            current_user.organizer_id
+        ) or 0.0
+
+        # Collections received today
+        collections_received_today = await self.db.fetchval(
+            "SELECT COALESCE(SUM(payment_amount), 0) FROM chit_payment_receipts WHERE organizer_id = $1 AND DATE(payment_date) = CURRENT_DATE AND status = 'SUCCESS'",
+            current_user.organizer_id
+        ) or 0.0
+
+        # Pending amount (past due and due today)
+        pending_amount = await self.db.fetchval(
+            "SELECT COALESCE(SUM(remaining_amount), 0) FROM monthly_member_dues WHERE organizer_id = $1 AND payment_status != 'PAID' AND due_date <= CURRENT_DATE",
+            current_user.organizer_id
+        ) or 0.0
+
+        # Auctions today
+        auctions_today = await self.db.fetchval(
+            "SELECT COUNT(id) FROM chit_auctions WHERE organizer_id = $1 AND DATE(auction_date) = CURRENT_DATE AND status IN ('SCHEDULED', 'IN_PROGRESS', 'COMPLETED')",
+            current_user.organizer_id
+        ) or 0
+
         return {
             "organizer_name": org.name,
-            "active_chits": 0,
+            "active_chits": active_chits,
             "total_members": total_members,
-            "collections_due_today": 0,
-            "collections_received_today": 0,
-            "pending_amount": 0.0,
-            "auctions_today": 0
+            "collections_due_today": float(collections_due_today),
+            "collections_received_today": float(collections_received_today),
+            "pending_amount": float(pending_amount),
+            "auctions_today": auctions_today
         }
 
