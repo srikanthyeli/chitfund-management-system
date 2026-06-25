@@ -1,0 +1,166 @@
+:root {
+  --receipt-primary: #7c3aed;
+  --receipt-theme: #5F259F;
+  --receipt-success: #10b981;
+  --receipt-error: #ef4444;
+  --receipt-reversed: #dc2626;
+  --receipt-white: #ffffff;
+  --receipt-light-bg: #f9fafb;
+  --receipt-light-purple: #e9d5ff;
+  --badge-paid-bg: #d1fae5;
+  --badge-paid-text: #065f46;
+  --badge-partial-bg: #fef3c7;
+  --badge-partial-text: #92400e;
+  --text-primary: #1f2937;
+  --text-secondary: #4b5563;
+  --text-tertiary: #374151;
+  --text-dark: #111827;
+  --text-muted: #6b7280;
+  --text-light: #9ca3af;
+  --border-light: #e5e7eb;
+  --border-subtle: #f3f4f6;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--receipt-light-bg);
+  color: var(--text-primary);
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.receipt-card {
+  background: var(--receipt-white);
+  max-width: 600px;
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  border: 1px solid var(--border-light);
+}
+
+.receipt-header {
+  background-color: var(--receipt-theme);
+  color: var(--receipt-white);
+  padding: 24px;
+  text-align: center;
+}
+
+.receipt-header h1 {
+  margin: 0 0 8px 0;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.receipt-header h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 400;
+  opacity: 0.9;
+}
+
+.receipt-body {
+  padding: 24px;
+}
+
+.receipt-section {
+  margin-bottom: 24px;
+}
+
+.receipt-section-title {
+  font-size: 14px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 8px;
+}
+
+.receipt-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+
+.receipt-label {
+  color: var(--text-secondary);
+}
+
+.receipt-value {
+  color: var(--text-dark);
+  font-weight: 500;
+  text-align: right;
+}
+
+.receipt-value.highlight {
+  color: var(--receipt-primary);
+  font-weight: 600;
+}
+
+.net-amount {
+  background-color: var(--receipt-light-purple);
+  padding: 16px;
+  border-radius: 8px;
+  margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.net-amount .receipt-label {
+  color: var(--receipt-theme);
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.net-amount .receipt-value {
+  color: var(--receipt-theme);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.receipt-footer {
+  padding: 20px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+  border-top: 1px dashed var(--border-light);
+  background-color: var(--receipt-light-bg);
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-top: 12px;
+}
+
+.badge.paid {
+  background-color: var(--badge-paid-bg);
+  color: var(--badge-paid-text);
+}
+
+.badge.draft {
+  background-color: var(--border-light);
+  color: var(--text-secondary);
+}
+
+@media print {
+  body {
+    background-color: var(--receipt-white);
+    padding: 0;
+  }
+  .receipt-card {
+    box-shadow: none;
+    border: none;
+    max-width: 100%;
+  }
+}

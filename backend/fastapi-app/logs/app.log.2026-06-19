@@ -1,0 +1,78 @@
+2026-06-19 17:09:31 - passlib.handlers.bcrypt - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/home/srikanth/chitfund-management-system/backend/fastapi-app/venv/lib/python3.12/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2026-06-19 17:09:51 - src.shared.core.services.auth_service - INFO - Login success: User 72a0e6e6-c8fe-4753-868e-d01d3d851a6a (ORGANIZER) logged in successfully
+2026-06-19 17:09:51 - httpx - INFO - HTTP Request: POST http://testserver/api/v1/auth/login "HTTP/1.1 200 OK"
+2026-06-19 17:09:52 - src.shared.core.services.auth_service - WARNING - Login failed: User caf2a777-e03c-4332-8ed2-0007b182c9f8 is inactive
+2026-06-19 17:09:52 - src.api.main - ERROR - Application error: status_code=401, message='User account is disabled'
+2026-06-19 17:09:52 - httpx - INFO - HTTP Request: POST http://testserver/api/v1/auth/login "HTTP/1.1 401 Unauthorized"
+2026-06-19 17:09:54 - src.shared.core.services.auth_service - WARNING - Login failed: User efa10613-8ac0-4ec7-a45c-3dd414903857 with role MEMBER tried to login, which is not supported in MVP
+2026-06-19 17:09:54 - src.api.main - ERROR - Application error: status_code=403, message='Login is currently restricted to Admin and Organizers'
+2026-06-19 17:09:54 - httpx - INFO - HTTP Request: POST http://testserver/api/v1/auth/login "HTTP/1.1 403 Forbidden"
+2026-06-19 17:09:55 - src.shared.core.services.auth_service - WARNING - Login failed: Invalid password for mobile 8765432109
+2026-06-19 17:09:55 - src.api.main - ERROR - Application error: status_code=401, message='Invalid mobile number or password'
+2026-06-19 17:09:55 - httpx - INFO - HTTP Request: POST http://testserver/api/v1/auth/login "HTTP/1.1 401 Unauthorized"
+2026-06-19 17:09:55 - httpx - INFO - HTTP Request: GET http://testserver/api/v1/auth/me "HTTP/1.1 200 OK"
+2026-06-19 17:09:55 - src.shared.core.services.auth_service - WARNING - User validation failed: Invalid token
+2026-06-19 17:09:55 - src.api.main - ERROR - Application error: status_code=401, message='Invalid token'
+2026-06-19 17:09:55 - httpx - INFO - HTTP Request: GET http://testserver/api/v1/auth/me "HTTP/1.1 401 Unauthorized"
+2026-06-19 17:09:55 - src.shared.core.services.auth_service - INFO - Token refresh success: Issued new access token for user 72a0e6e6-c8fe-4753-868e-d01d3d851a6a
+2026-06-19 17:09:55 - httpx - INFO - HTTP Request: POST http://testserver/api/v1/auth/refresh "HTTP/1.1 200 OK"
+2026-06-19 17:09:55 - httpx - INFO - HTTP Request: GET http://testserver/api/v1/auth/health "HTTP/1.1 200 OK"
+2026-06-19 18:52:01 - src.shared.core.services.auth_service - INFO - Login success: User 58246331-bbf6-44ac-8f89-f1f3e3dd36aa (ORGANIZER) logged in successfully
+2026-06-19 18:52:01 - httpx - INFO - HTTP Request: POST http://testserver/api/v1/auth/login "HTTP/1.1 200 OK"
+2026-06-19 18:52:02 - src.shared.core.services.auth_service - WARNING - Login failed: User d688ff0f-e0a0-4175-9eed-1115000da1f0 is inactive
+2026-06-19 18:52:02 - src.api.main - ERROR - Application error: status_code=401, message='User account is disabled'
+2026-06-19 18:52:02 - httpx - INFO - HTTP Request: POST http://testserver/api/v1/auth/login "HTTP/1.1 401 Unauthorized"
+2026-06-19 18:52:03 - src.shared.core.services.auth_service - WARNING - Login failed: User 76fbdb29-b962-4212-aba5-7d21ece52496 with role MEMBER tried to login, which is not supported in MVP
+2026-06-19 18:52:03 - src.api.main - ERROR - Application error: status_code=403, message='Login is currently restricted to Admin and Organizers'
+2026-06-19 18:52:03 - httpx - INFO - HTTP Request: POST http://testserver/api/v1/auth/login "HTTP/1.1 403 Forbidden"
+2026-06-19 18:52:04 - src.shared.core.services.auth_service - WARNING - Login failed: Invalid password for mobile 8765432109
+2026-06-19 18:52:04 - src.api.main - ERROR - Application error: status_code=401, message='Invalid mobile number or password'
+2026-06-19 18:52:04 - httpx - INFO - HTTP Request: POST http://testserver/api/v1/auth/login "HTTP/1.1 401 Unauthorized"
+2026-06-19 18:52:04 - httpx - INFO - HTTP Request: GET http://testserver/api/v1/auth/me "HTTP/1.1 200 OK"
+2026-06-19 18:52:04 - src.shared.core.services.auth_service - WARNING - User validation failed: Invalid token
+2026-06-19 18:52:04 - src.api.main - ERROR - Application error: status_code=401, message='Invalid token'
+2026-06-19 18:52:04 - httpx - INFO - HTTP Request: GET http://testserver/api/v1/auth/me "HTTP/1.1 401 Unauthorized"
+2026-06-19 18:52:04 - src.shared.core.services.auth_service - INFO - Token refresh success: Issued new access token for user 58246331-bbf6-44ac-8f89-f1f3e3dd36aa
+2026-06-19 18:52:04 - httpx - INFO - HTTP Request: POST http://testserver/api/v1/auth/refresh "HTTP/1.1 200 OK"
+2026-06-19 18:52:04 - httpx - INFO - HTTP Request: GET http://testserver/api/v1/auth/health "HTTP/1.1 200 OK"
+2026-06-19 18:54:08 - src.shared.core.services.auth_service - INFO - Login success: User 782abac0-62fb-4a8d-85d5-f95e34f78027 (ORGANIZER) logged in successfully
+2026-06-19 18:54:08 - httpx - INFO - HTTP Request: POST http://testserver/api/v1/auth/login "HTTP/1.1 200 OK"
+2026-06-19 18:54:08 - src.shared.core.services.auth_service - WARNING - Login failed: User e6591ecc-87aa-429c-8f97-96211f5da148 is inactive
+2026-06-19 18:54:08 - src.api.main - ERROR - Application error: status_code=401, message='User account is disabled'
+2026-06-19 18:54:08 - httpx - INFO - HTTP Request: POST http://testserver/api/v1/auth/login "HTTP/1.1 401 Unauthorized"
+2026-06-19 18:54:09 - src.shared.core.services.auth_service - WARNING - Login failed: User f442cfd7-3ab7-4ae0-bc49-5b6443fde2db with role MEMBER tried to login, which is not supported in MVP
+2026-06-19 18:54:09 - src.api.main - ERROR - Application error: status_code=403, message='Login is currently restricted to Admin and Organizers'
+2026-06-19 18:54:09 - httpx - INFO - HTTP Request: POST http://testserver/api/v1/auth/login "HTTP/1.1 403 Forbidden"
+2026-06-19 18:54:10 - src.shared.core.services.auth_service - WARNING - Login failed: Invalid password for mobile 8765432109
+2026-06-19 18:54:10 - src.api.main - ERROR - Application error: status_code=401, message='Invalid mobile number or password'
+2026-06-19 18:54:10 - httpx - INFO - HTTP Request: POST http://testserver/api/v1/auth/login "HTTP/1.1 401 Unauthorized"
+2026-06-19 18:54:10 - httpx - INFO - HTTP Request: GET http://testserver/api/v1/auth/me "HTTP/1.1 200 OK"
+2026-06-19 18:54:10 - src.shared.core.services.auth_service - WARNING - User validation failed: Invalid token
+2026-06-19 18:54:10 - src.api.main - ERROR - Application error: status_code=401, message='Invalid token'
+2026-06-19 18:54:10 - httpx - INFO - HTTP Request: GET http://testserver/api/v1/auth/me "HTTP/1.1 401 Unauthorized"
+2026-06-19 18:54:10 - src.shared.core.services.auth_service - INFO - Token refresh success: Issued new access token for user 782abac0-62fb-4a8d-85d5-f95e34f78027
+2026-06-19 18:54:10 - httpx - INFO - HTTP Request: POST http://testserver/api/v1/auth/refresh "HTTP/1.1 200 OK"
+2026-06-19 18:54:10 - httpx - INFO - HTTP Request: GET http://testserver/api/v1/auth/health "HTTP/1.1 200 OK"
+2026-06-19 19:01:52 - src.shared.core.services.auth_service - INFO - Login success: User 10cf34b4-3747-464d-8dd8-2955084a5f8a (ORGANIZER) logged in successfully
+2026-06-19 19:01:52 - httpx - INFO - HTTP Request: POST http://testserver/api/v1/auth/login "HTTP/1.1 200 OK"
+2026-06-19 19:01:53 - src.shared.core.services.auth_service - WARNING - Login failed: User 44f88c8d-14c3-4e42-a7d0-7b2dd998296d is inactive
+2026-06-19 19:01:53 - src.api.main - ERROR - Application error: status_code=401, message='User account is disabled'
+2026-06-19 19:01:53 - httpx - INFO - HTTP Request: POST http://testserver/api/v1/auth/login "HTTP/1.1 401 Unauthorized"
+2026-06-19 19:01:54 - src.shared.core.services.auth_service - WARNING - Login failed: User e00f399d-bf2b-41d5-a3de-f491489a0c91 with role MEMBER tried to login, which is not supported in MVP
+2026-06-19 19:01:54 - src.api.main - ERROR - Application error: status_code=403, message='Login is currently restricted to Admin and Organizers'
+2026-06-19 19:01:54 - httpx - INFO - HTTP Request: POST http://testserver/api/v1/auth/login "HTTP/1.1 403 Forbidden"
+2026-06-19 19:01:55 - src.shared.core.services.auth_service - WARNING - Login failed: Invalid password for mobile 8765432109
+2026-06-19 19:01:55 - src.api.main - ERROR - Application error: status_code=401, message='Invalid mobile number or password'
+2026-06-19 19:01:55 - httpx - INFO - HTTP Request: POST http://testserver/api/v1/auth/login "HTTP/1.1 401 Unauthorized"
+2026-06-19 19:01:55 - httpx - INFO - HTTP Request: GET http://testserver/api/v1/auth/me "HTTP/1.1 200 OK"
+2026-06-19 19:01:55 - src.shared.core.services.auth_service - WARNING - User validation failed: Invalid token
+2026-06-19 19:01:55 - src.api.main - ERROR - Application error: status_code=401, message='Invalid token'
+2026-06-19 19:01:55 - httpx - INFO - HTTP Request: GET http://testserver/api/v1/auth/me "HTTP/1.1 401 Unauthorized"
+2026-06-19 19:01:55 - src.shared.core.services.auth_service - INFO - Token refresh success: Issued new access token for user 10cf34b4-3747-464d-8dd8-2955084a5f8a
+2026-06-19 19:01:55 - httpx - INFO - HTTP Request: POST http://testserver/api/v1/auth/refresh "HTTP/1.1 200 OK"
+2026-06-19 19:01:55 - httpx - INFO - HTTP Request: GET http://testserver/api/v1/auth/health "HTTP/1.1 200 OK"
