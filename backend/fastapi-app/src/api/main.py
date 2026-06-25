@@ -1,10 +1,12 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Depends, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import asyncpg
 from src.shared.core.database import get_db_session, init_pool, close_pool
 from src.shared.common.logging.log import get_logger
-from src.api.routers import auth_router
+from src.api.routers import auth_router, organizer_router, dashboard_router, member_router, chit_group_router
+from src.api.routers import chit_auction_router, chit_collection_router, winner_payout_router
 from src.shared.common.exceptions import AppError
 
 logger = get_logger(__name__)
@@ -26,8 +28,25 @@ app = FastAPI(
     lifespan=lifespan
 )
 
+# Enable CORS for frontend origin
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # Register routers
 app.include_router(auth_router.router)
+app.include_router(organizer_router.router)
+app.include_router(dashboard_router.router)
+app.include_router(member_router.router)
+app.include_router(chit_group_router.router)
+app.include_router(chit_auction_router.router)
+app.include_router(chit_collection_router.router)
+app.include_router(winner_payout_router.router)
+
 
 # Register custom exception handler
 @app.exception_handler(AppError)

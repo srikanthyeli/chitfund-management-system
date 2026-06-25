@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Winner Payout Receipt - {{ payout.payout_receipt_number }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/winner_payout_receipt.css">
+    <style>
+        /* Inline fallback in case external stylesheet fails in some PDF generators */
+        {{ css_content|safe }}
+    </style>
+</head>
+<body>
+    <div class="receipt-card">
+        <div class="receipt-header">
+            <h1>{{ organizer.name }}</h1>
+            <h2>Winner Payout Receipt</h2>
+            <div class="badge {{ 'paid' if payout.status in ['PAID', 'WINNER_CONFIRMED'] else 'draft' }}">
+                {{ payout.status.replace('_', ' ') }}
+            </div>
+        </div>
+
+        <div class="receipt-body">
+            <div class="receipt-section">
+                <div class="receipt-section-title">Receipt Details</div>
+                <div class="receipt-row">
+                    <span class="receipt-label">Receipt No:</span>
+                    <span class="receipt-value">{{ payout.payout_receipt_number }}</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label">Date Paid:</span>
+                    <span class="receipt-value">{{ payout.payout_date }}</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label">Payment Mode:</span>
+                    <span class="receipt-value">{{ payout.payment_method }}</span>
+                </div>
+                {% if payout.transaction_reference %}
+                <div class="receipt-row">
+                    <span class="receipt-label">Transaction Ref:</span>
+                    <span class="receipt-value">{{ payout.transaction_reference }}</span>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="receipt-section">
+                <div class="receipt-section-title">Winner & Chit Group</div>
+                <div class="receipt-row">
+                    <span class="receipt-label">Winner Name:</span>
+                    <span class="receipt-value">{{ payout.winner_name }}</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label">Chit Group:</span>
+                    <span class="receipt-value">{{ payout.chit_name }}</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label">Month Number:</span>
+                    <span class="receipt-value">{{ payout.month_number }}</span>
+                </div>
+            </div>
+
+            <div class="receipt-section">
+                <div class="receipt-section-title">Payout Calculation</div>
+                <div class="receipt-row">
+                    <span class="receipt-label">Gross Chit Value:</span>
+                    <span class="receipt-value">₹{{ "{:,.2f}".format(payout.gross_chit_amount) }}</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label">Winning Discount:</span>
+                    <span class="receipt-value">- ₹{{ "{:,.2f}".format(payout.winning_bid_discount_amount) }}</span>
+                </div>
+                <div class="receipt-row">
+                    <span class="receipt-label">Maintenance/Commission:</span>
+                    <span class="receipt-value">- ₹{{ "{:,.2f}".format(payout.maintenance_charge_amount) }}</span>
+                </div>
+                
+                <div class="net-amount">
+                    <span class="receipt-label">Net Amount Paid</span>
+                    <span class="receipt-value">₹{{ "{:,.2f}".format(payout.payout_amount) }}</span>
+                </div>
+            </div>
+            
+            {% if payout.remarks %}
+            <div class="receipt-section">
+                <div class="receipt-section-title">Notes</div>
+                <div style="font-size: 14px; color: var(--text-secondary);">
+                    {{ payout.remarks }}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="receipt-footer">
+            System generated receipt by Chit Fund Management System.<br>
+            No signature required.
+        </div>
+    </div>
+</body>
+</html>

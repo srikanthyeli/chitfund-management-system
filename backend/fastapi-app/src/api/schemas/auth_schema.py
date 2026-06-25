@@ -4,12 +4,26 @@ from typing import Optional
 
 class LoginRequest(BaseModel):
     mobile: str = Field(..., description="User mobile number")
-    password: str = Field(..., min_length=6, description="User password")
+    password: str = Field(..., description="User password")
+    device_id: Optional[str] = None
+    device_name: Optional[str] = None
 
-class UserResponse(BaseModel):
+class ForceLoginRequest(BaseModel):
+    mobile: str = Field(..., description="User mobile number")
+    password: str = Field(..., description="User password")
+    device_id: Optional[str] = None
+    device_name: Optional[str] = None
+
+class RefreshTokenRequest(BaseModel):
+    refresh_token: str
+
+class CurrentUserResponse(BaseModel):
     id: UUID
     mobile: str
     role: str
+    organizer_id: Optional[UUID] = None
+    name: str
+    must_change_password: bool
 
     class Config:
         from_attributes = True
@@ -17,24 +31,8 @@ class UserResponse(BaseModel):
 class LoginResponse(BaseModel):
     access_token: str
     refresh_token: str
-    token_type: str = "Bearer"
-    expires_in: int
-    user: UserResponse
+    user: CurrentUserResponse
 
-class RefreshTokenRequest(BaseModel):
-    refresh_token: str
-
-class TokenPayload(BaseModel):
-    sub: str
-    role: str
-    type: str
-    exp: int
-
-class CurrentUserResponse(BaseModel):
-    id: UUID
-    mobile: str
-    role: str
-    is_active: bool
-
-    class Config:
-        from_attributes = True
+class LogoutResponse(BaseModel):
+    success: bool
+    message: str

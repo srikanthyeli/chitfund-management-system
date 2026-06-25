@@ -1,47 +1,64 @@
 import asyncpg
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Request
+from src.api.schemas.auth_schema import (
+    LoginRequest, ForceLoginRequest, RefreshTokenRequest, 
+    LoginResponse, LogoutResponse, CurrentUserResponse
+)
+from src.shared.core.services.auth_service import AuthService
 from src.shared.core.database import get_db_session
-from src.api.controllers.auth_controller import AuthController
-from src.api.schemas.auth_schema import LoginRequest, LoginResponse, RefreshTokenRequest, CurrentUserResponse
 from src.api.dependencies.auth_dependency import get_current_user
 from src.api.models.models import User
+from src.shared.common.helpers.jwt_helper import decode_token
 
-router = APIRouter(prefix="/api/v1/auth", tags=["Authentication"])
+router = APIRouter(prefix="/api/v1/auth", tags=["auth"])
 
-@router.post("/login", response_model=LoginResponse, status_code=status.HTTP_200_OK)
-async def login(login_request: LoginRequest, db_object: asyncpg.Connection = Depends(get_db_session)):
-    """
-    User login endpoint. Accepts mobile and password. Returns access and refresh tokens.
-    """
-    controller = AuthController(db_object)
-    return await controller.login(login_request)
+@router.post("/login", response_model=LoginResponse)
+async def login(
+    request_data: LoginRequest,
+    db: asyncpg.Connection = Depends(get_db_session)
+):
+    service = AuthService(db)
+    return await service.login(request_data)
 
-@router.post("/refresh", response_model=LoginResponse, status_code=status.HTTP_200_OK)
-async def refresh_token(refresh_request: RefreshTokenRequest, db_object: asyncpg.Connection = Depends(get_db_session)):
-    """
-    Refresh JWT tokens using a valid refresh token.
-    """
-    controller = AuthController(db_object)
-    return await controller.refresh_token(refresh_request)
+@router.post("/force-login", response_model=LoginResponse)
+async def force_login(
+    request_data: ForceLoginRequest,
+    db: asyncpg.Connection = Depends(get_db_session)
+):
+    service = AuthService(db)
+    return await service.force_login(request_data)
 
-@router.get("/me", response_model=CurrentUserResponse, status_code=status.HTTP_200_OK)
-async def me(current_user: User = Depends(get_current_user)):
-    """
-    Get profile information of the currently authenticated user.
-    """
-    return {
-        "id": current_user.id,
-        "mobile": current_user.mobile,
-        "role": current_user.role,
-        "is_active": current_user.is_active
-    }
+@router.post("/refresh")
+async def refresh_token(
+    request_data: RefreshTokenRequest,
+    db: asyncpg.Connection = Depends(get_db_session)
+):
+    service = AuthService(db)
+    return await service.refresh_token(request_data)
 
-@router.get("/health", status_code=status.HTTP_200_OK)
-async def auth_health():
-    """
-    Endpoint verifying the status of the Authentication Module.
-    """
-    return {
-        "status": "healthy",
-        "service": "auth_module"
-    }
+@router.post("/logout", response_model=LogoutResponse)
+async def logout(
+    request: Request,
+    current_user: User = Depends(get_current_user),
+    db: asyncpg.Connection = Depends(get_db_session)
+):
+    service = AuthService(db)
+    auth_header = request.headers.get("Authorization")
+    token = auth_header.split(" ")[1]
+    payload = decode_token(token)
+    session_id = payload.get("session_id")
+    
+    import uuid
+    return await service.logout(current_user.id, uuid.UUID(session_id))
+
+@router.get("/me", response_model=CurrentUserResponse)
+async def get_me(
+    current_user: User = Depends(get_current_user),
+    db: asyncpg.Connection = Depends(get_db_session)
+):
+    service = AuthService(db)
+    return await service.get_me(current_user)
+
+@router.get("/health")
+async def health_check():
+    return {"status": "healthy"}
