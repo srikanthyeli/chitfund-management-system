@@ -1,5 +1,7 @@
 import uvicorn
 from src.shared.core.properties.app_properties import settings
+from src.api.main import app
+
 
 if __name__ == "__main__":
     # Determine reload based on local/development environment
