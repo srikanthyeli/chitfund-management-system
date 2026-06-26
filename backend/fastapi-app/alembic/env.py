@@ -2,14 +2,13 @@ import sys
 from logging.config import fileConfig
 from pathlib import Path
 
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
-
-from alembic import context
-
 # Add backend directory to Python path so src can be imported
 backend_dir = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(backend_dir))
+
+from sqlalchemy import engine_from_config
+from sqlalchemy import pool
+from alembic import context
 
 # Import settings and metadata
 from src.shared.core.properties.app_properties import settings

@@ -1,3 +1,4 @@
+import os
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -29,7 +30,6 @@ app = FastAPI(
 )
 
 # Enable CORS for frontend origin
-import os
 origins_env = os.getenv("ALLOWED_ORIGINS", "")
 if origins_env:
     origins = [origin.strip() for origin in origins_env.split(",") if origin.strip()]

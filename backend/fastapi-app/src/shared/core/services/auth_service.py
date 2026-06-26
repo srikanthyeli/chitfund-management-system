@@ -1,4 +1,5 @@
 import asyncpg
+import uuid
 from uuid import UUID
 from datetime import datetime, timezone, timedelta
 from fastapi import HTTPException
@@ -188,4 +189,3 @@ class AuthService:
             "must_change_password": user.must_change_password
         }
 
-import uuid

@@ -1,25 +1,25 @@
-import asyncio
-import asyncpg
-from pathlib import Path
 import sys
-from fastapi import HTTPException
+from pathlib import Path
 
 # Add backend directory to Python path
 backend_dir = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(backend_dir))
 
+import asyncio
+import asyncpg
+import uuid
+from fastapi import HTTPException
+
 from src.shared.core.properties.app_properties import settings
 from src.shared.core.services.member_service import MemberService
 from src.api.schemas.member_schema import MemberCreateRequest
+from src.shared.common.helpers.password_helper import hash_password
 
 class MockCurrentUser:
     def __init__(self, user_id, organizer_id):
         self.id = user_id
         self.organizer_id = organizer_id
         self.role = "ORGANIZER"
-
-import uuid
-from src.shared.common.helpers.password_helper import hash_password
 
 async def seed_15_members():
     print("Connecting to database...")

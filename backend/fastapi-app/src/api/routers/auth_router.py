@@ -1,4 +1,5 @@
 import asyncpg
+import uuid
 from fastapi import APIRouter, Depends, Request
 from src.api.schemas.auth_schema import (
     LoginRequest, ForceLoginRequest, RefreshTokenRequest, 
@@ -48,7 +49,6 @@ async def logout(
     payload = decode_token(token)
     session_id = payload.get("session_id")
     
-    import uuid
     return await service.logout(current_user.id, uuid.UUID(session_id))
 
 @router.get("/me", response_model=CurrentUserResponse)

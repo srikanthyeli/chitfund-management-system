@@ -1,11 +1,16 @@
-import asyncio
-import asyncpg
 import sys
 from pathlib import Path
 
+# Add backend directory to Python path
 backend_dir = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(backend_dir))
+
+import asyncio
+import asyncpg
+import uuid
+
 from src.shared.core.properties.app_properties import settings
+from src.shared.common.helpers.password_helper import hash_password
 
 async def find_member_with_chits():
     conn = await asyncpg.connect(settings.database.db_url)
@@ -23,8 +28,6 @@ async def find_member_with_chits():
         user = await conn.fetchrow("SELECT id FROM users WHERE mobile=$1", member['mobile'])
         if not user:
             print("Creating user account for this member...")
-            import uuid
-            from src.shared.common.helpers.password_helper import hash_password
             hashed_pw = hash_password("Member@123")
             await conn.execute("""
                 INSERT INTO users (id, organizer_id, member_id, mobile, password_hash, role, is_active, must_change_password, is_deleted, version)

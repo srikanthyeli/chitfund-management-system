@@ -11,3 +11,5 @@ pyjwt
 python-multipart
 asyncpg
 email-validator
+jinja2
+bcrypt

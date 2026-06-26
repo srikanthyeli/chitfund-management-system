@@ -1,12 +1,13 @@
-import asyncio
-import asyncpg
-from pathlib import Path
 import sys
-import uuid
+from pathlib import Path
 
 # Add backend directory to Python path
 backend_dir = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(backend_dir))
+
+import asyncio
+import asyncpg
+import uuid
 
 from src.shared.core.properties.app_properties import settings
 from src.shared.common.helpers.password_helper import hash_password

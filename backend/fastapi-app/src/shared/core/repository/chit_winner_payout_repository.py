@@ -1,3 +1,4 @@
+import json
 from uuid import UUID
 import uuid
 from typing import Optional, List
@@ -177,7 +178,6 @@ class ChitWinnerPayoutActivityLogRepository:
                 $1, $2, $3, $4, $5, $6, $7, $8, $9
             ) RETURNING *
         """
-        import json
         row = await self.db.fetchrow(
             query,
             uuid.uuid4(),
