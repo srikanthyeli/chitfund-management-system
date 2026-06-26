@@ -9,7 +9,7 @@ from src.api.dependencies.auth_decorator import authorize
 from src.api.schemas.financial_summary_schemas import FinancialSummaryResponse
 from src.shared.core.database import get_db_session
 
-router = APIRouter(prefix="/organizer/financial-summary", tags=["Financial Summary"])
+router = APIRouter(prefix="/api/v1/organizer/financial-summary", tags=["Financial Summary"])
 
 @router.get("/overview", response_model=FinancialSummaryResponse)
 @authorize(allowed_roles=["ORGANIZER", "ADMIN"])
