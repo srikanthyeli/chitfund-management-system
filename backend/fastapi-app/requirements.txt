@@ -10,3 +10,4 @@ passlib[bcrypt]
 pyjwt
 python-multipart
 asyncpg
+email-validator
