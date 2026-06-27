@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Outlet, NavLink, useLocation } from 'react-router-dom';
-import { Home, Users, Briefcase, IndianRupee, Menu, Bell, X, LogOut, Settings, ChevronLeft, ChevronRight, Wallet, Trophy, PieChart, MoreHorizontal } from 'lucide-react';
+import { Home, Users, Briefcase, IndianRupee, Menu, Bell, X, LogOut, Settings, ChevronLeft, ChevronRight, Wallet, Trophy, PieChart, MoreHorizontal, BarChart } from 'lucide-react';
 import clsx from 'clsx';
 import { useAuth } from '../../core/AuthContext';
 
@@ -31,6 +31,7 @@ export const AppLayout: React.FC = () => {
         { path: '/organizer/collections', label: 'Collections', icon: Wallet },
         { path: '/organizer/winner-payouts', label: 'Payouts', icon: Trophy },
         { path: '/organizer/financial-summary', label: 'Summary', icon: PieChart },
+        { path: '/organizer/reports', label: 'Reports', icon: BarChart },
       ];
     } else if (user?.role === 'MEMBER') {
       return [

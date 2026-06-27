@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 from typing import List, Optional, Any, Dict
 from uuid import UUID
 from datetime import date, datetime
@@ -15,104 +15,124 @@ class ReportResponse(BaseModel):
     summary: Dict[str, Any]
     pagination: PaginationMeta
 
-class ChitGroupReportItem(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-    chit_group_id: UUID
-    chit_group_name: str
-    code: str
-    status: str
-    total_chit_value: Decimal
+class DashboardMetricsResponse(BaseModel):
+    total_chit_groups: int
+    active_chit_groups: int
+    completed_chit_groups: int
+    total_members: int
+    active_members: int
+    replacement_members: int
     total_shares: int
-    current_month: int
-    expected_collection: Decimal
-    collected_amount: Decimal
-    pending_amount: Decimal
-    overdue_amount: Decimal
-    total_payouts: Decimal
-    total_dividends: Decimal
-    total_commission: Decimal
+    allocated_shares: int
+    available_shares: int
+    total_collections: Decimal
+    todays_collections: Decimal
+    current_month_collections: Decimal
+    pending_collections: Decimal
+    overdue_collections: Decimal
     collection_percentage: float
-    financial_health_status: str
+    total_auction_amount: Decimal
+    total_winner_payouts: Decimal
+    total_dividends: Decimal
+    total_maintenance_charges: Decimal
+    organizer_earnings: Decimal
+    total_outstanding: Decimal
+    net_cash_flow: Decimal
+    # Chart Data
+    monthly_collection_trend: List[Dict[str, Any]]
+    monthly_payout_trend: List[Dict[str, Any]]
+    payment_mode_distribution: List[Dict[str, Any]]
+    collection_success_percentage: List[Dict[str, Any]]
+    monthly_revenue: List[Dict[str, Any]]
 
 class CollectionReportItem(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     receipt_id: UUID
-    payment_date: datetime
     receipt_number: str
-    chit_group_name: str
-    month_number: int
     member_name: str
-    number_of_shares: int
-    expected_amount: Decimal
-    paid_amount: Decimal
-    pending_amount: Decimal
-    payment_mode: str
-    transaction_reference: Optional[str]
-    status: str
-
-class PayoutReportItem(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-    payout_id: UUID
-    payout_receipt_number: str
+    member_id: UUID
     chit_group_name: str
+    shares: int
     month_number: int
-    winner_member_name: str
-    gross_chit_value: Decimal
-    winning_discount: Decimal
-    commission: Decimal
-    maintenance_charge: Decimal
-    net_payout: Decimal
+    amount: Decimal
     payment_mode: str
-    transaction_reference: Optional[str]
-    paid_date: Optional[date]
     status: str
+    collected_by: Optional[str]
+    payment_date: datetime
+    transaction_reference: Optional[str]
 
-class OverdueReportItem(BaseModel):
+class PendingCollectionReportItem(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     due_id: UUID
     member_name: str
-    mobile_number: str
+    mobile: str
+    shares: int
     chit_group_name: str
-    shares_held: int
     month_number: int
-    due_date: Optional[date]
     expected_amount: Decimal
     paid_amount: Decimal
     pending_amount: Decimal
     overdue_days: int
-    last_payment_date: Optional[datetime]
+    grace_period_end: Optional[date]
 
-class CommissionReportItem(BaseModel):
+class AuctionReportItem(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     auction_id: UUID
+    auction_month: int
     chit_group_name: str
-    month_number: int
+    winner_name: Optional[str]
+    gross_amount: Decimal
+    discount_amount: Optional[Decimal]
+    dividend_per_share: Optional[Decimal]
     auction_date: date
-    gross_chit_value: Decimal
-    winning_discount: Decimal
-    organizer_commission: Decimal
-    maintenance_charge: Decimal
     status: str
+    payout_status: str
 
-class DividendReportItem(BaseModel):
+class WinnerPayoutReportItem(BaseModel):
     model_config = ConfigDict(from_attributes=True)
-    closure_id: UUID
+    payout_id: UUID
+    winner_name: str
     chit_group_name: str
     month_number: int
-    dividend_pool: Decimal
-    dividend_per_share: Decimal
-    total_eligible_shares: int
-    total_dividend_distributed: Decimal
-    status: str
-
-class ReceiptReportItem(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-    receipt_id: UUID
+    gross_amount: Decimal
+    deductions: Decimal
+    net_amount: Decimal
+    payment_status: str
+    payment_mode: str
+    transaction_reference: Optional[str]
     receipt_number: str
-    receipt_type: str # 'COLLECTION' or 'PAYOUT'
-    entity_name: str # Member name
+    confirmation_status: str
+    payout_date: date
+
+class MemberFinancialReportItem(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    member_id: UUID
+    member_name: str
+    mobile: str
+    total_paid: Decimal
+    pending_amount: Decimal
+    late_payments_count: int
+    total_dividend_earned: Decimal
+    total_winner_amount: Decimal
+    current_balance: Decimal
+
+class OrganizerFinancialReportItem(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    month: str # e.g. "2026-06"
+    collections_received: Decimal
+    maintenance_income: Decimal
+    commission_income: Decimal
+    total_outstanding: Decimal
+    net_cash_flow: Decimal
+
+class ChitPerformanceReportItem(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    chit_group_id: UUID
     chit_group_name: str
-    month_number: int
-    amount: Decimal
-    created_date: datetime
     status: str
+    completion_percentage: float
+    total_members: int
+    total_collections: Decimal
+    total_pending: Decimal
+    auction_count: int
+    risk_score: str # Low, Medium, High

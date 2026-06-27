@@ -8,7 +8,7 @@ import asyncpg
 from src.shared.core.database import get_db_session, init_pool, close_pool
 from src.shared.common.logging.log import get_logger
 from src.api.routers import auth_router, organizer_router, dashboard_router, member_router, chit_group_router
-from src.api.routers import chit_auction_router, chit_collection_router, winner_payout_router, member_portal_router, financial_summary_router
+from src.api.routers import chit_auction_router, chit_collection_router, winner_payout_router, member_portal_router, financial_summary_router, report_router
 from src.shared.common.exceptions import AppError
 
 logger = get_logger(__name__)
@@ -62,6 +62,7 @@ app.include_router(chit_collection_router.router)
 app.include_router(winner_payout_router.router)
 app.include_router(member_portal_router.router)
 app.include_router(financial_summary_router.router)
+app.include_router(report_router.router)
 
 
 # Register custom exception handler

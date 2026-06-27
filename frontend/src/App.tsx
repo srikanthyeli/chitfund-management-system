@@ -32,6 +32,11 @@ import { FinancialSummaryPage } from './features/financial-summary/pages/Financi
 import { ChitFinancialSummaryPage } from './pages/Payouts/ChitFinancialSummaryPage';
 import { WinnerPayoutListPage } from './pages/Payouts/WinnerPayoutListPage';
 import { WinnerPayoutDetailPage } from './pages/Payouts/WinnerPayoutDetailPage';
+// Reports pages
+import { ReportsDashboard } from './pages/Reports/ReportsDashboard';
+import { CollectionReport } from './pages/Reports/CollectionReport';
+import { PendingCollectionReport } from './pages/Reports/PendingCollectionReport';
+import { AuctionReport, WinnerPayoutReport, MemberFinancialReport, OrganizerFinancialReport, ChitPerformanceReport } from './pages/Reports/OtherReports';
 
 // Member Portal Pages
 import { MemberDashboardPage } from './features/member-portal/pages/MemberDashboardPage';
@@ -90,6 +95,16 @@ function App() {
             {/* Phase 6.1: Winner Payout Receipt & Tracking */}
             <Route path="/organizer/winner-payouts" element={<WinnerPayoutListPage />} />
             <Route path="/organizer/winner-payouts/:payoutId" element={<WinnerPayoutDetailPage />} />
+
+            {/* Phase 8: Reports & Analytics */}
+            <Route path="/organizer/reports" element={<ReportsDashboard />} />
+            <Route path="/organizer/reports/collections" element={<CollectionReport />} />
+            <Route path="/organizer/reports/pending-collections" element={<PendingCollectionReport />} />
+            <Route path="/organizer/reports/auctions" element={<AuctionReport />} />
+            <Route path="/organizer/reports/winner-payouts" element={<WinnerPayoutReport />} />
+            <Route path="/organizer/reports/member-financial" element={<MemberFinancialReport />} />
+            <Route path="/organizer/reports/organizer-financial" element={<OrganizerFinancialReport />} />
+            <Route path="/organizer/reports/chit-performance" element={<ChitPerformanceReport />} />
           </Route>
 
           {/* Admin Routes */}
