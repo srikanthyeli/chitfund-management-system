@@ -9,6 +9,7 @@ from src.shared.core.repository.chit_payment_receipt_repository import ChitPayme
 from src.shared.core.repository.payment_receipt_sequence_repository import PaymentReceiptSequenceRepository
 from src.shared.core.repository.organizer_repository import OrganizerRepository
 from src.api.schemas.chit_collection_schema import PaymentCollectionRequest, PaymentReversalRequest
+from src.shared.core.properties.constants import CollectionStatus
 
 class ChitCollectionService:
     def __init__(self, conn):
@@ -38,10 +39,10 @@ class ChitCollectionService:
             "total_net_payable": sum(d["net_payable_amount"] for d in dues),
             "total_collected": sum(d["total_paid_amount"] for d in dues),
             "total_remaining": sum(d["remaining_amount"] for d in dues),
-            "paid_count": sum(1 for d in dues if d["payment_status"] == "PAID"),
-            "partial_count": sum(1 for d in dues if d["payment_status"] == "PARTIALLY_PAID"),
-            "pending_count": sum(1 for d in dues if d["payment_status"] == "PENDING"),
-            "overdue_count": sum(1 for d in dues if d["payment_status"] == "OVERDUE"),
+            "paid_count": sum(1 for d in dues if d["payment_status"] == CollectionStatus.PAID.value),
+            "partial_count": sum(1 for d in dues if d["payment_status"] == CollectionStatus.PARTIALLY_PAID.value),
+            "pending_count": sum(1 for d in dues if d["payment_status"] == CollectionStatus.PENDING.value),
+            "overdue_count": sum(1 for d in dues if d["payment_status"] == CollectionStatus.OVERDUE.value),
         }
 
         return {"summary": summary, "dues": dues}
@@ -63,7 +64,7 @@ class ChitCollectionService:
             if not due:
                 raise HTTPException(status_code=404, detail="Due not found")
 
-            if due["payment_status"] == "PAID":
+            if due["payment_status"] == CollectionStatus.PAID.value:
                 raise HTTPException(status_code=409, detail="Due is already fully paid")
 
             if Decimal(str(request.payment_amount)) > due["remaining_amount"]:
@@ -105,7 +106,7 @@ class ChitCollectionService:
             # Update Due balance
             total_paid = due["total_paid_amount"] + Decimal(str(request.payment_amount))
             remaining = due["remaining_amount"] - Decimal(str(request.payment_amount))
-            status = "PAID" if remaining <= 0 else "PARTIALLY_PAID"
+            status = CollectionStatus.PAID.value if remaining <= 0 else CollectionStatus.PARTIALLY_PAID.value
 
             updated_due = await due_repo.update_due_payment(
                 due_id, organizer_id, total_paid, remaining, status, now, user_id
@@ -138,7 +139,7 @@ class ChitCollectionService:
 
             total_paid = due["total_paid_amount"] - receipt["payment_amount"]
             remaining = due["remaining_amount"] + receipt["payment_amount"]
-            status = "PENDING" if total_paid <= 0 else "PARTIALLY_PAID"
+            status = CollectionStatus.PENDING.value if total_paid <= 0 else CollectionStatus.PARTIALLY_PAID.value
 
             updated_due = await due_repo.update_due_payment(
                 due["id"], organizer_id, total_paid, remaining, status, datetime.utcnow(), user_id

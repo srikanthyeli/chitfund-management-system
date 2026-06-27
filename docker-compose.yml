@@ -1,54 +1,61 @@
-version: '3.8'
+# ─────────────────────────────────────────────────────────────
+#  ChitMate – Docker Compose
+#  Services: db (PostgreSQL) → backend (FastAPI) → frontend (Nginx/React)
+# ─────────────────────────────────────────────────────────────
 
 services:
+
+  # ── PostgreSQL Database ──────────────────────────────────────
   db:
     image: postgres:15-alpine
     container_name: chitfund-db
-    restart: always
+    restart: unless-stopped
     environment:
       POSTGRES_DB: chitfund_db
       POSTGRES_USER: chitfund_admin
       POSTGRES_PASSWORD: chitfund_password
     ports:
-      - "5435:5432"
+      - "5435:5432"          # host:container (use 5435 to avoid conflicts)
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./database/schema:/docker-entrypoint-initdb.d:ro   # auto-run SQL on first boot
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U chitfund_admin -d chitfund_db"]
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 10s
 
+  # ── FastAPI Backend ──────────────────────────────────────────
   backend:
     build:
       context: ./backend/fastapi-app
       dockerfile: Dockerfile
     container_name: chitfund-backend
-    restart: always
+    restart: unless-stopped
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgresql://chitfund_admin:chitfund_password@db:5432/chitfund_db
-      - ENVIRONMENT=dev
-    volumes:
-      - ./backend/fastapi-app:/app
+      ENVIRONMENT: dev
+      DATABASE_URL: postgresql://chitfund_admin:chitfund_password@db:5432/chitfund_db
+      # CORS: allow Nginx frontend + local dev
+      ALLOWED_ORIGINS: "http://localhost,http://localhost:80,http://localhost:3000,http://127.0.0.1"
     depends_on:
       db:
         condition: service_healthy
 
+  # ── React / Vite Frontend (served via Nginx) ─────────────────
   frontend:
     build:
-      context: ./frontend/angular-app
+      context: ./frontend
       dockerfile: Dockerfile
     container_name: chitfund-frontend
-    restart: always
+    restart: unless-stopped
     ports:
-      - "4200:4200"
-    volumes:
-      - ./frontend/angular-app:/app
-      - /app/node_modules
+      - "80:80"              # access the app at http://localhost
     depends_on:
       - backend
 
 volumes:
   postgres_data:
+    name: chitfund_postgres_data

@@ -11,6 +11,7 @@ from src.api.models.models import User
 from src.api.schemas.member_schema import (
     MemberCreateRequest, MemberUpdateRequest, MemberStatusRequest, MemberMobileUpdateRequest
 )
+from src.shared.core.properties.constants import UserRole, ActivityAction
 
 def normalize_and_validate_indian_mobile(mobile: str) -> str:
     if not mobile:
@@ -31,7 +32,7 @@ class MemberService:
         self.user_repo = UserRepository(db_object)
 
     async def create_member(self, current_user: User, request: MemberCreateRequest):
-        if current_user.role != "ORGANIZER" or not current_user.organizer_id:
+        if current_user.role != UserRole.ORGANIZER.value or not current_user.organizer_id:
             raise HTTPException(status_code=403, detail="Only organizers can create members")
 
         organizer_id = current_user.organizer_id
@@ -80,7 +81,7 @@ class MemberService:
             await self.activity_repo.create_log(
                 organizer_id=organizer_id,
                 member_id=member.id,
-                action_type="MEMBER_CREATED",
+                action_type=ActivityAction.MEMBER_CREATED.value,
                 old_values=None,
                 new_values=new_log_values,
                 remarks="Member registered",
@@ -94,7 +95,7 @@ class MemberService:
                 "member_id": member.id,
                 "mobile": member.mobile,
                 "password_hash": hashed_pw,
-                "role": "MEMBER",
+                "role": UserRole.MEMBER.value,
                 "is_active": True,
                 "must_change_password": True
             }
@@ -115,7 +116,7 @@ class MemberService:
         sort_by: str = 'created_at',
         sort_order: str = 'desc'
     ):
-        if current_user.role != "ORGANIZER" or not current_user.organizer_id:
+        if current_user.role != UserRole.ORGANIZER.value or not current_user.organizer_id:
             raise HTTPException(status_code=403, detail="Only organizers can view members list")
 
         organizer_id = current_user.organizer_id
@@ -151,7 +152,7 @@ class MemberService:
         }
 
     async def get_member(self, current_user: User, member_id: UUID):
-        if current_user.role != "ORGANIZER" or not current_user.organizer_id:
+        if current_user.role != UserRole.ORGANIZER.value or not current_user.organizer_id:
             raise HTTPException(status_code=403, detail="Only organizers can view member details")
 
         member = await self.member_repo.get_member_by_id_and_organizer(member_id, current_user.organizer_id)
@@ -161,7 +162,7 @@ class MemberService:
         return member
 
     async def update_member(self, current_user: User, member_id: UUID, request: MemberUpdateRequest):
-        if current_user.role != "ORGANIZER" or not current_user.organizer_id:
+        if current_user.role != UserRole.ORGANIZER.value or not current_user.organizer_id:
             raise HTTPException(status_code=403, detail="Only organizers can update members")
 
         organizer_id = current_user.organizer_id
@@ -203,7 +204,7 @@ class MemberService:
             await self.activity_repo.create_log(
                 organizer_id=organizer_id,
                 member_id=member_id,
-                action_type="MEMBER_UPDATED",
+                action_type=ActivityAction.MEMBER_UPDATED.value,
                 old_values=old_values,
                 new_values=new_values,
                 remarks="Member profile updated",
@@ -213,7 +214,7 @@ class MemberService:
         return updated_member
 
     async def update_member_mobile(self, current_user: User, member_id: UUID, request: MemberMobileUpdateRequest):
-        if current_user.role != "ORGANIZER" or not current_user.organizer_id:
+        if current_user.role != UserRole.ORGANIZER.value or not current_user.organizer_id:
             raise HTTPException(status_code=403, detail="Only organizers can change member mobile")
 
         organizer_id = current_user.organizer_id
@@ -249,7 +250,7 @@ class MemberService:
             await self.activity_repo.create_log(
                 organizer_id=organizer_id,
                 member_id=member_id,
-                action_type="MEMBER_UPDATED",
+                action_type=ActivityAction.MEMBER_UPDATED.value,
                 old_values={"mobile": member.mobile},
                 new_values={"mobile": normalized_new_mobile},
                 remarks="Member mobile number changed",
@@ -259,7 +260,7 @@ class MemberService:
         return updated_member
 
     async def update_member_status(self, current_user: User, member_id: UUID, request: MemberStatusRequest):
-        if current_user.role != "ORGANIZER" or not current_user.organizer_id:
+        if current_user.role != UserRole.ORGANIZER.value or not current_user.organizer_id:
             raise HTTPException(status_code=403, detail="Only organizers can update member status")
 
         organizer_id = current_user.organizer_id
@@ -274,7 +275,7 @@ class MemberService:
         async with self.db.transaction():
             updated_member = await self.member_repo.update_member_status(member_id, organizer_id, request.is_active, current_user.id)
             
-            action = "MEMBER_ACTIVATED" if request.is_active else "MEMBER_DEACTIVATED"
+            action = ActivityAction.MEMBER_REACTIVATED.value if request.is_active else ActivityAction.MEMBER_DEACTIVATED.value
             remarks = request.remarks or ("Member activated" if request.is_active else "Member deactivated")
             
             await self.activity_repo.create_log(
@@ -290,7 +291,7 @@ class MemberService:
         return updated_member
 
     async def get_member_activity(self, current_user: User, member_id: UUID, page: int = 1, page_size: int = 20):
-        if current_user.role != "ORGANIZER" or not current_user.organizer_id:
+        if current_user.role != UserRole.ORGANIZER.value or not current_user.organizer_id:
             raise HTTPException(status_code=403, detail="Only organizers can view activity history")
 
         member = await self.member_repo.get_member_by_id_and_organizer(member_id, current_user.organizer_id)
@@ -302,7 +303,7 @@ class MemberService:
         return items
 
     async def get_member_summary(self, current_user: User):
-        if current_user.role != "ORGANIZER" or not current_user.organizer_id:
+        if current_user.role != UserRole.ORGANIZER.value or not current_user.organizer_id:
             raise HTTPException(status_code=403, detail="Only organizers can view member summary")
 
         return await self.member_repo.get_member_summary(current_user.organizer_id)

@@ -4,6 +4,7 @@ from src.api.models.models import User
 from src.shared.core.repository.chit_month_financial_closure_repository import ChitMonthFinancialClosureRepository
 from src.shared.core.repository.chit_winner_payout_repository import ChitWinnerPayoutRepository
 from src.shared.core.repository.chit_group_activity_log_repository import ChitGroupActivityLogRepository
+from src.shared.core.properties.constants import PayoutStatus, ClosureStatus, ActivityAction
 
 class ChitFinancialClosureService:
     def __init__(self, db_object):
@@ -18,7 +19,7 @@ class ChitFinancialClosureService:
             if not closure:
                 raise HTTPException(status_code=404, detail="Financial closure record not found")
             
-            if closure["closure_status"] == "CLOSED":
+            if closure["closure_status"] == ClosureStatus.CLOSED.value:
                 raise HTTPException(status_code=400, detail="Month is already closed")
                 
             if closure["closure_status"] != "READY_FOR_CLOSURE":
@@ -26,7 +27,7 @@ class ChitFinancialClosureService:
 
             payout_repo = ChitWinnerPayoutRepository(self.db)
             payout = await payout_repo.get_active_payout_by_group_and_month(chit_group_id, month_number, organizer_id)
-            if not payout or payout["status"] not in ["PAID", "WINNER_CONFIRMED", "COMPLETED"]:
+            if not payout or payout["status"] not in [PayoutStatus.PAID.value, PayoutStatus.WINNER_CONFIRMED.value, PayoutStatus.COMPLETED.value]:
                 raise HTTPException(status_code=400, detail="Winner payout must be paid or confirmed before closing the month")
 
             updated_closure = await closure_repo.close_month(closure["id"], organizer_id, current_user.id, remarks)
@@ -35,7 +36,7 @@ class ChitFinancialClosureService:
             await activity_repo.create_log(
                 organizer_id=organizer_id,
                 chit_group_id=chit_group_id,
-                action_type="CHIT_MONTH_FINANCIALLY_CLOSED",
+                action_type=ActivityAction.MONTH_CLOSED.value,
                 new_values={"month_number": month_number, "remarks": remarks},
                 remarks=f"Month {month_number} financially closed",
                 performed_by_user_id=current_user.id

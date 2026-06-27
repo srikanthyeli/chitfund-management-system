@@ -39,8 +39,8 @@ async def seed_15_members():
         if not org_row:
             print("Creating organizer 'Yelisetty Srikanth'...")
             await conn.execute("""
-                INSERT INTO organizers (id, organizer_code, name, mobile, is_active)
-                VALUES ($1, $2, $3, $4, $5)
+                INSERT INTO organizers (id, organizer_code, name, mobile, is_active, is_deleted, version)
+                VALUES ($1, $2, $3, $4, $5, FALSE, 1)
             """, target_org_id, "ORG00002", "Yelisetty Srikanth", target_mobile, True)
         else:
             print(f"Organizer 'Yelisetty Srikanth' exists.")
@@ -50,9 +50,9 @@ async def seed_15_members():
         if not user_row:
             print("Creating user for organizer...")
             await conn.execute("""
-                INSERT INTO users (id, organizer_id, mobile, password_hash, role, is_active, must_change_password)
-                VALUES ($1, $2, $3, $4, $5, $6, $7)
-            """, target_user_id, target_org_id, target_mobile, hash_password("Organizer@123"), "ORGANIZER", True, True)
+                INSERT INTO users (id, organizer_id, mobile, password_hash, role, is_active, must_change_password, is_deleted, version)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, FALSE, 1)
+            """, target_user_id, target_org_id, target_mobile, hash_password("Organizer@123"), "ORGANIZER", True, False)
         else:
             print("Organizer user exists.")
 

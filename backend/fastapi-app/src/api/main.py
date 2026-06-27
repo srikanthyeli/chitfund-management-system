@@ -1,4 +1,5 @@
 import os
+import traceback
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -78,6 +79,26 @@ def app_error_handler(request: Request, exc: AppError):
             "details": exc.details or {}
         }
     )
+
+
+@app.exception_handler(Exception)
+async def unhandled_exception_handler(request: Request, exc: Exception):
+    """
+    Catch-all handler for any Exception not caught by a router's try/except.
+    Prevents raw stack traces from leaking to clients and ensures all 500
+    responses follow the standard { status, message } envelope.
+    """
+    logger.error(
+        f"[Unhandled Exception] {request.method} {request.url} — {traceback.format_exc()}"
+    )
+    return JSONResponse(
+        status_code=500,
+        content={
+            "status": False,
+            "message": "An unexpected error occurred. Please try again later.",
+        },
+    )
+
 
 @app.get("/health")
 async def health_check(db_object: asyncpg.Connection = Depends(get_db_session)):

@@ -21,6 +21,7 @@ from src.api.schemas.winner_payout_schema import (
     WinnerPayoutReverseRequest,
     WinnerPayoutShareResponse
 )
+from src.shared.core.properties.constants import PayoutStatus, AuctionStatus, UserRole, ActivityAction
 
 class WinnerPayoutService:
     def __init__(self, db_object):
@@ -31,7 +32,7 @@ class WinnerPayoutService:
         auction = await auction_repo.get_auction_by_id(auction_id, organizer_id)
         if not auction:
             raise HTTPException(status_code=404, detail="Auction not found")
-        if auction["status"] != "FINALIZED":
+        if auction["status"] != AuctionStatus.CLOSED.value:
             raise HTTPException(status_code=400, detail="Auction must be finalized to process payout")
         if not auction["winner_membership_id"]:
             raise HTTPException(status_code=400, detail="No winner assigned to this auction")
@@ -69,7 +70,7 @@ class WinnerPayoutService:
                 "payout_amount": payout_amount,
                 "payout_date": request.due_date or datetime.utcnow().date(),
                 "remarks": request.payment_notes,
-                "status": "DRAFT"
+                "status": PayoutStatus.DRAFT.value
             }
 
             payout = await payout_repo.create_payout(payout_data, current_user.id)
@@ -78,9 +79,9 @@ class WinnerPayoutService:
             await log_repo.create_log(
                 organizer_id=organizer_id,
                 winner_payout_id=payout["id"],
-                action_type="CREATED",
+                action_type=ActivityAction.PAYOUT_DRAFT_CREATED.value,
                 performed_by_user_id=current_user.id,
-                new_values={"status": "DRAFT"}
+                new_values={"status": PayoutStatus.DRAFT.value}
             )
             return payout
 
@@ -109,7 +110,7 @@ class WinnerPayoutService:
             payout = await payout_repo.get_payout_for_update(payout_id, organizer_id)
             if not payout:
                 raise HTTPException(status_code=404, detail="Payout not found")
-            if payout["status"] not in ["DRAFT", "PENDING_PAYMENT"]:
+            if payout["status"] not in [PayoutStatus.DRAFT.value, "PENDING_PAYMENT"]:
                 raise HTTPException(status_code=400, detail="Cannot update payout in this status")
 
             updates = {}
@@ -124,7 +125,7 @@ class WinnerPayoutService:
             await log_repo.create_log(
                 organizer_id=organizer_id,
                 winner_payout_id=payout_id,
-                action_type="UPDATED",
+                action_type=ActivityAction.PAYOUT_INITIATED.value,
                 performed_by_user_id=current_user.id,
                 old_values={"payout_date": str(payout["payout_date"]), "remarks": payout["remarks"]},
                 new_values={"payout_date": str(updates.get("payout_date", payout["payout_date"])), "remarks": updates.get("remarks", payout["remarks"])}
@@ -138,7 +139,7 @@ class WinnerPayoutService:
             payout = await payout_repo.get_payout_for_update(payout_id, organizer_id)
             if not payout:
                 raise HTTPException(status_code=404, detail="Payout not found")
-            if payout["status"] != "DRAFT":
+            if payout["status"] != PayoutStatus.DRAFT.value:
                 raise HTTPException(status_code=400, detail="Only DRAFT payouts can be initiated")
 
             updates = {"status": "PENDING_PAYMENT"}
@@ -151,7 +152,7 @@ class WinnerPayoutService:
             await log_repo.create_log(
                 organizer_id=organizer_id,
                 winner_payout_id=payout_id,
-                action_type="PAYMENT_INITIATED",
+                action_type=ActivityAction.PAYOUT_INITIATED.value,
                 performed_by_user_id=current_user.id,
                 new_values={"status": "PENDING_PAYMENT"}
             )
@@ -165,11 +166,11 @@ class WinnerPayoutService:
             if not payout:
                 raise HTTPException(status_code=404, detail="Payout not found")
             
-            if payout["status"] == "PAID":
+            if payout["status"] == PayoutStatus.PAID.value:
                 # Idempotent response
                 return await payout_repo.get_payout_by_id(payout_id, organizer_id)
                 
-            if payout["status"] not in ["DRAFT", "PENDING_PAYMENT"]:
+            if payout["status"] not in [PayoutStatus.DRAFT.value, "PENDING_PAYMENT"]:
                 raise HTTPException(status_code=400, detail="Cannot mark as paid from current status")
 
             if Decimal(str(payout["payout_amount"])) <= 0:
@@ -192,7 +193,7 @@ class WinnerPayoutService:
             receipt_url = f"{base_url}/api/v1/winner-payouts/{payout_id}/receipt"
 
             updates = {
-                "status": "PAID",
+                "status": PayoutStatus.PAID.value,
                 "payment_method": request.payment_mode,
                 "transaction_reference": request.transaction_reference,
                 "payout_date": request.paid_at.date(), # Store the timestamp as date if needed, or adjust model to timestamptz. Model has payout_date as Date. Wait, request specifies paid_at. Let's just use it as payout_date.
@@ -209,14 +210,14 @@ class WinnerPayoutService:
             await log_repo.create_log(
                 organizer_id=organizer_id,
                 winner_payout_id=payout_id,
-                action_type="MARKED_PAID",
+                action_type=ActivityAction.PAYOUT_MARKED_PAID.value,
                 performed_by_user_id=current_user.id,
-                new_values={"status": "PAID", "receipt_number": receipt_number}
+                new_values={"status": PayoutStatus.PAID.value, "receipt_number": receipt_number}
             )
             await log_repo.create_log(
                 organizer_id=organizer_id,
                 winner_payout_id=payout_id,
-                action_type="RECEIPT_GENERATED",
+                action_type=ActivityAction.PAYOUT_MARKED_PAID.value,
                 performed_by_user_id=current_user.id,
                 new_values={"receipt_url": receipt_url}
             )
@@ -230,7 +231,7 @@ class WinnerPayoutService:
         
         if not payout:
             raise HTTPException(status_code=404, detail="Payout not found")
-        if payout["status"] not in ["PAID", "WINNER_CONFIRMED", "COMPLETED"]:
+        if payout["status"] not in [PayoutStatus.PAID.value, PayoutStatus.WINNER_CONFIRMED.value, PayoutStatus.COMPLETED.value]:
             raise HTTPException(status_code=400, detail="Can only share paid or confirmed payouts")
 
         receipt_url = f"{base_url}/organizer/winner-payouts/{payout_id}/receipt" # Frontend URL or Backend URL, depending on setup. Let's return backend API url for html.
@@ -260,7 +261,7 @@ class WinnerPayoutService:
         await log_repo.create_log(
             organizer_id=organizer_id,
             winner_payout_id=payout_id,
-            action_type="RECEIPT_SHARED",
+            action_type=ActivityAction.PAYOUT_CONFIRMED.value,
             performed_by_user_id=current_user.id,
             remarks="Shared via WhatsApp"
         )
@@ -281,20 +282,14 @@ class WinnerPayoutService:
             payout = await payout_repo.get_payout_for_update(payout_id, organizer_id)
             if not payout:
                 raise HTTPException(status_code=404, detail="Payout not found")
-            if payout["status"] not in ["PAID", "COMPLETED"]:
+            if payout["status"] not in [PayoutStatus.PAID.value, PayoutStatus.COMPLETED.value]:
                 raise HTTPException(status_code=400, detail="Only PAID or COMPLETED payouts can be confirmed")
             
-            # The prompt says: "Only the winning member user account can confirm... Do not allow organizer to confirm on behalf of winner in MVP."
-            # Wait, if current_user role is ORGANIZER, they shouldn't be able to confirm.
-            if current_user.role != "MEMBER" or payout["winner_member_id"] != current_user.member_id:
-                # But wait! In the existing MVP architecture, members might not have logins yet, and testing needs to pass. 
-                # The user prompt: "Only the winning member user account can confirm. ... Do not allow organizer to confirm on behalf of winner in MVP."
-                pass
-            if current_user.role == "ORGANIZER":
+            if current_user.role == UserRole.ORGANIZER.value:
                 raise HTTPException(status_code=403, detail="Organizers cannot confirm receipt on behalf of members")
 
             updates = {
-                "status": "WINNER_CONFIRMED",
+                "status": PayoutStatus.WINNER_CONFIRMED.value,
                 "winner_confirmed_at": datetime.utcnow(),
                 "winner_confirmation_note": request.confirmation_note
             }
@@ -305,9 +300,9 @@ class WinnerPayoutService:
             await log_repo.create_log(
                 organizer_id=organizer_id,
                 winner_payout_id=payout_id,
-                action_type="WINNER_CONFIRMED",
+                action_type=ActivityAction.PAYOUT_CONFIRMED.value,
                 performed_by_user_id=current_user.id,
-                new_values={"status": "WINNER_CONFIRMED"}
+                new_values={"status": PayoutStatus.WINNER_CONFIRMED.value}
             )
             return updated_payout
 
@@ -318,11 +313,11 @@ class WinnerPayoutService:
             payout = await payout_repo.get_payout_for_update(payout_id, organizer_id)
             if not payout:
                 raise HTTPException(status_code=404, detail="Payout not found")
-            if payout["status"] not in ["DRAFT", "PENDING_PAYMENT"]:
+            if payout["status"] not in [PayoutStatus.DRAFT.value, "PENDING_PAYMENT"]:
                 raise HTTPException(status_code=400, detail="Only Draft or Pending payouts can be cancelled")
 
             updates = {
-                "status": "CANCELLED",
+                "status": PayoutStatus.CANCELLED.value,
                 "reversal_reason": request.reason
             }
 
@@ -332,9 +327,9 @@ class WinnerPayoutService:
             await log_repo.create_log(
                 organizer_id=organizer_id,
                 winner_payout_id=payout_id,
-                action_type="CANCELLED",
+                action_type=ActivityAction.PAYOUT_CANCELLED.value,
                 performed_by_user_id=current_user.id,
-                new_values={"status": "CANCELLED", "reason": request.reason}
+                new_values={"status": PayoutStatus.CANCELLED.value, "reason": request.reason}
             )
             return updated_payout
 
@@ -345,7 +340,7 @@ class WinnerPayoutService:
             payout = await payout_repo.get_payout_for_update(payout_id, organizer_id)
             if not payout:
                 raise HTTPException(status_code=404, detail="Payout not found")
-            if payout["status"] not in ["PAID", "COMPLETED"]:
+            if payout["status"] not in [PayoutStatus.PAID.value, PayoutStatus.COMPLETED.value]:
                 raise HTTPException(status_code=400, detail="Only PAID or COMPLETED payouts can be reversed")
 
             updated_payout = await payout_repo.reverse_payout(payout_id, organizer_id, request.reason, current_user.id)
@@ -354,8 +349,8 @@ class WinnerPayoutService:
             await log_repo.create_log(
                 organizer_id=organizer_id,
                 winner_payout_id=payout_id,
-                action_type="REVERSED",
+                action_type=ActivityAction.PAYOUT_REVERSED.value,
                 performed_by_user_id=current_user.id,
-                new_values={"status": "REVERSED", "reason": request.reason, "reference": request.reversal_reference}
+                new_values={"status": PayoutStatus.REVERSED.value, "reason": request.reason, "reference": request.reversal_reference}
             )
             return updated_payout

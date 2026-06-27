@@ -3,11 +3,15 @@ CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    organizer_id UUID,
+    member_id UUID,
     mobile VARCHAR(15) UNIQUE NOT NULL,
     password_hash VARCHAR(255),
     otp_enabled BOOLEAN NOT NULL DEFAULT TRUE,
     role VARCHAR(20) NOT NULL CHECK (role IN ('ADMIN', 'ORGANIZER', 'STAFF', 'MEMBER')),
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    last_login_at TIMESTAMP,
+    must_change_password BOOLEAN NOT NULL DEFAULT TRUE,
 
     -- Standard Audit Columns
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),

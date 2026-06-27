@@ -33,6 +33,9 @@ class LoginResponse(BaseModel):
     refresh_token: str
     user: CurrentUserResponse
 
+class RefreshTokenResponse(BaseModel):
+    access_token: str
+
 class LogoutResponse(BaseModel):
     success: bool
     message: str

@@ -52,11 +52,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(response.data.user);
       return { success: true, user: response.data.user };
     } catch (error: any) {
-      const isForceLogin = error.response?.status === 409 && 
-        (error.response?.data?.code === 'FORCE_LOGIN_REQUIRED' || error.response?.data?.detail?.code === 'FORCE_LOGIN_REQUIRED');
-      
+      const responseData = error.response?.data;
+      const isForceLogin =
+        responseData?.details?.code === 'FORCE_LOGIN_REQUIRED' ||
+        responseData?.code === 'FORCE_LOGIN_REQUIRED' ||
+        responseData?.detail?.code === 'FORCE_LOGIN_REQUIRED';
+
       if (isForceLogin) {
-        const message = error.response?.data?.detail?.message || error.response?.data?.message || 'This account is active on another device.';
+        const message = responseData?.message || responseData?.detail?.message || 'This account is active on another device.';
         return { success: false, forceLoginRequired: true, message };
       }
       toast.error(error.response?.data?.detail || 'Login failed');

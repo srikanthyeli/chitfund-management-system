@@ -12,6 +12,7 @@ from src.shared.core.repository.chit_membership_repository import ChitMembership
 from src.shared.core.repository.chit_group_activity_log_repository import ChitGroupActivityLogRepository
 from src.api.schemas.chit_auction_schema import CreateAuctionRequest, SubmitBidRequest
 from src.api.models.models import User
+from src.shared.core.properties.constants import UserRole, ChitStatus, MembershipStatus, AuctionStatus, ActivityAction
 
 
 def _round_money(value: Decimal) -> Decimal:
@@ -30,7 +31,7 @@ class ChitAuctionService:
         self.activity_repo = ChitGroupActivityLogRepository(db_object)
 
     def _require_organizer(self, current_user: User):
-        if current_user.role != "ORGANIZER" or not current_user.organizer_id:
+        if current_user.role != UserRole.ORGANIZER.value or not current_user.organizer_id:
             raise HTTPException(status_code=403, detail="Only organizers can perform this action")
 
     # ─── Create Auction ───────────────────────────────────────────────────────
@@ -43,7 +44,7 @@ class ChitAuctionService:
         chit = await self.chit_repo.get_chit_group_by_id_and_organizer(chit_group_id, organizer_id)
         if not chit:
             raise HTTPException(status_code=404, detail="Chit group not found")
-        if chit.status != "ACTIVE":
+        if chit.status != ChitStatus.ACTIVE.value:
             raise HTTPException(status_code=400, detail=f"Auctions can only be created for ACTIVE chit groups. Current status: {chit.status}")
 
         # Validate month number range
@@ -87,7 +88,7 @@ class ChitAuctionService:
             await self.activity_repo.create_log(
                 organizer_id=organizer_id,
                 chit_group_id=chit_group_id,
-                action_type="AUCTION_CREATED",
+                action_type=ActivityAction.AUCTION_OPENED.value,
                 new_values={
                     "auction_id": str(auction["id"]),
                     "month_number": request.auction_month_number,
@@ -151,7 +152,7 @@ class ChitAuctionService:
 
         # Winner info if finalized
         winner = None
-        if auction["status"] == "FINALIZED" and auction.get("winner_membership_id"):
+        if auction["status"] == AuctionStatus.CLOSED.value and auction.get("winner_membership_id"):
             # Find winner name from memberships
             winner_membership = next(
                 (m for m in memberships if str(m["membership_id"]) == str(auction["winner_membership_id"])), None
@@ -184,7 +185,7 @@ class ChitAuctionService:
         auction = await self.auction_repo.get_auction_by_id(auction_id, organizer_id)
         if not auction:
             raise HTTPException(status_code=404, detail="Auction not found")
-        if auction["status"] != "OPEN":
+        if auction["status"] != AuctionStatus.OPEN.value:
             raise HTTPException(status_code=400, detail=f"Auction is not open for bids. Status: {auction['status']}")
 
         # Validate membership belongs to this organizer and chit group
@@ -195,7 +196,7 @@ class ChitAuctionService:
             raise HTTPException(status_code=404, detail="Membership not found")
         if str(membership.chit_group_id) != str(auction["chit_group_id"]):
             raise HTTPException(status_code=400, detail="Membership does not belong to this chit group")
-        if membership.status != "ACTIVE":
+        if membership.status != MembershipStatus.ACTIVE.value:
             raise HTTPException(status_code=400, detail="Only active memberships can bid")
 
         # Winner exclusion rule
@@ -237,7 +238,7 @@ class ChitAuctionService:
                 organizer_id=organizer_id,
                 chit_group_id=auction["chit_group_id"],
                 membership_id=request.membership_id,
-                action_type="AUCTION_BID_SUBMITTED",
+                action_type=ActivityAction.BID_PLACED.value,
                 new_values={
                     "auction_id": str(auction_id),
                     "bid_id": str(bid["id"]),
@@ -260,7 +261,7 @@ class ChitAuctionService:
         auction_check = await self.auction_repo.get_auction_by_id(auction_id, organizer_id)
         if not auction_check:
             raise HTTPException(status_code=404, detail="Auction not found")
-        if auction_check["status"] != "OPEN":
+        if auction_check["status"] != AuctionStatus.OPEN.value:
             raise HTTPException(status_code=400, detail=f"Auction cannot be finalized. Status: {auction_check['status']}")
 
         chit_group_id = auction_check["chit_group_id"]
@@ -276,7 +277,7 @@ class ChitAuctionService:
                 raise HTTPException(status_code=404, detail="Auction not found")
 
             # 2. Re-validate status inside transaction
-            if auction["status"] != "OPEN":
+            if auction["status"] != AuctionStatus.OPEN.value:
                 raise HTTPException(status_code=400, detail=f"Auction already {auction['status']}")
 
             # 3. Fetch and lock active bids
@@ -364,7 +365,7 @@ class ChitAuctionService:
             await self.activity_repo.create_log(
                 organizer_id=organizer_id,
                 chit_group_id=chit_group_id,
-                action_type="AUCTION_FINALIZED",
+                action_type=ActivityAction.AUCTION_CLOSED.value,
                 new_values={
                     "auction_id": str(auction_id),
                     "month_number": auction["auction_month_number"],
@@ -385,7 +386,7 @@ class ChitAuctionService:
                 organizer_id=organizer_id,
                 chit_group_id=chit_group_id,
                 membership_id=winner_bid["membership_id"],
-                action_type="AUCTION_WINNER_DECLARED",
+                action_type=ActivityAction.WINNER_DECLARED.value,
                 new_values={
                     "auction_id": str(auction_id),
                     "month_number": auction["auction_month_number"],
@@ -397,7 +398,7 @@ class ChitAuctionService:
             await self.activity_repo.create_log(
                 organizer_id=organizer_id,
                 chit_group_id=chit_group_id,
-                action_type="MONTHLY_DUES_GENERATED",
+                action_type=ActivityAction.COLLECTION_RECORDED.value,
                 new_values={
                     "auction_id": str(auction_id),
                     "month_number": auction["auction_month_number"],

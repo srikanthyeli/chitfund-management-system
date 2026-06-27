@@ -15,6 +15,7 @@ from src.api.schemas.chit_group_schema import (
     ChitMembershipCreateRequest, ChitMembershipUpdateRequest,
     ChitStatusChangeRequest
 )
+from src.shared.core.properties.constants import UserRole, ChitStatus, ActivityAction
 
 class ChitGroupService:
     def __init__(self, db_object):
@@ -25,7 +26,7 @@ class ChitGroupService:
         self.member_repo = MemberRepository(db_object)
 
     async def create_chit_group(self, current_user: User, request: ChitGroupCreateRequest) -> ChitGroup:
-        if current_user.role != "ORGANIZER" or not current_user.organizer_id:
+        if current_user.role != UserRole.ORGANIZER.value or not current_user.organizer_id:
             raise HTTPException(status_code=403, detail="Only organizers can create chit groups")
 
         organizer_id = current_user.organizer_id
@@ -46,7 +47,7 @@ class ChitGroupService:
             await self.activity_repo.create_log(
                 organizer_id=organizer_id,
                 chit_group_id=chit.id,
-                action_type="CHIT_CREATED",
+                action_type=ActivityAction.CHIT_CREATED.value,
                 new_values={
                     "chit_name": chit.chit_name,
                     "chit_code": chit.chit_code,
@@ -76,7 +77,7 @@ class ChitGroupService:
         sort_by: str = 'start_date',
         sort_order: str = 'desc'
     ):
-        if current_user.role != "ORGANIZER" or not current_user.organizer_id:
+        if current_user.role != UserRole.ORGANIZER.value or not current_user.organizer_id:
             raise HTTPException(status_code=403, detail="Only organizers can view chit groups list")
 
         organizer_id = current_user.organizer_id
@@ -113,7 +114,7 @@ class ChitGroupService:
         }
 
     async def get_chit_group_detail(self, current_user: User, chit_group_id: UUID) -> dict:
-        if current_user.role != "ORGANIZER" or not current_user.organizer_id:
+        if current_user.role != UserRole.ORGANIZER.value or not current_user.organizer_id:
             raise HTTPException(status_code=403, detail="Only organizers can view chit group details")
 
         organizer_id = current_user.organizer_id
@@ -165,7 +166,7 @@ class ChitGroupService:
         }
 
     async def update_chit_group(self, current_user: User, chit_group_id: UUID, request: ChitGroupUpdateRequest) -> ChitGroup:
-        if current_user.role != "ORGANIZER" or not current_user.organizer_id:
+        if current_user.role != UserRole.ORGANIZER.value or not current_user.organizer_id:
             raise HTTPException(status_code=403, detail="Only organizers can update chit groups")
 
         organizer_id = current_user.organizer_id
@@ -174,7 +175,7 @@ class ChitGroupService:
         if not chit:
             raise HTTPException(status_code=404, detail="Chit group not found")
 
-        if chit.status != "DRAFT":
+        if chit.status != ChitStatus.DRAFT.value:
             raise HTTPException(status_code=400, detail="Chit group can only be updated in DRAFT status")
 
         update_data = request.dict(exclude_unset=True)
@@ -223,7 +224,7 @@ class ChitGroupService:
             await self.activity_repo.create_log(
                 organizer_id=organizer_id,
                 chit_group_id=chit_group_id,
-                action_type="CHIT_UPDATED",
+                action_type=ActivityAction.CHIT_UPDATED.value,
                 old_values=old_values,
                 new_values=new_values,
                 remarks="Chit group details updated",
@@ -233,7 +234,7 @@ class ChitGroupService:
         return updated_chit
 
     async def allocate_member_shares(self, current_user: User, chit_group_id: UUID, request: ChitMembershipCreateRequest) -> ChitMembership:
-        if current_user.role != "ORGANIZER" or not current_user.organizer_id:
+        if current_user.role != UserRole.ORGANIZER.value or not current_user.organizer_id:
             raise HTTPException(status_code=403, detail="Only organizers can allocate shares")
 
         organizer_id = current_user.organizer_id
@@ -249,7 +250,7 @@ class ChitGroupService:
             if not chit_lock:
                 raise HTTPException(status_code=404, detail="Chit group not found")
 
-            if chit_lock["status"] != "DRAFT":
+            if chit_lock["status"] != ChitStatus.DRAFT.value:
                 raise HTTPException(status_code=400, detail="Shares can only be allocated when the chit group is in DRAFT status")
 
             existing = await self.membership_repo.get_membership_by_chit_and_member(chit_group_id, request.member_id, organizer_id)
@@ -276,7 +277,7 @@ class ChitGroupService:
                 organizer_id=organizer_id,
                 chit_group_id=chit_group_id,
                 membership_id=membership.id,
-                action_type="MEMBER_SHARE_ALLOCATED",
+                action_type=ActivityAction.MEMBER_SHARE_ALLOCATED.value,
                 new_values={
                     "member_id": str(request.member_id),
                     "share_count": request.share_count,
@@ -289,7 +290,7 @@ class ChitGroupService:
         return membership
 
     async def update_member_shares(self, current_user: User, chit_group_id: UUID, membership_id: UUID, request: ChitMembershipUpdateRequest) -> ChitMembership:
-        if current_user.role != "ORGANIZER" or not current_user.organizer_id:
+        if current_user.role != UserRole.ORGANIZER.value or not current_user.organizer_id:
             raise HTTPException(status_code=403, detail="Only organizers can update shares")
 
         organizer_id = current_user.organizer_id
@@ -299,7 +300,7 @@ class ChitGroupService:
             if not chit_lock:
                 raise HTTPException(status_code=404, detail="Chit group not found")
 
-            if chit_lock["status"] != "DRAFT":
+            if chit_lock["status"] != ChitStatus.DRAFT.value:
                 raise HTTPException(status_code=400, detail="Shares can only be updated when the chit group is in DRAFT status")
 
             membership = await self.membership_repo.get_membership_by_id_and_organizer(membership_id, organizer_id)
@@ -325,7 +326,7 @@ class ChitGroupService:
                 organizer_id=organizer_id,
                 chit_group_id=chit_group_id,
                 membership_id=membership_id,
-                action_type="MEMBER_SHARE_UPDATED",
+                action_type=ActivityAction.MEMBER_SHARE_UPDATED.value,
                 old_values={"share_count": old_share_count},
                 new_values={"share_count": request.share_count},
                 remarks=f"Updated share count from {old_share_count} to {request.share_count} for member {member.full_name if member else ''}",
@@ -335,7 +336,7 @@ class ChitGroupService:
         return updated_membership
 
     async def remove_member_from_chit(self, current_user: User, chit_group_id: UUID, membership_id: UUID, remarks: Optional[str]):
-        if current_user.role != "ORGANIZER" or not current_user.organizer_id:
+        if current_user.role != UserRole.ORGANIZER.value or not current_user.organizer_id:
             raise HTTPException(status_code=403, detail="Only organizers can remove members")
 
         organizer_id = current_user.organizer_id
@@ -345,7 +346,7 @@ class ChitGroupService:
             if not chit_lock:
                 raise HTTPException(status_code=404, detail="Chit group not found")
 
-            if chit_lock["status"] != "DRAFT":
+            if chit_lock["status"] != ChitStatus.DRAFT.value:
                 raise HTTPException(status_code=400, detail="Members can only be removed when the chit group is in DRAFT status")
 
             membership = await self.membership_repo.get_membership_by_id_and_organizer(membership_id, organizer_id)
@@ -363,7 +364,7 @@ class ChitGroupService:
                 organizer_id=organizer_id,
                 chit_group_id=chit_group_id,
                 membership_id=membership_id,
-                action_type="MEMBER_REMOVED",
+                action_type=ActivityAction.MEMBER_REMOVED.value,
                 old_values={"status": "ACTIVE", "is_deleted": False},
                 new_values={"status": "REMOVED", "is_deleted": True},
                 remarks=remarks or f"Removed member {member.full_name if member else ''} from chit",
@@ -373,7 +374,7 @@ class ChitGroupService:
         return removed_membership
 
     async def change_chit_status(self, current_user: User, chit_group_id: UUID, request: ChitStatusChangeRequest) -> ChitGroup:
-        if current_user.role != "ORGANIZER" or not current_user.organizer_id:
+        if current_user.role != UserRole.ORGANIZER.value or not current_user.organizer_id:
             raise HTTPException(status_code=403, detail="Only organizers can change chit status")
 
         organizer_id = current_user.organizer_id
@@ -394,18 +395,18 @@ class ChitGroupService:
                 return chit
 
             # Status Transitions logic
-            if old_status == "DRAFT" and new_status == "READY_TO_START":
+            if old_status == ChitStatus.DRAFT.value and new_status == ChitStatus.READY_TO_START.value:
                 if chit.allocated_shares != chit.total_shares:
                     raise HTTPException(status_code=400, detail="Cannot mark chit as Ready to Start until all shares are allocated")
             
-            elif old_status == "READY_TO_START" and new_status == "DRAFT":
+            elif old_status == ChitStatus.READY_TO_START.value and new_status == ChitStatus.DRAFT.value:
                 pass
 
-            elif old_status == "READY_TO_START" and new_status == "ACTIVE":
+            elif old_status == ChitStatus.READY_TO_START.value and new_status == ChitStatus.ACTIVE.value:
                 if chit.allocated_shares != chit.total_shares:
                     raise HTTPException(status_code=400, detail="Cannot activate chit group until all shares are allocated")
 
-            elif old_status in ("DRAFT", "READY_TO_START") and new_status == "CANCELLED":
+            elif old_status in (ChitStatus.DRAFT.value, ChitStatus.READY_TO_START.value) and new_status == ChitStatus.CANCELLED.value:
                 if not remarks:
                     raise HTTPException(status_code=400, detail="Remarks are required to cancel a chit group")
 
@@ -415,10 +416,10 @@ class ChitGroupService:
             updated_chit = await self.chit_repo.update_chit_group_status(chit_group_id, organizer_id, new_status, current_user.id)
 
             action_map = {
-                "READY_TO_START": "CHIT_READY_TO_START",
-                "ACTIVE": "CHIT_ACTIVATED",
-                "CANCELLED": "CHIT_CANCELLED",
-                "DRAFT": "CHIT_STATUS_CHANGED"
+                ChitStatus.READY_TO_START.value: ActivityAction.CHIT_READY_TO_START.value,
+                ChitStatus.ACTIVE.value: ActivityAction.CHIT_ACTIVATED.value,
+                ChitStatus.CANCELLED.value: ActivityAction.CHIT_CANCELLED.value,
+                ChitStatus.DRAFT.value: ActivityAction.CHIT_STATUS_CHANGED.value,
             }
             action_type = action_map.get(new_status, "CHIT_STATUS_CHANGED")
 
@@ -435,7 +436,7 @@ class ChitGroupService:
         return updated_chit
 
     async def get_chit_group_activity(self, current_user: User, chit_group_id: UUID, page: int = 1, page_size: int = 20):
-        if current_user.role != "ORGANIZER" or not current_user.organizer_id:
+        if current_user.role != UserRole.ORGANIZER.value or not current_user.organizer_id:
             raise HTTPException(status_code=403, detail="Only organizers can view chit activity")
 
         organizer_id = current_user.organizer_id
@@ -448,13 +449,13 @@ class ChitGroupService:
         return items
 
     async def get_chit_group_summary(self, current_user: User) -> dict:
-        if current_user.role != "ORGANIZER" or not current_user.organizer_id:
+        if current_user.role != UserRole.ORGANIZER.value or not current_user.organizer_id:
             raise HTTPException(status_code=403, detail="Only organizers can view summaries")
 
         return await self.chit_repo.get_chit_group_summary(current_user.organizer_id)
 
     async def get_available_members(self, current_user: User, chit_group_id: UUID) -> List[Any]:
-        if current_user.role != "ORGANIZER" or not current_user.organizer_id:
+        if current_user.role != UserRole.ORGANIZER.value or not current_user.organizer_id:
             raise HTTPException(status_code=403, detail="Only organizers can view available members")
 
         organizer_id = current_user.organizer_id
