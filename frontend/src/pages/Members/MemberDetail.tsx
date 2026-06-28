@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 
 import { ChangeMobileDialog } from './ChangeMobileDialog';
 import { StatusDialog } from './StatusDialog';
+import { useTranslation } from 'react-i18next';
 
 interface MemberDetails {
   id: string;
@@ -38,6 +39,8 @@ interface ActivityLog {
 }
 
 export const MemberDetail: React.FC = () => {
+  const { t } = useTranslation(['members', 'collections', 'organisers', 'auth']);
+
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   
@@ -129,10 +132,10 @@ export const MemberDetail: React.FC = () => {
             <Link
               to={`/organizer/members/${member.id}/edit`}
               className="p-2 hover:bg-white/10 rounded-xl transition-colors border border-white/20 flex items-center space-x-1"
-              title="Edit Member"
+              title={t('members:members_edit')}
             >
               <Edit size={16} />
-              <span className="hidden sm:inline text-xs font-semibold">Edit</span>
+              <span className="hidden sm:inline text-xs font-semibold">{t('collections:collections_edit_button')}</span>
             </Link>
           </div>
         </div>
@@ -233,7 +236,7 @@ export const MemberDetail: React.FC = () => {
               <div className="flex items-start space-x-3">
                 <User className="text-slate-400 mt-0.5" size={18} />
                 <div>
-                  <p className="text-xs text-slate-500">Email Address</p>
+                  <p className="text-xs text-slate-500">{t('auth:login_email')}</p>
                   <p className="font-medium text-slate-800 dark:text-gray-200">{member.email || '-'}</p>
                 </div>
               </div>
@@ -243,7 +246,7 @@ export const MemberDetail: React.FC = () => {
               <MapPin className="text-slate-400 mt-0.5" size={18} />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
                 <div>
-                  <p className="text-xs text-slate-500">Address</p>
+                  <p className="text-xs text-slate-500">{t('organisers:organisers_address')}</p>
                   <p className="font-medium text-slate-800 dark:text-gray-200">{member.address || '-'}</p>
                 </div>
                 <div>

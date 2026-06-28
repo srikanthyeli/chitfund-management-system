@@ -3,11 +3,12 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, Edit, UserPlus, Play, CheckCircle2, 
   XCircle, RotateCcw, AlertTriangle, Calendar, User, 
-  MapPin, Phone, RefreshCw, BookOpen, Gavel, Activity
+  MapPin, Phone, RefreshCw, BookOpen, Gavel
 } from 'lucide-react';
 import api from '../../core/api';
 import toast from 'react-hot-toast';
 import clsx from 'clsx';
+import { useTranslation } from 'react-i18next';
 
 interface MembershipItem {
   membership_id: string;
@@ -65,6 +66,8 @@ interface ActivityLogItem {
 }
 
 export const ChitGroupDetail: React.FC = () => {
+  const { t } = useTranslation(['collections', 'common', 'members', 'payouts', 'chitGroups']);
+
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [chit, setChit] = useState<ChitGroupDetail | null>(null);
@@ -412,19 +415,6 @@ export const ChitGroupDetail: React.FC = () => {
                 <Gavel size={16} />
                 <span>Monthly Auctions</span>
               </Link>
-
-              <Link 
-                to={`/organizer/chit-groups/${chit.id}/financial-summary`}
-                className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm flex items-center gap-3 hover:border-purple-300 transition-colors"
-              >
-                <div className="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 shrink-0">
-                  <Activity size={20} />
-                </div>
-                <div className="flex flex-col font-medium text-gray-900 dark:text-gray-100">
-                  <span>Financial Summary</span>
-                  <span className="text-xs text-gray-500 font-normal mt-0.5">View payouts and closures</span>
-                </div>
-              </Link>
             </div>
           )}
 
@@ -470,7 +460,7 @@ export const ChitGroupDetail: React.FC = () => {
               </span>
             </div>
             <div className="flex justify-between border-t pt-2.5">
-              <span className="text-slate-500">Start Date</span>
+              <span className="text-slate-500">{t('chitGroups:chitgroups_start_date')}</span>
               <span className="font-semibold text-slate-800 dark:text-white">
                 {new Date(chit.start_date).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}
               </span>
@@ -505,7 +495,7 @@ export const ChitGroupDetail: React.FC = () => {
                   <p className="text-lg font-bold text-slate-800 dark:text-white">{chit.available_shares}</p>
                 </div>
                 <div className="bg-slate-50 dark:bg-gray-900 p-2.5 rounded-xl">
-                  <p className="text-[10px] font-semibold text-slate-400 uppercase">Members</p>
+                  <p className="text-[10px] font-semibold text-slate-400 uppercase">{t('common:navigation_members')}</p>
                   <p className="text-lg font-bold text-slate-800 dark:text-white">{chit.member_count}</p>
                 </div>
               </div>
@@ -608,11 +598,11 @@ export const ChitGroupDetail: React.FC = () => {
                   <thead>
                     <tr className="bg-slate-50 dark:bg-gray-850 text-slate-500 dark:text-gray-400 font-semibold text-xs uppercase tracking-wider border-b border-slate-100 dark:border-gray-700">
                       <th className="px-6 py-3">Code</th>
-                      <th className="px-6 py-3">Member Name</th>
+                      <th className="px-6 py-3">{t('payouts:payouts_member_name')}</th>
                       <th className="px-6 py-3">Contact</th>
-                      <th className="px-6 py-3">Village</th>
+                      <th className="px-6 py-3">{t('members:members_village')}</th>
                       <th className="px-6 py-3 text-center">Allocated Shares</th>
-                      {isDraft && <th className="px-6 py-3 text-right">Actions</th>}
+                      {isDraft && <th className="px-6 py-3 text-right">{t('collections:collections_action')}</th>}
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 dark:divide-gray-700 text-sm text-slate-700 dark:text-gray-300">
@@ -655,7 +645,7 @@ export const ChitGroupDetail: React.FC = () => {
                         <span className="font-mono text-xs text-slate-400">{m.member_code}</span>
                       </div>
                       <div className="text-right">
-                        <span className="text-xs text-slate-400">Shares</span>
+                        <span className="text-xs text-slate-400">{t('common:receipt_shares')}</span>
                         <p className="font-bold text-base text-slate-800 dark:text-white">{m.share_count}</p>
                       </div>
                     </div>
@@ -917,9 +907,7 @@ export const ChitGroupDetail: React.FC = () => {
                   type="button"
                   onClick={() => setIsAllocateOpen(false)}
                   className="flex-1 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-slate-700 dark:text-gray-300 font-medium text-xs font-semibold"
-                >
-                  Cancel
-                </button>
+                >{t('common:cancel')}</button>
                 <button
                   type="submit"
                   disabled={submittingAlloc || allocSelectedIds.length === 0 || exceedsAvailable || allocSharesPerMember <= 0 || chit.status !== 'DRAFT'}
@@ -975,9 +963,7 @@ export const ChitGroupDetail: React.FC = () => {
                   type="button"
                   onClick={() => setIsEditSharesOpen(false)}
                   className="flex-1 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-slate-700 dark:text-gray-300 font-medium text-xs"
-                >
-                  Cancel
-                </button>
+                >{t('common:cancel')}</button>
                 <button
                   type="submit"
                   disabled={submittingEditShares}
@@ -1025,9 +1011,7 @@ export const ChitGroupDetail: React.FC = () => {
                   type="button"
                   onClick={() => setIsRemoveMemberOpen(false)}
                   className="flex-1 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-slate-700 dark:text-gray-300 font-medium text-xs"
-                >
-                  Cancel
-                </button>
+                >{t('common:cancel')}</button>
                 <button
                   type="submit"
                   disabled={submittingRemove}
@@ -1077,9 +1061,7 @@ export const ChitGroupDetail: React.FC = () => {
                   type="button"
                   onClick={() => setIsStatusModalOpen(false)}
                   className="flex-1 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-slate-700 dark:text-gray-300 font-medium text-xs"
-                >
-                  Cancel
-                </button>
+                >{t('common:cancel')}</button>
                 <button
                   type="submit"
                   disabled={submittingStatus}

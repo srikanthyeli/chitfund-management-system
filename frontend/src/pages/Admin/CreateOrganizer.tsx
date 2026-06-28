@@ -3,8 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import api from '../../core/api';
 import toast from 'react-hot-toast';
 import { ArrowLeft, CheckCircle2, Copy } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export const CreateOrganizer = () => {
+  const { t } = useTranslation(['common', 'organisers', 'auth']);
+
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [successData, setSuccessData] = useState<any>(null);
@@ -146,7 +149,7 @@ export const CreateOrganizer = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email Address</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('auth:login_email')}</label>
               <input
                 type="email"
                 name="email"
@@ -157,7 +160,7 @@ export const CreateOrganizer = () => {
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Address</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('organisers:organisers_address')}</label>
               <textarea
                 name="address"
                 value={formData.address}
@@ -201,7 +204,7 @@ export const CreateOrganizer = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">State</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('organisers:organisers_state')}</label>
               <input
                 type="text"
                 name="state"
@@ -229,9 +232,7 @@ export const CreateOrganizer = () => {
               type="button"
               onClick={() => navigate('/admin/organizers')}
               className="px-6 py-2 rounded-lg font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-            >
-              Cancel
-            </button>
+            >{t('common:cancel')}</button>
             <button
               type="submit"
               disabled={loading}

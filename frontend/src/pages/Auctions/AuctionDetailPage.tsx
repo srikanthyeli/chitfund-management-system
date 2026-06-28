@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 import BidEntryDialog from './BidEntryDialog';
 import FinalizeAuctionDialog from './FinalizeAuctionDialog';
 import { payoutApi } from '../../core/payoutApi';
+import { useTranslation } from 'react-i18next';
 
 interface Bid {
   id: string;
@@ -77,6 +78,8 @@ const fmt = (v: string | number | null | undefined) => {
 };
 
 export const AuctionDetailPage: React.FC = () => {
+  const { t } = useTranslation(['collections', 'reports']);
+
   const { id: chitGroupId, auctionId } = useParams<{ id: string; auctionId: string }>();
   const navigate = useNavigate();
   const [auction, setAuction] = useState<AuctionDetail | null>(null);
@@ -223,8 +226,7 @@ export const AuctionDetailPage: React.FC = () => {
               onClick={() => navigate(`/organizer/chit-groups/${chitGroupId}/auctions/${auctionId}/collections`)}
               className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-sm transition-all active:scale-95 bg-purple-600 hover:bg-purple-700 text-white shadow-sm"
             >
-              <IndianRupee size={16} /> Collections
-            </button>
+              <IndianRupee size={16} />{t('collections:collections_title')}</button>
             <button
               disabled={creatingPayout}
               onClick={async () => {
@@ -281,7 +283,7 @@ export const AuctionDetailPage: React.FC = () => {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
                       <p className="font-semibold text-sm truncate text-gray-900 dark:text-white">{bid.member_name}</p>
-                      {bid.is_highest && <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-medium flex-shrink-0">Highest</span>}
+                      {bid.is_highest && <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-medium flex-shrink-0">{t('reports:reports_highest')}</span>}
                     </div>
                     <p className="text-xs text-gray-500 dark:text-gray-400">
                       {bid.member_code} · {bid.share_count} share{bid.share_count > 1 ? 's' : ''} · {new Date(bid.bid_time).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}

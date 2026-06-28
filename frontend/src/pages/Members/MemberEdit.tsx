@@ -3,8 +3,11 @@ import { ArrowLeft, Save, User, Phone, Mail, MapPin, Hash, BookOpen } from 'luci
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import api from '../../core/api';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 export const MemberEdit: React.FC = () => {
+  const { t } = useTranslation(['common', 'organisers', 'auth']);
+
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState(false);
@@ -219,9 +222,7 @@ export const MemberEdit: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
-              Email Address
-            </label>
+            <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">{t('auth:login_email')}</label>
             <div className="relative">
               <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
                 <Mail size={16} />
@@ -307,9 +308,7 @@ export const MemberEdit: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
-                State
-              </label>
+              <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">{t('organisers:organisers_state')}</label>
               <input
                 type="text"
                 name="state"
@@ -365,9 +364,7 @@ export const MemberEdit: React.FC = () => {
           <Link
             to={`/organizer/members/${id}`}
             className="flex-1 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-slate-700 dark:text-gray-300 font-medium text-sm text-center transition-colors"
-          >
-            Cancel
-          </Link>
+          >{t('common:cancel')}</Link>
           <button
             type="submit"
             disabled={loading}

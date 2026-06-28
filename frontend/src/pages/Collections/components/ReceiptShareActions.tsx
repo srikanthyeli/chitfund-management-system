@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import html2canvas from 'html2canvas';
+import { useTranslation } from 'react-i18next';
 
 interface ReceiptShareActionsProps {
   receiptData: any;
@@ -7,6 +8,8 @@ interface ReceiptShareActionsProps {
 }
 
 export const ReceiptShareActions: React.FC<ReceiptShareActionsProps> = ({ receiptData, onClose }) => {
+  const { t } = useTranslation(['common']);
+
   const [isGenerating, setIsGenerating] = useState(false);
   const isReversed = receiptData.status === 'REVERSED';
 
@@ -41,6 +44,7 @@ export const ReceiptShareActions: React.FC<ReceiptShareActionsProps> = ({ receip
           }
         }
 
+        // Desktop fallback: download image then open WhatsApp Web
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -49,6 +53,10 @@ export const ReceiptShareActions: React.FC<ReceiptShareActionsProps> = ({ receip
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
+
+        if (waLink) {
+          setTimeout(() => window.open(waLink, '_blank'), 400);
+        }
       }, 'image/png');
     } catch (error) {
       console.error('Error generating receipt', error);
@@ -58,16 +66,25 @@ export const ReceiptShareActions: React.FC<ReceiptShareActionsProps> = ({ receip
     }
   };
 
-  const getWhatsAppLink = () => {
-    let phone = receiptData?.member_phone || '';
+  const waLink = (() => {
+    let phone = (receiptData?.member_phone || '').replace(/\D/g, '');
     if (!phone) return null;
-    phone = phone.replace(/\D/g, '');
-    if (phone.length === 10) phone = `91${phone}`;
-    const text = `Hello ${receiptData.member_name},\n\nYour chit payment receipt is ready.\n\nReceipt No: ${receiptData.receipt_number}\nPaid: ₹${receiptData.payment_amount}\nDate: ${new Date(receiptData.payment_date).toLocaleDateString()}\n\nThank you!`;
+    if (phone.startsWith('91') && phone.length === 12) {
+      // already has country code
+    } else if (phone.length === 10) {
+      phone = `91${phone}`;
+    } else {
+      return null;
+    }
+    const text =
+      `Hello ${receiptData.member_name},\n\n` +
+      `Your chit payment receipt is ready.\n\n` +
+      `Receipt No: ${receiptData.receipt_number}\n` +
+      `Paid: ₹${receiptData.payment_amount}\n` +
+      `Date: ${new Date(receiptData.payment_date).toLocaleDateString('en-IN')}\n\n` +
+      `Thank you!`;
     return `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
-  };
-
-  const waLink = getWhatsAppLink();
+  })();
 
   return (
     <div className="w-full max-w-sm mx-auto mt-4 px-4 pb-4 flex flex-col gap-3">
@@ -125,9 +142,7 @@ export const ReceiptShareActions: React.FC<ReceiptShareActionsProps> = ({ receip
         <button
           onClick={onClose}
           className="w-full py-3.5 rounded-2xl font-semibold text-sm text-gray-500 bg-gray-100 hover:bg-gray-200 active:scale-95 transition-all"
-        >
-          Close
-        </button>
+        >{t('common:close')}</button>
       )}
     </div>
   );

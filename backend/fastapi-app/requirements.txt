@@ -13,3 +13,4 @@ asyncpg
 email-validator
 jinja2
 bcrypt
+python-dateutil

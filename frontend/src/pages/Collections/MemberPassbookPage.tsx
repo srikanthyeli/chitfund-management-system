@@ -3,8 +3,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, BookOpen } from 'lucide-react';
 import { chitCollectionApi } from '../../core/chitCollectionApi';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 export const MemberPassbookPage: React.FC = () => {
+  const { t } = useTranslation(['collections']);
+
   const { memberId } = useParams();
   const navigate = useNavigate();
   const [data, setData] = useState<any>(null);
@@ -43,7 +46,7 @@ export const MemberPassbookPage: React.FC = () => {
       </div>
 
       <div className="p-4 bg-white shadow-sm mb-4">
-        <p className="text-gray-500 text-sm font-semibold uppercase tracking-wide">Member</p>
+        <p className="text-gray-500 text-sm font-semibold uppercase tracking-wide">{t('collections:collections_member')}</p>
         <p className="text-xl font-bold text-gray-900">{data.member_name}</p>
       </div>
 

@@ -58,6 +58,7 @@ class AuctionStatus(str, Enum):
     PENDING = "PENDING"
     OPEN = "OPEN"
     CLOSED = "CLOSED"
+    FINALIZED = "FINALIZED"
     CANCELLED = "CANCELLED"
 
 

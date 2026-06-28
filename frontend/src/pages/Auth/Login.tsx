@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../core/AuthContext';
-import { Eye, EyeOff, AlertTriangle } from 'lucide-react';
+import { useTheme } from '../../core/useTheme';
+import { Eye, EyeOff, AlertTriangle, Sun, Moon } from 'lucide-react';
+import { LanguageSwitcher } from '../../components/common/LanguageSwitcher';
 
 export const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { login, forceLogin } = useAuth();
+  const { theme, toggle: toggleTheme } = useTheme();
+  const { t } = useTranslation(['auth', 'common']);
   
   const [mobile, setMobile] = useState('');
   const [password, setPassword] = useState('');
@@ -65,11 +70,21 @@ export const Login = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
+      <div className="fixed top-4 right-4 flex items-center gap-2">
+        <LanguageSwitcher />
+        <button
+          onClick={toggleTheme}
+          className="p-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 shadow-sm"
+          aria-label="Toggle theme"
+        >
+          {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+        </button>
+      </div>
       <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-xl shadow-xl p-8 border border-gray-100 dark:border-gray-700">
         <div className="text-center mb-8 flex flex-col items-center">
           <img src="/logo.png" alt="ChitMate Logo" className="w-20 h-20 mb-4 rounded-2xl shadow-md border-2 border-purple-100 dark:border-purple-900/30" />
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white">ChitMate</h2>
-          <p className="text-gray-500 dark:text-gray-400 mt-2">Sign in to your account</p>
+          <p className="text-gray-500 dark:text-gray-400 mt-2">{t('auth:login_subtitle')}</p>
         </div>
 
         {forceLoginRequired && (
@@ -78,7 +93,7 @@ export const Login = () => {
             <div>
               <p className="font-semibold">{errorMessage}</p>
               <p className="mt-1 text-red-700 dark:text-red-400">
-                Please check the option below to log out other devices and sign in.
+                {t('auth:login_force_warning')}
               </p>
             </div>
           </div>
@@ -86,26 +101,26 @@ export const Login = () => {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Mobile Number</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('auth:login_mobile')}</label>
             <input
               type="tel"
               value={mobile}
               onChange={(e) => handleMobileChange(e.target.value)}
               className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
-              placeholder="Enter mobile number"
+              placeholder={t('auth:login_mobile_placeholder')}
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Password</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('auth:login_password')}</label>
             <div className="relative">
               <input
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => handlePasswordChange(e.target.value)}
                 className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
-                placeholder="Enter password"
+                placeholder={t('auth:login_password_placeholder')}
                 required
               />
               <button
@@ -140,7 +155,7 @@ export const Login = () => {
               loading ? 'opacity-70 cursor-not-allowed' : ''
             }`}
           >
-            {loading ? 'Signing in...' : forceLoginChecked ? 'Log out other devices & Sign In' : 'Sign In'}
+            {loading ? t('auth:login_loading') : forceLoginChecked ? t('auth:login_force_signin') : t('auth:login_button')}
           </button>
         </form>
       </div>

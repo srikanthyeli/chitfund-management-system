@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, AlertTriangle } from 'lucide-react';
 import api from '../../core/api';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 interface StatusDialogProps {
   isOpen: boolean;
@@ -20,6 +21,8 @@ export const StatusDialog: React.FC<StatusDialogProps> = ({
   memberName,
   onSuccess,
 }) => {
+  const { t } = useTranslation(['common']);
+
   const [remarks, setRemarks] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -89,9 +92,7 @@ export const StatusDialog: React.FC<StatusDialogProps> = ({
               type="button"
               onClick={onClose}
               className="flex-1 py-2.5 rounded-xl bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 font-medium text-sm transition-colors"
-            >
-              Cancel
-            </button>
+            >{t('common:cancel')}</button>
             <button
               type="submit"
               disabled={loading}

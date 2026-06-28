@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, AlertTriangle, Trophy, IndianRupee, TrendingDown, Users } from 'lucide-react';
 import api from '../../core/api';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   auctionId: string;
@@ -63,7 +64,7 @@ const FinalizeAuctionDialog: React.FC<Props> = ({
         <div className="rounded-xl p-4 mb-4 border bg-emerald-50 dark:bg-emerald-900/20 border-emerald-100 dark:border-emerald-800/30">
           <div className="flex items-center gap-2 mb-3">
             <Trophy size={16} className="text-yellow-500" />
-            <span className="font-semibold text-sm text-gray-900 dark:text-white">Winner</span>
+            <span className="font-semibold text-sm text-gray-900 dark:text-white">{t('common:receipt_winner')}</span>
           </div>
           <p className="font-bold text-base text-gray-900 dark:text-white">{winnerName}</p>
           <p className="text-xs mt-0.5 text-gray-600 dark:text-gray-400">Highest bid: {fmt(winningDiscount)}</p>
@@ -96,9 +97,7 @@ const FinalizeAuctionDialog: React.FC<Props> = ({
         </div>
 
         <div className="flex gap-3">
-          <button type="button" onClick={onClose} className="flex-1 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-            Cancel
-          </button>
+          <button type="button" onClick={onClose} className="flex-1 py-3 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">{t('common:cancel')}</button>
           <button
             onClick={handleFinalize}
             disabled={loading}

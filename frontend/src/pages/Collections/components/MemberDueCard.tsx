@@ -1,5 +1,6 @@
 import React from 'react';
 import { IndianRupee, CheckCircle2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface MemberDueCardProps {
   due: any;
@@ -20,6 +21,8 @@ const fmt = (v: any) => {
 };
 
 export const MemberDueCard: React.FC<MemberDueCardProps> = ({ due, onCollect, onHistory }) => {
+  const { t } = useTranslation(['collections']);
+
   const cfg = STATUS_CONFIG[due.payment_status] || STATUS_CONFIG.PENDING;
   const isPaid = due.payment_status === 'PAID';
 
@@ -54,7 +57,7 @@ export const MemberDueCard: React.FC<MemberDueCardProps> = ({ due, onCollect, on
 
         <div className="grid grid-cols-2 gap-2 text-center mt-2 pt-2 border-t border-gray-100 dark:border-gray-700">
           <div>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">Paid</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">{t('collections:collections_paid_status')}</p>
             <p className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">{fmt(due.total_paid_amount)}</p>
           </div>
           <div>

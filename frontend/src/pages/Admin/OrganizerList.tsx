@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../../core/api';
 import toast from 'react-hot-toast';
 import { PlusCircle, Search, Power } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface Organizer {
   id: string;
@@ -14,6 +15,8 @@ interface Organizer {
 }
 
 export const OrganizerList = () => {
+  const { t } = useTranslation(['collections']);
+
   const navigate = useNavigate();
   const [organizers, setOrganizers] = useState<Organizer[]>([]);
   const [loading, setLoading] = useState(true);
@@ -89,8 +92,8 @@ export const OrganizerList = () => {
                 <th className="p-4 font-medium">Code</th>
                 <th className="p-4 font-medium">Name</th>
                 <th className="p-4 font-medium">Mobile</th>
-                <th className="p-4 font-medium">Status</th>
-                <th className="p-4 font-medium text-right">Actions</th>
+                <th className="p-4 font-medium">{t('collections:collections_status')}</th>
+                <th className="p-4 font-medium text-right">{t('collections:collections_action')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-gray-700">

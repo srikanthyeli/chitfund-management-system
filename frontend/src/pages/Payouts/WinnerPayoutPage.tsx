@@ -5,8 +5,11 @@ import { payoutApi } from '../../core/payoutApi';
 import type { PayoutPreviewResponse } from '../../core/payoutApi';
 import toast from 'react-hot-toast';
 import { v4 as uuidv4 } from 'uuid';
+import { useTranslation } from 'react-i18next';
 
 export const WinnerPayoutPage: React.FC = () => {
+  const { t } = useTranslation(['dashboard', 'common', 'payouts']);
+
   const { chitGroupId, monthNumber } = useParams<{ chitGroupId: string; monthNumber: string }>();
   const navigate = useNavigate();
   
@@ -59,7 +62,7 @@ export const WinnerPayoutPage: React.FC = () => {
         client_request_id: uuidv4()
       });
       toast.success('Winner payout successful!');
-      navigate(`/organizer/chit-groups/${chitGroupId}/financial-summary`);
+      navigate(`/organizer/winner-payouts`);
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'Failed to process payout');
     } finally {
@@ -84,8 +87,8 @@ export const WinnerPayoutPage: React.FC = () => {
         <CheckCircle2 size={64} className="text-emerald-500 mb-4" />
         <h2 className="text-2xl font-bold">Payout Already Completed</h2>
         <p className="text-gray-500 mt-2">The winner for month {monthNumber} has already been paid.</p>
-        <button onClick={() => navigate(`/organizer/chit-groups/${chitGroupId}/financial-summary`)} className="mt-6 px-6 py-2 bg-purple-600 text-white rounded-lg font-bold">
-          View Financial Summary
+        <button onClick={() => navigate(`/organizer/winner-payouts`)} className="mt-6 px-6 py-2 bg-purple-600 text-white rounded-lg font-bold">
+          View Payouts
         </button>
       </div>
     );
@@ -94,8 +97,7 @@ export const WinnerPayoutPage: React.FC = () => {
   return (
     <div className="p-4 max-w-4xl mx-auto pb-24">
       <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-gray-500 hover:text-gray-700 mb-6 font-medium">
-        <ArrowLeft size={20} /> Back
-      </button>
+        <ArrowLeft size={20} />{t('common:back')}</button>
 
       <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Process Winner Payout</h1>
       <p className="text-gray-500 mb-6">Review the financials and pay the auction winner for Month {monthNumber}.</p>
@@ -119,15 +121,15 @@ export const WinnerPayoutPage: React.FC = () => {
           
           <div className="space-y-3">
             <div className="flex justify-between text-sm">
-              <span className="text-gray-500">Gross Chit Amount</span>
+              <span className="text-gray-500">{t('common:receipt_gross_chit_amount')}</span>
               <span className="font-medium">{fmt(data.auction.gross_chit_amount)}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-gray-500">Winning Bid Discount</span>
+              <span className="text-gray-500">{t('common:receipt_winning_bid_discount')}</span>
               <span className="font-medium text-red-500">-{fmt(data.auction.winning_bid_discount_amount)}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-gray-500">Maintenance Charge</span>
+              <span className="text-gray-500">{t('common:receipt_maintenance_charge')}</span>
               <span className="font-medium text-red-500">-{fmt(data.auction.maintenance_charge_amount)}</span>
             </div>
             <div className="pt-3 mt-3 border-t border-gray-100 flex justify-between font-bold text-lg">
@@ -139,7 +141,7 @@ export const WinnerPayoutPage: React.FC = () => {
 
         {/* Collection Status Card */}
         <div className="bg-white dark:bg-gray-800 p-5 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm">
-          <h2 className="font-bold flex items-center gap-2 mb-4 border-b pb-2"><Wallet size={18} /> Collection Status</h2>
+          <h2 className="font-bold flex items-center gap-2 mb-4 border-b pb-2"><Wallet size={18} />{t('dashboard:dashboard_collection_status')}</h2>
           
           <div className="space-y-3">
             <div className="flex justify-between text-sm">
@@ -170,11 +172,11 @@ export const WinnerPayoutPage: React.FC = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Payout Date</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{t('payouts:payouts_date')}</label>
             <input type="date" value={payoutDate} onChange={(e) => setPayoutDate(e.target.value)} className="w-full p-2.5 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Payment Method</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">{t('common:receipt_payment_method')}</label>
             <select value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)} className="w-full p-2.5 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 outline-none">
               <option value="BANK_TRANSFER">Bank Transfer (NEFT/IMPS/RTGS)</option>
               <option value="UPI">UPI</option>

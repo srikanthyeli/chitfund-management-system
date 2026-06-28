@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Search, IndianRupee, TrendingUp, CheckCircle2, Clock, X } from 'lucide-react';
+import { ArrowLeft, Search, IndianRupee, TrendingUp, CheckCircle2, Clock, X, Share2 } from 'lucide-react';
 import { chitCollectionApi } from '../../core/chitCollectionApi';
 import { MemberDueCard } from './components/MemberDueCard';
 import { CollectPaymentDialog } from './components/CollectPaymentDialog';
 import { PaymentHistoryDialog } from './components/PaymentHistoryDialog';
 import { PaymentReceiptTemplate } from './components/PaymentReceiptTemplate';
-import { ReceiptShareActions } from './components/ReceiptShareActions';
+import { ReceiptShareModal } from '../../components/receipt/ReceiptShareModal';
 import toast from 'react-hot-toast';
 
 export const CollectionDetailsPage: React.FC = () => {
@@ -21,6 +21,7 @@ export const CollectionDetailsPage: React.FC = () => {
   const [isCollectOpen, setIsCollectOpen] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [viewReceiptData, setViewReceiptData] = useState<any>(null);
+  const [isShareOpen, setIsShareOpen] = useState(false);
 
   useEffect(() => {
     if (chitGroupId && auctionId) fetchData();
@@ -217,16 +218,36 @@ export const CollectionDetailsPage: React.FC = () => {
       {viewReceiptData && (
         <div className="fixed inset-0 z-[60] bg-black/80 flex flex-col items-center p-4 overflow-y-auto">
           <button 
-            onClick={() => setViewReceiptData(null)} 
+            onClick={() => { setViewReceiptData(null); setIsShareOpen(false); }} 
             className="absolute top-4 right-4 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors z-[70]"
           >
             <X size={24} />
           </button>
           <div className="my-auto w-full flex flex-col items-center py-10 relative">
             <PaymentReceiptTemplate receiptData={viewReceiptData} />
-            <ReceiptShareActions receiptData={viewReceiptData} />
+            <div className="w-full max-w-sm mx-auto mt-4 px-4 pb-4">
+              <button
+                onClick={() => setIsShareOpen(true)}
+                className="w-full flex items-center justify-center gap-2 px-5 py-4 rounded-2xl font-semibold text-base bg-purple-600 hover:bg-purple-700 active:scale-95 text-white shadow-md shadow-purple-200 transition-all"
+              >
+                <Share2 size={18} />
+                Share Receipt
+              </button>
+            </div>
           </div>
         </div>
+      )}
+
+      {viewReceiptData && (
+        <ReceiptShareModal
+          isOpen={isShareOpen}
+          onClose={() => setIsShareOpen(false)}
+          captureElementId="receipt-capture-area"
+          receiptNumber={viewReceiptData.receipt_number}
+          memberName={viewReceiptData.member_name}
+          amount={viewReceiptData.payment_amount}
+          chitName={viewReceiptData.chit_name}
+        />
       )}
     </div>
   );

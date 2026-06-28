@@ -1,6 +1,8 @@
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AppLayout } from './components/layout/AppLayout';
 import { ProtectedRoute } from './core/guards/ProtectedRoute';
+import { useTheme } from './core/useTheme';
 
 // Pages
 import { Login } from './pages/Auth/Login';
@@ -28,10 +30,13 @@ import { AuctionDetailPage } from './pages/Auctions/AuctionDetailPage';
 import { CollectionsPage } from './pages/Collections/CollectionsPage';
 import { CollectionDetailsPage } from './pages/Collections/CollectionDetailsPage';
 import { MemberPassbookPage } from './pages/Collections/MemberPassbookPage';
-import { FinancialSummaryPage } from './features/financial-summary/pages/FinancialSummaryPage';
-import { ChitFinancialSummaryPage } from './pages/Payouts/ChitFinancialSummaryPage';
 import { WinnerPayoutListPage } from './pages/Payouts/WinnerPayoutListPage';
 import { WinnerPayoutDetailPage } from './pages/Payouts/WinnerPayoutDetailPage';
+// Financial Utilities — lazy loaded
+const BondInterestCalculatorPage = lazy(() =>
+  import('./pages/FinancialUtilities/BondInterestCalculatorPage').then((m) => ({ default: m.BondInterestCalculatorPage }))
+);
+
 // Reports pages
 import { ReportsDashboard } from './pages/Reports/ReportsDashboard';
 import { CollectionReport } from './pages/Reports/CollectionReport';
@@ -51,6 +56,7 @@ import { MemberProfilePage } from './features/member-portal/pages/MemberProfileP
 import { MyChitDetailPage } from './features/member-portal/pages/MyChitDetailPage';
 
 function App() {
+  useTheme(); // initialize theme from localStorage on every page
   return (
     <BrowserRouter>
       <Routes>
@@ -65,6 +71,14 @@ function App() {
           <Route element={<ProtectedRoute allowedRoles={['ORGANIZER']} />}>
             <Route path="/organizer/dashboard" element={<OrganizerDashboard />} />
             <Route path="/dashboard" element={<Navigate to="/organizer/dashboard" replace />} />
+            <Route
+              path="/dashboard/bond-calculator"
+              element={
+                <Suspense fallback={<div className="flex justify-center p-8 text-gray-400">Loading…</div>}>
+                  <BondInterestCalculatorPage />
+                </Suspense>
+              }
+            />
             
             {/* Member management routes */}
             <Route path="/organizer/members" element={<MemberList />} />
@@ -87,10 +101,6 @@ function App() {
             <Route path="/organizer/collections" element={<CollectionsPage />} />
             <Route path="/organizer/chit-groups/:chitGroupId/auctions/:auctionId/collections" element={<CollectionDetailsPage />} />
             <Route path="/organizer/members/:memberId/passbook" element={<MemberPassbookPage />} />
-            
-            {/* Phase 6: Financial Summary & Closure */}
-            <Route path="/organizer/financial-summary" element={<FinancialSummaryPage />} />
-            <Route path="/organizer/chit-groups/:chitGroupId/financial-summary" element={<ChitFinancialSummaryPage />} />
             
             {/* Phase 6.1: Winner Payout Receipt & Tracking */}
             <Route path="/organizer/winner-payouts" element={<WinnerPayoutListPage />} />

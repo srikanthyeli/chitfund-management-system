@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { reportApi } from '../../core/reportApi';
 import type { ReportParams } from '../../core/reportApi';
 import { ExportActions } from '../../components/common/ExportActions';
+import { useTranslation } from 'react-i18next';
 
 export const PendingCollectionReport = () => {
+  const { t } = useTranslation(['dashboard', 'collections', 'common']);
+
   const [data, setData] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -57,7 +60,7 @@ export const PendingCollectionReport = () => {
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Pending Collections</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{t('dashboard:dashboard_pending_collections')}</h1>
           <p className="text-sm text-gray-500">View members with pending or overdue installments.</p>
         </div>
         <ExportActions data={data} filename="pending_collections" onExportBackend={handleExportBackend} />
@@ -68,17 +71,17 @@ export const PendingCollectionReport = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Member</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('collections:collections_member')}</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mobile</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Group</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Month</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('common:receipt_month')}</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pending Amount</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Overdue Days</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {loading ? (
-                <tr><td colSpan={6} className="px-6 py-4 text-center text-gray-500">Loading...</td></tr>
+                <tr><td colSpan={6} className="px-6 py-4 text-center text-gray-500">{t('common:loading')}</td></tr>
               ) : data.length === 0 ? (
                 <tr><td colSpan={6} className="px-6 py-4 text-center text-gray-500">No pending collections found</td></tr>
               ) : (
@@ -107,16 +110,12 @@ export const PendingCollectionReport = () => {
               onClick={() => setParams(p => ({ ...p, page: p.page! - 1 }))}
               disabled={params.page === 1}
               className="px-3 py-1 border border-gray-300 rounded text-sm disabled:opacity-50"
-            >
-              Previous
-            </button>
+            >{t('common:previous')}</button>
             <button
               onClick={() => setParams(p => ({ ...p, page: p.page! + 1 }))}
               disabled={params.page! * params.limit! >= total}
               className="px-3 py-1 border border-gray-300 rounded text-sm disabled:opacity-50"
-            >
-              Next
-            </button>
+            >{t('common:next')}</button>
           </div>
         </div>
       </div>

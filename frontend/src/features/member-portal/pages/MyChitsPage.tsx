@@ -3,8 +3,11 @@ import { memberPortalApi } from '../api/memberPortalApi';
 import type { ChitSummaryResponse } from '../api/memberPortalApi';
 import { Briefcase, Calendar, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export const MyChitsPage: React.FC = () => {
+  const { t } = useTranslation(['bondCalculator', 'common']);
+
   const [chits, setChits] = useState<ChitSummaryResponse[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -31,8 +34,7 @@ export const MyChitsPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center">
-            <Briefcase className="w-6 h-6 mr-2 text-purple-600" /> My Chits
-          </h1>
+            <Briefcase className="w-6 h-6 mr-2 text-purple-600" />{t('common:navigation_my_chits')}</h1>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">View all your active and past chit groups.</p>
         </div>
       </div>
@@ -69,7 +71,7 @@ export const MyChitsPage: React.FC = () => {
                     <span className="font-semibold text-gray-900 dark:text-white">₹{chit.duration_months * chit.monthly_installment_per_share}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-500 dark:text-gray-400">Monthly Installment</span>
+                    <span className="text-gray-500 dark:text-gray-400">{t('bondCalculator:calculator_monthly_installment')}</span>
                     <span className="font-semibold text-gray-900 dark:text-white">₹{chit.monthly_installment_per_share}</span>
                   </div>
                   <div className="flex justify-between text-sm">

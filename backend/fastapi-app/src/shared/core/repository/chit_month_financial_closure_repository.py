@@ -114,23 +114,6 @@ class ChitMonthFinancialClosureRepository:
         row = await self.db.fetchrow(query, *values)
         return dict(row)
 
-    async def get_financial_summary(self, chit_group_id: UUID, organizer_id: UUID) -> dict:
-        query = """
-            SELECT
-                COUNT(id) AS completed_months,
-                COALESCE(SUM(expected_collection_amount), 0) AS total_expected_collection,
-                COALESCE(SUM(actual_collection_amount), 0) AS total_actual_collection,
-                COALESCE(SUM(pending_collection_amount), 0) AS total_pending_collection,
-                COALESCE(SUM(winner_payout_amount), 0) AS total_winner_payouts,
-                COALESCE(SUM(maintenance_charge_amount), 0) AS total_maintenance_collected,
-                COALESCE(SUM(organizer_contribution_amount), 0) AS total_organizer_contribution,
-                COALESCE(SUM(shortfall_amount), 0) AS total_shortfall
-            FROM chit_month_financial_closures
-            WHERE chit_group_id = $1 AND organizer_id = $2 AND is_deleted = FALSE
-        """
-        row = await self.db.fetchrow(query, chit_group_id, organizer_id)
-        return dict(row)
-
     async def get_monthly_summaries(self, chit_group_id: UUID, organizer_id: UUID) -> List[dict]:
         query = """
             SELECT 

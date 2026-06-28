@@ -227,7 +227,7 @@ class ChitAuction(Base, AuditMixin):
     chit_group_id = Column(UUID(as_uuid=True), ForeignKey("chit_groups.id", ondelete="CASCADE"), nullable=False, index=True)
 
     auction_month_number = Column(Integer, nullable=False)
-    auction_date = Column(Date, nullable=False)
+    auction_date = Column(Date, nullable=False, index=True)
     status = Column(String(20), nullable=False, default="OPEN", index=True)  # DRAFT|OPEN|FINALIZED|CANCELLED
 
     gross_chit_amount = Column(Numeric(14, 2), nullable=False)
@@ -299,7 +299,7 @@ class MonthlyMemberDue(Base, AuditMixin):
     remaining_amount = Column(Numeric(14, 2), nullable=False)
 
     payment_status = Column(String(20), nullable=False, default="PENDING", index=True)  # PENDING|PARTIALLY_PAID|PAID|OVERDUE|WAIVED
-    due_date = Column(Date, nullable=True)
+    due_date = Column(Date, nullable=True, index=True)
     grace_period_end_date = Column(Date, nullable=True)
     last_payment_at = Column(DateTime, nullable=True)
     remarks = Column(Text, nullable=True)
@@ -324,7 +324,7 @@ class ChitPaymentReceipt(Base, AuditMixin):
     member_id = Column(UUID(as_uuid=True), ForeignKey("members.id", ondelete="CASCADE"), nullable=False, index=True)
 
     receipt_number = Column(String(50), nullable=False)
-    payment_date = Column(DateTime, nullable=False, server_default=func.now())
+    payment_date = Column(DateTime, nullable=False, server_default=func.now(), index=True)
     payment_amount = Column(Numeric(14, 2), nullable=False)
     payment_method = Column(String(20), nullable=False, default="CASH") # CASH|UPI|BANK_TRANSFER|CARD|OTHER
     transaction_reference = Column(String(100), nullable=True)

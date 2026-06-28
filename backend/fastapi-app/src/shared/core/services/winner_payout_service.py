@@ -32,7 +32,7 @@ class WinnerPayoutService:
         auction = await auction_repo.get_auction_by_id(auction_id, organizer_id)
         if not auction:
             raise HTTPException(status_code=404, detail="Auction not found")
-        if auction["status"] != AuctionStatus.CLOSED.value:
+        if auction["status"] not in {AuctionStatus.CLOSED.value, AuctionStatus.FINALIZED.value}:
             raise HTTPException(status_code=400, detail="Auction must be finalized to process payout")
         if not auction["winner_membership_id"]:
             raise HTTPException(status_code=400, detail="No winner assigned to this auction")

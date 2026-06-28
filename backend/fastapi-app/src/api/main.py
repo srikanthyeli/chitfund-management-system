@@ -2,13 +2,15 @@ import os
 import traceback
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, Depends, Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import asyncpg
 from src.shared.core.database import get_db_session, init_pool, close_pool
 from src.shared.common.logging.log import get_logger
 from src.api.routers import auth_router, organizer_router, dashboard_router, member_router, chit_group_router
-from src.api.routers import chit_auction_router, chit_collection_router, winner_payout_router, member_portal_router, financial_summary_router, report_router
+from src.api.routers import chit_auction_router, chit_collection_router, winner_payout_router, member_portal_router, report_router
+from src.api.routers import bond_interest_router
 from src.shared.common.exceptions import AppError
 
 logger = get_logger(__name__)
@@ -32,20 +34,28 @@ app = FastAPI(
 
 # Enable CORS for frontend origin
 origins_env = os.getenv("ALLOWED_ORIGINS", "")
+allow_all_origins = False
 if origins_env:
-    origins = [origin.strip() for origin in origins_env.split(",") if origin.strip()]
+    if origins_env.strip() in ("*", "all"):
+        allow_all_origins = True
+        origins = []
+        origin_regex = r".*"
+    else:
+        origins = [origin.strip() for origin in origins_env.split(",") if origin.strip()]
+        origin_regex = r"https://chitfund-management-system-.*\.vercel\.app"
 else:
     origins = [
         "http://localhost:5173",
         "http://127.0.0.1:5173",
         "https://chitfund-management-system-mzbi.vercel.app"
     ]
+    origin_regex = r"https://chitfund-management-system-.*\.vercel\.app"
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_origin_regex=r"https://chitfund-management-system-.*\.vercel\.app",
-    allow_credentials=True,
+    allow_origin_regex=origin_regex,
+    allow_credentials=not allow_all_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -61,8 +71,8 @@ app.include_router(chit_auction_router.router)
 app.include_router(chit_collection_router.router)
 app.include_router(winner_payout_router.router)
 app.include_router(member_portal_router.router)
-app.include_router(financial_summary_router.router)
 app.include_router(report_router.router)
+app.include_router(bond_interest_router.router)
 
 
 # Register custom exception handler
@@ -97,6 +107,22 @@ async def unhandled_exception_handler(request: Request, exc: Exception):
         content={
             "status": False,
             "message": "An unexpected error occurred. Please try again later.",
+        },
+    )
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_error_handler(request: Request, exc: RequestValidationError):
+    body = await request.body()
+    logger.error(
+        f"Request validation error for {request.method} {request.url}: body={body.decode('utf-8', errors='replace')} errors={exc.errors()}"
+    )
+    return JSONResponse(
+        status_code=422,
+        content={
+            "status": False,
+            "message": "Validation error",
+            "details": exc.errors(),
         },
     )
 

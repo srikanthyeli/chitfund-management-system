@@ -43,23 +43,3 @@ class ChitFinancialClosureService:
             )
 
             return updated_closure
-
-    async def get_financial_summary(self, current_user: User, chit_group_id: UUID) -> dict:
-        organizer_id = current_user.organizer_id
-        closure_repo = ChitMonthFinancialClosureRepository(self.db)
-        
-        summary = await closure_repo.get_financial_summary(chit_group_id, organizer_id)
-        monthly_summaries = await closure_repo.get_monthly_summaries(chit_group_id, organizer_id)
-
-        return {
-            "chit_group_id": str(chit_group_id),
-            "total_expected_collection": summary["total_expected_collection"],
-            "total_actual_collection": summary["total_actual_collection"],
-            "total_pending_collection": summary["total_pending_collection"],
-            "total_winner_payouts": summary["total_winner_payouts"],
-            "total_maintenance_collected": summary["total_maintenance_collected"],
-            "total_organizer_contribution": summary["total_organizer_contribution"],
-            "total_shortfall": summary["total_shortfall"],
-            "completed_months": summary["completed_months"],
-            "monthly_summaries": monthly_summaries
-        }

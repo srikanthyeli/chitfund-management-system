@@ -152,7 +152,7 @@ class ChitAuctionService:
 
         # Winner info if finalized
         winner = None
-        if auction["status"] == AuctionStatus.CLOSED.value and auction.get("winner_membership_id"):
+        if auction["status"] in {AuctionStatus.CLOSED.value, AuctionStatus.FINALIZED.value} and auction.get("winner_membership_id"):
             # Find winner name from memberships
             winner_membership = next(
                 (m for m in memberships if str(m["membership_id"]) == str(auction["winner_membership_id"])), None

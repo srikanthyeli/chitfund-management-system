@@ -41,11 +41,6 @@ export const payoutApi = {
     return response.data;
   },
 
-  getFinancialSummary: async (chitGroupId: string) => {
-    const response = await api.get(`/chit-groups/${chitGroupId}/financial-summary`);
-    return response.data;
-  },
-
   // --- Phase 6.1 Endpoints ---
   
   createDraft: async (payload: any) => {

@@ -8,6 +8,7 @@ import {
 import api from '../../core/api';
 import toast from 'react-hot-toast';
 import CreateAuctionDialog from './CreateAuctionDialog';
+import { useTranslation } from 'react-i18next';
 
 interface Auction {
   id: string;
@@ -25,10 +26,10 @@ interface Auction {
 }
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
-  OPEN: { label: 'Open', color: 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30', icon: <Clock size={12} /> },
-  FINALIZED: { label: 'Finalized', color: 'bg-blue-500/20 text-blue-400 border border-blue-500/30', icon: <CheckCircle2 size={12} /> },
-  CANCELLED: { label: 'Cancelled', color: 'bg-red-500/20 text-red-400 border border-red-500/30', icon: <XCircle size={12} /> },
-  DRAFT: { label: 'Draft', color: 'bg-gray-500/20 text-gray-400 border border-gray-500/30', icon: <AlertCircle size={12} /> },
+  OPEN: { label: 'Open', color: 'bg-emerald-100 text-emerald-700 border border-emerald-200 dark:bg-emerald-500/20 dark:text-emerald-400 dark:border-emerald-500/30', icon: <Clock size={12} /> },
+  FINALIZED: { label: 'Finalized', color: 'bg-blue-100 text-blue-700 border border-blue-200 dark:bg-blue-500/20 dark:text-blue-400 dark:border-blue-500/30', icon: <CheckCircle2 size={12} /> },
+  CANCELLED: { label: 'Cancelled', color: 'bg-red-100 text-red-700 border border-red-200 dark:bg-red-500/20 dark:text-red-400 dark:border-red-500/30', icon: <XCircle size={12} /> },
+  DRAFT: { label: 'Draft', color: 'bg-gray-100 text-gray-600 border border-gray-200 dark:bg-gray-500/20 dark:text-gray-400 dark:border-gray-500/30', icon: <AlertCircle size={12} /> },
 };
 
 const fmt = (v: string | number | null | undefined) => {
@@ -37,6 +38,8 @@ const fmt = (v: string | number | null | undefined) => {
 };
 
 export const AuctionsPage: React.FC = () => {
+  const { t } = useTranslation(['auctions', 'reports']);
+
   const { id: chitGroupId } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [auctions, setAuctions] = useState<Auction[]>([]);
@@ -139,11 +142,11 @@ export const AuctionsPage: React.FC = () => {
                       <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{fmt(auction.gross_chit_amount)}</p>
                     </div>
                     <div className="text-center">
-                      <p className="text-xs mb-0.5" style={{ color: 'var(--text-secondary)' }}>Bids</p>
+                      <p className="text-xs mb-0.5" style={{ color: 'var(--text-secondary)' }}>{t('auctions:auctions_bids')}</p>
                       <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{auction.bid_count}</p>
                     </div>
                     <div className="text-center">
-                      <p className="text-xs mb-0.5" style={{ color: 'var(--text-secondary)' }}>Highest</p>
+                      <p className="text-xs mb-0.5" style={{ color: 'var(--text-secondary)' }}>{t('reports:reports_highest')}</p>
                       <p className="text-sm font-semibold" style={{ color: auction.highest_bid ? 'var(--accent-primary)' : 'var(--text-secondary)' }}>
                         {auction.highest_bid ? fmt(auction.highest_bid) : '—'}
                       </p>

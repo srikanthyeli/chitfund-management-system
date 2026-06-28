@@ -3,8 +3,11 @@ import { ArrowLeft, Save, Briefcase, Calendar, Percent, ShieldAlert } from 'luci
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../../core/api';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 export const ChitGroupCreate: React.FC = () => {
+  const { t } = useTranslation(['chitGroups', 'common']);
+
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
@@ -143,7 +146,7 @@ export const ChitGroupCreate: React.FC = () => {
           <ArrowLeft size={20} />
         </Link>
         <div>
-          <h1 className="text-xl font-bold text-slate-800 dark:text-white">Create Chit Group</h1>
+          <h1 className="text-xl font-bold text-slate-800 dark:text-white">{t('chitGroups:chitgroups_create')}</h1>
           <p className="text-sm text-slate-500">Configure financials and set up a new chit fund</p>
         </div>
       </div>
@@ -210,8 +213,7 @@ export const ChitGroupCreate: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
-                Duration (Months) <span className="text-slate-400">(Calculated)</span>
+              <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">{t('chitGroups:chitgroups_duration')}<span className="text-slate-400">(Calculated)</span>
               </label>
               <input
                 type="text"
@@ -307,8 +309,7 @@ export const ChitGroupCreate: React.FC = () => {
           
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
-                Start Date <span className="text-rose-500">*</span> <span className="text-slate-400 text-[10px]">(Must be 1st day of month)</span>
+              <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">{t('chitGroups:chitgroups_start_date')}<span className="text-rose-500">*</span> <span className="text-slate-400 text-[10px]">(Must be 1st day of month)</span>
               </label>
               <div className="relative">
                 <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
@@ -357,9 +358,7 @@ export const ChitGroupCreate: React.FC = () => {
           <Link
             to="/organizer/chit-groups"
             className="flex-1 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-slate-700 dark:text-gray-300 font-medium text-sm text-center transition-colors"
-          >
-            Cancel
-          </Link>
+          >{t('common:cancel')}</Link>
           <button
             type="submit"
             disabled={loading}

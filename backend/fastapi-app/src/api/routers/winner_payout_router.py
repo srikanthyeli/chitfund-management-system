@@ -2,6 +2,7 @@ import asyncpg
 from fastapi import APIRouter, Depends, Path as FastAPIPath, Request
 from uuid import UUID
 
+from src.shared.common.logging.log import get_logger
 from src.api.controllers.winner_payout_controller import WinnerPayoutController, CloseMonthRequest
 from src.api.schemas.winner_payout_schema import (
     WinnerPayoutCreateRequest,
@@ -18,6 +19,7 @@ from src.api.dependencies.auth_decorator import authorize
 from src.api.models.models import User
 
 router = APIRouter(prefix="/api/v1", tags=["Winner Payout & Financial Closure"])
+logger = get_logger(__name__)
 
 # --- Phase 6.1 Winner Payout Endpoints ---
 
@@ -28,6 +30,7 @@ async def create_payout_draft(
     current_user: User = Depends(get_current_user),
     db: asyncpg.Connection = Depends(get_db_session)
 ):
+    logger.info(f"Winner payout create request received: {request.dict()}")
     controller = WinnerPayoutController(db)
     return await controller.create_draft(current_user, request)
 
@@ -151,14 +154,4 @@ async def close_month(
     db: asyncpg.Connection = Depends(get_db_session)
 ):
     controller = WinnerPayoutController(db)
-    return await controller.close_month(current_user, chit_group_id, month_number, request)
-
-@router.get("/chit-groups/{chit_group_id}/financial-summary")
-@authorize(allowed_roles=["ORGANIZER", "ADMIN"])
-async def get_financial_summary(
-    chit_group_id: UUID = FastAPIPath(...),
-    current_user: User = Depends(get_current_user),
-    db: asyncpg.Connection = Depends(get_db_session)
-):
-    controller = WinnerPayoutController(db)
-    return await controller.get_financial_summary(current_user, chit_group_id)
+    return await controller.close_month(current_user, chit_group_id, month_number, request.remarks)

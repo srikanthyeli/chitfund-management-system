@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Receipt, CornerUpLeft } from 'lucide-react';
 import { chitCollectionApi } from '../../../core/chitCollectionApi';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 interface PaymentHistoryDialogProps {
   isOpen: boolean;
@@ -11,6 +12,8 @@ interface PaymentHistoryDialogProps {
 }
 
 export const PaymentHistoryDialog: React.FC<PaymentHistoryDialogProps> = ({ isOpen, onClose, dueId, onReceiptClick }) => {
+  const { t } = useTranslation(['collections', 'common']);
+
   const [history, setHistory] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [reversingReceiptId, setReversingReceiptId] = useState<string | null>(null);
@@ -94,8 +97,7 @@ export const PaymentHistoryDialog: React.FC<PaymentHistoryDialogProps> = ({ isOp
                     onClick={() => onReceiptClick(receipt)}
                     className="flex-1 flex justify-center items-center gap-1.5 py-1.5 text-xs font-semibold text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                   >
-                    <Receipt size={12} /> View Receipt
-                  </button>
+                    <Receipt size={12} />{t('collections:collections_receipt')}</button>
                   {receipt.status === 'SUCCESS' && (
                     <button
                       onClick={() => setReversingReceiptId(reversingReceiptId === receipt.id ? null : receipt.id)}
@@ -120,9 +122,7 @@ export const PaymentHistoryDialog: React.FC<PaymentHistoryDialogProps> = ({ isOp
                       <button
                         onClick={() => setReversingReceiptId(null)}
                         className="px-3 py-1 text-xs font-semibold text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg"
-                      >
-                        Cancel
-                      </button>
+                      >{t('common:cancel')}</button>
                       <button
                         onClick={() => handleReverse(receipt.id)}
                         className="px-3 py-1 text-xs font-bold text-white bg-red-600 hover:bg-red-700 rounded-lg"

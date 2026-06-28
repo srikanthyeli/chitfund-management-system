@@ -4,6 +4,7 @@ import { Toaster } from 'react-hot-toast'
 import './index.css'
 import App from './App.tsx'
 import { AuthProvider } from './core/AuthContext'
+import './i18n'
 
 import { registerSW } from 'virtual:pwa-register'
 

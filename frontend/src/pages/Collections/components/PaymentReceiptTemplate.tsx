@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { 
   CheckCircle2, 
   XCircle, 
@@ -38,6 +39,7 @@ interface ReceiptProps {
 }
 
 export const PaymentReceiptTemplate: React.FC<ReceiptProps> = ({ receiptData }) => {
+  const { t } = useTranslation('common');
   const isReversed = receiptData.status === 'REVERSED';
   const isFullyPaid = receiptData.payment_status === 'PAID';
 
@@ -83,13 +85,13 @@ export const PaymentReceiptTemplate: React.FC<ReceiptProps> = ({ receiptData }) 
             )}
           </div>
           <h3 className="text-sm font-bold tracking-wider mb-2" style={{ color: isReversed ? '#dc2626' : '#16a34a' }}>
-            {isReversed ? 'PAYMENT REVERSED' : 'PAYMENT RECEIVED'}
+            {isReversed ? t('receipt_payment_reversed') : t('receipt_payment_received')}
           </h3>
           <div className="text-4xl font-bold mb-1 flex justify-center items-center" style={{ color: '#4a1c72' }}>
             ₹{receiptData.payment_amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
           </div>
           <p className="text-xs mb-6" style={{ color: '#6b7280' }}>
-            Amount Paid Successfully
+            {t('receipt_amount_paid_success')}
           </p>
 
           {/* Date & Receipt No Block */}
@@ -107,7 +109,7 @@ export const PaymentReceiptTemplate: React.FC<ReceiptProps> = ({ receiptData }) 
             </div>
             <div className="w-px h-8" style={{ backgroundColor: '#e9d5ff' }}></div>
             <div className="text-right">
-              <div className="text-[10px] font-semibold uppercase" style={{ color: '#6b7280' }}>Receipt No.</div>
+              <div className="text-[10px] font-semibold uppercase" style={{ color: '#6b7280' }}>{t('receipt_receipt_no')}</div>
               <div className="text-[10px] font-mono font-bold" style={{ color: '#581c87' }}>{receiptData.receipt_number}</div>
             </div>
           </div>
@@ -118,18 +120,18 @@ export const PaymentReceiptTemplate: React.FC<ReceiptProps> = ({ receiptData }) 
               <div className="p-2 rounded-full mb-2" style={{ backgroundColor: '#f3e8ff' }}>
                 <Users size={16} color="#7e22ce" />
               </div>
-              <div className="text-[9px] font-bold uppercase tracking-wider mb-1" style={{ color: '#9333ea' }}>Chit Fund</div>
+              <div className="text-[9px] font-bold uppercase tracking-wider mb-1" style={{ color: '#9333ea' }}>{t('receipt_chit_fund')}</div>
               <div className="text-xs font-semibold text-center mb-1" style={{ color: '#1f2937' }}>{receiptData.chit_name}</div>
               <div className="flex justify-between w-full text-[10px] mt-auto" style={{ color: '#6b7280' }}>
-                <span>Month <strong style={{ color: '#374151' }}>{receiptData.month_number}</strong></span>
-                <span>Shares <strong style={{ color: '#374151' }}>{receiptData.share_count}</strong></span>
+                <span>{t('receipt_month')} <strong style={{ color: '#374151' }}>{receiptData.month_number}</strong></span>
+                <span>{t('receipt_shares')} <strong style={{ color: '#374151' }}>{receiptData.share_count}</strong></span>
               </div>
             </div>
             <div className="flex-1 border rounded-xl p-3 flex flex-col items-center shadow-sm" style={{ borderColor: '#f3f4f6', backgroundColor: '#f9fafb' }}>
               <div className="p-2 rounded-full mb-2" style={{ backgroundColor: '#f3e8ff' }}>
                 <User size={16} color="#7e22ce" />
               </div>
-              <div className="text-[9px] font-bold uppercase tracking-wider mb-1" style={{ color: '#9333ea' }}>Member</div>
+              <div className="text-[9px] font-bold uppercase tracking-wider mb-1" style={{ color: '#9333ea' }}>{t('receipt_member')}</div>
               <div className="text-xs font-semibold text-center mb-1" style={{ color: '#1f2937' }}>{receiptData.member_name}</div>
               <div className="flex items-center gap-1 text-[10px] mt-auto" style={{ color: '#4b5563' }}>
                 <Phone size={10} />
@@ -143,7 +145,7 @@ export const PaymentReceiptTemplate: React.FC<ReceiptProps> = ({ receiptData }) 
             <div className="flex justify-between items-center pb-3 border-b" style={{ borderColor: '#f3f4f6' }}>
               <div className="flex items-center gap-2">
                 <FileText size={16} color="#d8b4fe" />
-                <span className="text-xs font-medium" style={{ color: '#374151' }}>Monthly Due (Net Payable)</span>
+                <span className="text-xs font-medium" style={{ color: '#374151' }}>{t('receipt_monthly_due')}</span>
               </div>
               <span className="text-xs font-bold" style={{ color: '#111827' }}>₹{receiptData.net_payable.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
             </div>
@@ -151,7 +153,7 @@ export const PaymentReceiptTemplate: React.FC<ReceiptProps> = ({ receiptData }) 
             <div className="flex justify-between items-center pb-3 border-b" style={{ borderColor: '#f3f4f6' }}>
               <div className="flex items-center gap-2">
                 <Wallet size={16} color="#d8b4fe" />
-                <span className="text-xs font-medium" style={{ color: '#374151' }}>Paid This Time</span>
+                <span className="text-xs font-medium" style={{ color: '#374151' }}>{t('receipt_paid_this_time')}</span>
               </div>
               <span className="text-xs font-bold" style={{ color: '#16a34a' }}>₹{receiptData.payment_amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
             </div>
@@ -159,7 +161,7 @@ export const PaymentReceiptTemplate: React.FC<ReceiptProps> = ({ receiptData }) 
             <div className="flex justify-between items-center pb-3 border-b" style={{ borderColor: '#f3f4f6' }}>
               <div className="flex items-center gap-2">
                 <IndianRupee size={16} color="#d8b4fe" />
-                <span className="text-xs font-medium" style={{ color: '#374151' }}>Remaining Balance</span>
+                <span className="text-xs font-medium" style={{ color: '#374151' }}>{t('receipt_remaining_balance')}</span>
               </div>
               <span className="text-xs font-bold" style={{ color: '#4a1c72' }}>₹{receiptData.remaining_balance.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
             </div>
@@ -167,13 +169,13 @@ export const PaymentReceiptTemplate: React.FC<ReceiptProps> = ({ receiptData }) 
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-2">
                 <ClipboardCheck size={16} color="#d8b4fe" />
-                <span className="text-xs font-medium" style={{ color: '#374151' }}>Payment Status</span>
+                <span className="text-xs font-medium" style={{ color: '#374151' }}>{t('receipt_payment_status')}</span>
               </div>
               <span className="text-[10px] font-bold px-3 py-1 rounded-full" style={{ 
                 backgroundColor: isFullyPaid ? '#dcfce7' : '#ffedd5',
                 color: isFullyPaid ? '#15803d' : '#c2410c'
               }}>
-                {isFullyPaid ? 'FULLY PAID' : 'PARTIALLY PAID'}
+                {isFullyPaid ? t('receipt_fully_paid') : t('receipt_partially_paid')}
               </span>
             </div>
           </div>
@@ -185,7 +187,7 @@ export const PaymentReceiptTemplate: React.FC<ReceiptProps> = ({ receiptData }) 
                   <CreditCard size={14} color="#a855f7" />
                 </div>
                 <div>
-                  <div className="text-[9px]" style={{ color: '#6b7280' }}>Payment Method</div>
+                  <div className="text-[9px]" style={{ color: '#6b7280' }}>{t('receipt_payment_method')}</div>
                   <div className="text-[10px] font-bold" style={{ color: '#1f2937' }}>{receiptData.payment_method}</div>
                 </div>
              </div>
@@ -194,7 +196,7 @@ export const PaymentReceiptTemplate: React.FC<ReceiptProps> = ({ receiptData }) 
                   <User size={14} color="#a855f7" />
                 </div>
                 <div>
-                  <div className="text-[9px]" style={{ color: '#6b7280' }}>Collected By</div>
+                  <div className="text-[9px]" style={{ color: '#6b7280' }}>{t('receipt_collected_by')}</div>
                   <div className="text-[10px] font-bold truncate max-w-[80px]" style={{ color: '#1f2937' }}>{receiptData.collected_by}</div>
                 </div>
              </div>
@@ -204,8 +206,8 @@ export const PaymentReceiptTemplate: React.FC<ReceiptProps> = ({ receiptData }) 
 
           {/* Footer Text */}
           <div className="text-center mb-6">
-            <h4 className="font-serif italic text-lg mb-1" style={{ color: '#6b21a8' }}>Thank you for your payment!</h4>
-            <p className="text-[10px]" style={{ color: '#6b7280' }}>This is a digital payment acknowledgement.</p>
+            <h4 className="font-serif italic text-lg mb-1" style={{ color: '#6b21a8' }}>{t('receipt_thank_you')}</h4>
+            <p className="text-[10px]" style={{ color: '#6b7280' }}>{t('receipt_digital_acknowledgement')}</p>
           </div>
         </div>
         
@@ -213,17 +215,17 @@ export const PaymentReceiptTemplate: React.FC<ReceiptProps> = ({ receiptData }) 
         <div className="py-3 px-4 flex justify-between items-center mt-auto" style={{ backgroundColor: '#faf5ff' }}>
           <div className="flex items-center gap-1 text-[10px] font-medium" style={{ color: '#7e22ce' }}>
             <ShieldCheck size={12} color="#7e22ce" />
-            Secure
+            {t('receipt_secure')}
           </div>
           <div className="w-1 h-1 rounded-full" style={{ backgroundColor: '#d8b4fe' }}></div>
           <div className="flex items-center gap-1 text-[10px] font-medium" style={{ color: '#7e22ce' }}>
             <ShieldCheck size={12} color="#7e22ce" />
-            Transparent
+            {t('receipt_transparent')}
           </div>
           <div className="w-1 h-1 rounded-full" style={{ backgroundColor: '#d8b4fe' }}></div>
           <div className="flex items-center gap-1 text-[10px] font-medium" style={{ color: '#7e22ce' }}>
             <ShieldCheck size={12} color="#7e22ce" />
-            Reliable
+            {t('receipt_reliable')}
           </div>
         </div>
       </div>

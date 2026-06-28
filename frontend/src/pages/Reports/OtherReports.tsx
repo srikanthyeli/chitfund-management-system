@@ -2,9 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { reportApi } from '../../core/reportApi';
 import type { ReportParams } from '../../core/reportApi';
 import { ExportActions } from '../../components/common/ExportActions';
+import { useTranslation } from 'react-i18next';
 
 // Generic Report Page Component to avoid code duplication
 export const GenericReportPage = ({ title, description, apiCall, columns, exportFilename }: any) => {
+  const { t } = useTranslation(['common', 'reports']);
+
   const [data, setData] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -71,7 +74,7 @@ export const GenericReportPage = ({ title, description, apiCall, columns, export
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {loading ? (
-                <tr><td colSpan={columns.length} className="px-6 py-4 text-center text-gray-500">Loading...</td></tr>
+                <tr><td colSpan={columns.length} className="px-6 py-4 text-center text-gray-500">{t('common:loading')}</td></tr>
               ) : data.length === 0 ? (
                 <tr><td colSpan={columns.length} className="px-6 py-4 text-center text-gray-500">No data found</td></tr>
               ) : (
@@ -96,16 +99,12 @@ export const GenericReportPage = ({ title, description, apiCall, columns, export
               onClick={() => setParams(p => ({ ...p, page: p.page! - 1 }))}
               disabled={params.page === 1}
               className="px-3 py-1 border border-gray-300 rounded text-sm disabled:opacity-50"
-            >
-              Previous
-            </button>
+            >{t('common:previous')}</button>
             <button
               onClick={() => setParams(p => ({ ...p, page: p.page! + 1 }))}
               disabled={params.page! * params.limit! >= total}
               className="px-3 py-1 border border-gray-300 rounded text-sm disabled:opacity-50"
-            >
-              Next
-            </button>
+            >{t('common:next')}</button>
           </div>
         </div>
       </div>
@@ -115,7 +114,7 @@ export const GenericReportPage = ({ title, description, apiCall, columns, export
 
 export const AuctionReport = () => (
   <GenericReportPage 
-    title="Auction Report" 
+    title={t('reports:reports_auction')} 
     description="Details of all conducted auctions."
     apiCall={reportApi.getAuctionReport}
     exportFilename="auction_report"
@@ -132,7 +131,7 @@ export const AuctionReport = () => (
 
 export const WinnerPayoutReport = () => (
   <GenericReportPage 
-    title="Winner Payout Report" 
+    title={t('reports:reports_winner_payout')} 
     description="Details of all winner payouts."
     apiCall={reportApi.getWinnerPayoutReport}
     exportFilename="winner_payout_report"
@@ -149,7 +148,7 @@ export const WinnerPayoutReport = () => (
 
 export const MemberFinancialReport = () => (
   <GenericReportPage 
-    title="Member Financial Report" 
+    title={t('reports:reports_member_financial')} 
     description="Financial summary for all members."
     apiCall={reportApi.getMemberFinancialReport}
     exportFilename="member_financial_report"
@@ -182,7 +181,7 @@ export const OrganizerFinancialReport = () => (
 
 export const ChitPerformanceReport = () => (
   <GenericReportPage 
-    title="Chit Performance Report" 
+    title={t('reports:reports_chit_performance')} 
     description="Health and performance of all chit groups."
     apiCall={reportApi.getChitPerformanceReport}
     exportFilename="chit_performance_report"

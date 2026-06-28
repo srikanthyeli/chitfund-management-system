@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, Gavel, Calendar, IndianRupee, Hash, FileText } from 'lucide-react';
 import api from '../../core/api';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   chitGroupId: string;
@@ -91,8 +92,7 @@ const CreateAuctionDialog: React.FC<Props> = ({ chitGroupId, onClose, onCreated 
           {/* Auction Date */}
           <div>
             <label className={labelClass}>
-              <Calendar size={12} /> Auction Date
-            </label>
+              <Calendar size={12} />{t('auctions:auctions_date')}</label>
             <input
               type="date"
               value={form.auction_date}
@@ -142,9 +142,7 @@ const CreateAuctionDialog: React.FC<Props> = ({ chitGroupId, onClose, onCreated 
               type="button"
               onClick={onClose}
               className="flex-1 py-3 rounded-xl border border-gray-200 dark:border-gray-600 text-sm font-semibold text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all"
-            >
-              Cancel
-            </button>
+            >{t('common:cancel')}</button>
             <button
               type="submit"
               disabled={loading}

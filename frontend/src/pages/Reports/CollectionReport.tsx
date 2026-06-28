@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { reportApi } from '../../core/reportApi';
 import type { ReportParams } from '../../core/reportApi';
 import { ExportActions } from '../../components/common/ExportActions';
+import { useTranslation } from 'react-i18next';
 
 export const CollectionReport = () => {
+  const { t } = useTranslation(['collections', 'common', 'reports']);
+
   const [data, setData] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -63,7 +66,7 @@ export const CollectionReport = () => {
     <div className="p-6 max-w-7xl mx-auto space-y-6">
       <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Collection Report</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{t('reports:reports_collection')}</h1>
           <p className="text-sm text-gray-500">View and export all collection receipts.</p>
         </div>
         <ExportActions data={data} filename="collection_report_page" onExportBackend={handleExportBackend} />
@@ -71,7 +74,7 @@ export const CollectionReport = () => {
 
       <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex gap-4 items-end">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Month</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">{t('common:receipt_month')}</label>
           <select 
             value={params.month || ''} 
             onChange={e => setParams(p => ({ ...p, month: e.target.value ? parseInt(e.target.value) : undefined, page: 1 }))}
@@ -103,7 +106,7 @@ export const CollectionReport = () => {
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Receipt No</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Member</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('collections:collections_member')}</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Group</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
@@ -112,9 +115,9 @@ export const CollectionReport = () => {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {loading ? (
-                <tr><td colSpan={6} className="px-6 py-4 text-center text-gray-500">Loading...</td></tr>
+                <tr><td colSpan={6} className="px-6 py-4 text-center text-gray-500">{t('common:loading')}</td></tr>
               ) : data.length === 0 ? (
-                <tr><td colSpan={6} className="px-6 py-4 text-center text-gray-500">No collections found</td></tr>
+                <tr><td colSpan={6} className="px-6 py-4 text-center text-gray-500">{t('collections:collections_no_results')}</td></tr>
               ) : (
                 data.map(row => (
                   <tr key={row.receipt_id} className="hover:bg-gray-50">
@@ -141,16 +144,12 @@ export const CollectionReport = () => {
               onClick={() => setParams(p => ({ ...p, page: p.page! - 1 }))}
               disabled={params.page === 1}
               className="px-3 py-1 border border-gray-300 rounded text-sm disabled:opacity-50"
-            >
-              Previous
-            </button>
+            >{t('common:previous')}</button>
             <button
               onClick={() => setParams(p => ({ ...p, page: p.page! + 1 }))}
               disabled={params.page! * params.limit! >= total}
               className="px-3 py-1 border border-gray-300 rounded text-sm disabled:opacity-50"
-            >
-              Next
-            </button>
+            >{t('common:next')}</button>
           </div>
         </div>
       </div>

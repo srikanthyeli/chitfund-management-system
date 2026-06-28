@@ -87,6 +87,3 @@ class WinnerPayoutController:
 
     async def close_month(self, current_user: User, chit_group_id: UUID, month_number: int, request: CloseMonthRequest):
         return await self.closure_service.close_month(current_user, chit_group_id, month_number, request.remarks)
-
-    async def get_financial_summary(self, current_user: User, chit_group_id: UUID):
-        return await self.closure_service.get_financial_summary(current_user, chit_group_id)

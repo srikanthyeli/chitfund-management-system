@@ -3,8 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { payoutApi } from '../../core/payoutApi';
 import toast from 'react-hot-toast';
 import { Plus, IndianRupee, Search, ChevronRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export const WinnerPayoutListPage: React.FC = () => {
+  const { t } = useTranslation(['payouts']);
+
   const navigate = useNavigate();
   const [payouts, setPayouts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -31,7 +34,7 @@ export const WinnerPayoutListPage: React.FC = () => {
     <div className="p-4 max-w-4xl mx-auto pb-24">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Winner Payouts</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('payouts:payouts_title')}</h1>
           <p className="text-gray-500 text-sm">Manage auction winner payouts and receipts</p>
         </div>
       </div>

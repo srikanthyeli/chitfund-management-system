@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import api from '../../core/api';
 import toast from 'react-hot-toast';
 import clsx from 'clsx';
+import { useTranslation } from 'react-i18next';
 
 interface ChitGroupListItem {
   id: string;
@@ -29,6 +30,8 @@ interface SummaryData {
 }
 
 export const ChitGroupList: React.FC = () => {
+  const { t } = useTranslation(['collections', 'chitGroups', 'common', 'organisers']);
+
   const navigate = useNavigate();
   const [chits, setChits] = useState<ChitGroupListItem[]>([]);
   const [total, setTotal] = useState(0);
@@ -156,7 +159,7 @@ export const ChitGroupList: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800 dark:text-white">Chit Groups</h1>
+          <h1 className="text-2xl font-bold text-slate-800 dark:text-white">{t('common:navigation_chitgroups')}</h1>
           <p className="text-sm text-slate-500">Organize chit groups, allocate member shares, and start funds</p>
         </div>
         <Link
@@ -175,7 +178,7 @@ export const ChitGroupList: React.FC = () => {
             <Briefcase size={20} />
           </div>
           <div>
-            <p className="text-xs font-medium text-slate-500">Total Groups</p>
+            <p className="text-xs font-medium text-slate-500">{t('chitGroups:chitgroups_total')}</p>
             <h3 className="text-lg font-bold text-slate-800 dark:text-white">{summary.total_chits}</h3>
           </div>
         </div>
@@ -185,7 +188,7 @@ export const ChitGroupList: React.FC = () => {
             <Play size={20} />
           </div>
           <div>
-            <p className="text-xs font-medium text-slate-500">Active</p>
+            <p className="text-xs font-medium text-slate-500">{t('organisers:organisers_active')}</p>
             <h3 className="text-lg font-bold text-slate-800 dark:text-white">{summary.active_chits}</h3>
           </div>
         </div>
@@ -271,12 +274,12 @@ export const ChitGroupList: React.FC = () => {
               <thead>
                 <tr className="bg-slate-50 dark:bg-gray-855 text-slate-500 dark:text-gray-400 font-semibold text-xs uppercase tracking-wider border-b border-slate-100 dark:border-gray-700">
                   <th className="px-6 py-4">Code</th>
-                  <th className="px-6 py-4">Group Name</th>
+                  <th className="px-6 py-4">{t('chitGroups:chitgroups_name')}</th>
                   <th className="px-6 py-4">Chit Value</th>
                   <th className="px-6 py-4">Allocated Shares</th>
-                  <th className="px-6 py-4">Start Date</th>
-                  <th className="px-6 py-4">Status</th>
-                  <th className="px-6 py-4 text-right">Actions</th>
+                  <th className="px-6 py-4">{t('chitGroups:chitgroups_start_date')}</th>
+                  <th className="px-6 py-4">{t('collections:collections_status')}</th>
+                  <th className="px-6 py-4 text-right">{t('collections:collections_action')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-gray-700 text-sm text-slate-700 dark:text-gray-300">

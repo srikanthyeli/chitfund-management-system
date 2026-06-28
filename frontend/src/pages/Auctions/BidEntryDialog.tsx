@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, IndianRupee, MessageSquare, ChevronDown } from 'lucide-react';
 import api from '../../core/api';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 interface EligibleMember {
   membership_id: string;
@@ -78,7 +79,7 @@ const BidEntryDialog: React.FC<Props> = ({ auctionId, maxBid, auctionMonth, elig
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Member Select */}
             <div>
-              <label className="text-xs font-semibold mb-2 block text-gray-500">Select Member</label>
+              <label className="text-xs font-semibold mb-2 block text-gray-500">{t('reports:reports_select_member')}</label>
               <div className="relative">
                 <select
                   value={membershipId}
@@ -133,9 +134,7 @@ const BidEntryDialog: React.FC<Props> = ({ auctionId, maxBid, auctionMonth, elig
             </div>
 
             <div className="flex gap-3 pt-2">
-              <button type="button" onClick={onClose} className="flex-1 py-3 rounded-xl border border-gray-300 dark:border-gray-700 text-sm font-semibold hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-gray-600 dark:text-gray-300">
-                Cancel
-              </button>
+              <button type="button" onClick={onClose} className="flex-1 py-3 rounded-xl border border-gray-300 dark:border-gray-700 text-sm font-semibold hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-gray-600 dark:text-gray-300">{t('common:cancel')}</button>
               <button
                 type="submit"
                 disabled={loading}

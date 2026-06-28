@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { chitCollectionApi } from '../../../core/chitCollectionApi';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 interface CollectPaymentDialogProps {
   isOpen: boolean;
@@ -11,6 +12,8 @@ interface CollectPaymentDialogProps {
 }
 
 export const CollectPaymentDialog: React.FC<CollectPaymentDialogProps> = ({ isOpen, onClose, due, onSuccess }) => {
+  const { t } = useTranslation(['collections']);
+
   const [amount, setAmount] = useState<string>('');
   const [method, setMethod] = useState<string>('CASH');
   const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]);
@@ -80,7 +83,7 @@ export const CollectPaymentDialog: React.FC<CollectPaymentDialogProps> = ({ isOp
                 <p className="font-semibold text-gray-800 dark:text-gray-200">₹{due.net_payable_amount}</p>
               </div>
               <div>
-                <p className="text-gray-500 dark:text-gray-400">Paid</p>
+                <p className="text-gray-500 dark:text-gray-400">{t('collections:collections_paid_status')}</p>
                 <p className="font-semibold text-gray-800 dark:text-gray-200">₹{due.total_paid_amount}</p>
               </div>
               <div>

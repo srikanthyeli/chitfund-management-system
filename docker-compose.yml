@@ -39,7 +39,7 @@ services:
       ENVIRONMENT: dev
       DATABASE_URL: postgresql://chitfund_admin:chitfund_password@db:5432/chitfund_db
       # CORS: allow Nginx frontend + local dev
-      ALLOWED_ORIGINS: "http://localhost,http://localhost:80,http://localhost:3000,http://127.0.0.1"
+      ALLOWED_ORIGINS: "*"
     depends_on:
       db:
         condition: service_healthy

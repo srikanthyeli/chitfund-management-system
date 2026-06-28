@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import api from '../../core/api';
 import toast from 'react-hot-toast';
 import clsx from 'clsx';
+import { useTranslation } from 'react-i18next';
 
 interface MemberListItem {
   id: string;
@@ -17,6 +18,8 @@ interface MemberListItem {
 }
 
 export const MemberList: React.FC = () => {
+  const { t } = useTranslation(['dashboard', 'collections', 'members']);
+
   const navigate = useNavigate();
   const [members, setMembers] = useState<MemberListItem[]>([]);
   const [total, setTotal] = useState(0);
@@ -116,7 +119,7 @@ export const MemberList: React.FC = () => {
           className="inline-flex items-center justify-center space-x-2 bg-primary hover:bg-primary-dark text-white px-5 py-2.5 rounded-xl font-medium text-sm transition-colors shadow-sm self-start sm:self-auto"
         >
           <Plus size={18} />
-          <span>Add Member</span>
+          <span>{t('dashboard:dashboard_add_member')}</span>
         </Link>
       </div>
 
@@ -184,9 +187,9 @@ export const MemberList: React.FC = () => {
                   <th className="px-6 py-4">Code</th>
                   <th className="px-6 py-4">Full Name</th>
                   <th className="px-6 py-4">Mobile</th>
-                  <th className="px-6 py-4">Village</th>
-                  <th className="px-6 py-4">Status</th>
-                  <th className="px-6 py-4 text-right">Actions</th>
+                  <th className="px-6 py-4">{t('members:members_village')}</th>
+                  <th className="px-6 py-4">{t('collections:collections_status')}</th>
+                  <th className="px-6 py-4 text-right">{t('collections:collections_action')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 dark:divide-gray-700 text-sm text-slate-700 dark:text-gray-300">

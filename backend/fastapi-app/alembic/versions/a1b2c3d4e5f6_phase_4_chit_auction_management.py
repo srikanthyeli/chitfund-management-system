@@ -66,6 +66,7 @@ def upgrade() -> None:
     op.create_index(op.f('ix_chit_auctions_organizer_id'), 'chit_auctions', ['organizer_id'], unique=False)
     op.create_index(op.f('ix_chit_auctions_chit_group_id'), 'chit_auctions', ['chit_group_id'], unique=False)
     op.create_index(op.f('ix_chit_auctions_status'), 'chit_auctions', ['status'], unique=False)
+    op.create_index(op.f('ix_chit_auctions_auction_date'), 'chit_auctions', ['auction_date'], unique=False)
 
     # -----------------------------------------------------------------
     # 2. Add winner FK on chit_auctions -> chit_memberships (self-referential via memberships)
@@ -185,11 +186,13 @@ def upgrade() -> None:
     op.create_index(op.f('ix_monthly_member_dues_chit_auction_id'), 'monthly_member_dues', ['chit_auction_id'], unique=False)
     op.create_index(op.f('ix_monthly_member_dues_membership_id'), 'monthly_member_dues', ['membership_id'], unique=False)
     op.create_index(op.f('ix_monthly_member_dues_payment_status'), 'monthly_member_dues', ['payment_status'], unique=False)
+    op.create_index(op.f('ix_monthly_member_dues_due_date'), 'monthly_member_dues', ['due_date'], unique=False)
 
 
 def downgrade() -> None:
     # Drop in reverse dependency order
     op.drop_index(op.f('ix_monthly_member_dues_payment_status'), table_name='monthly_member_dues')
+    op.drop_index(op.f('ix_monthly_member_dues_due_date'), table_name='monthly_member_dues')
     op.drop_index(op.f('ix_monthly_member_dues_membership_id'), table_name='monthly_member_dues')
     op.drop_index(op.f('ix_monthly_member_dues_chit_auction_id'), table_name='monthly_member_dues')
     op.drop_index(op.f('ix_monthly_member_dues_chit_group_id'), table_name='monthly_member_dues')
@@ -210,6 +213,7 @@ def downgrade() -> None:
     op.drop_constraint('fk_chit_auctions_winner_member', 'chit_auctions', type_='foreignkey')
     op.drop_constraint('fk_chit_auctions_winner_membership', 'chit_auctions', type_='foreignkey')
     op.drop_index(op.f('ix_chit_auctions_status'), table_name='chit_auctions')
+    op.drop_index(op.f('ix_chit_auctions_auction_date'), table_name='chit_auctions')
     op.drop_index(op.f('ix_chit_auctions_chit_group_id'), table_name='chit_auctions')
     op.drop_index(op.f('ix_chit_auctions_organizer_id'), table_name='chit_auctions')
     op.drop_table('chit_auctions')
