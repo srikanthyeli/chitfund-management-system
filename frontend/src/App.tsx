@@ -4,6 +4,9 @@ import { AppLayout } from './components/layout/AppLayout';
 import { ProtectedRoute } from './core/guards/ProtectedRoute';
 import { useTheme } from './core/useTheme';
 
+import { MemberLayout } from './components/layout/MemberLayout';
+import { MemberProtectedRoute } from './core/guards/MemberProtectedRoute';
+
 // Pages
 import { Login } from './pages/Auth/Login';
 import { OrganizerDashboard } from './pages/Dashboard/OrganizerDashboard';
@@ -123,9 +126,11 @@ function App() {
             <Route path="/admin/organizers/new" element={<CreateOrganizer />} />
             <Route path="/admin/organizers/:id" element={<div className="p-4">Organizer Detail Placeholder</div>} />
           </Route>
+        </Route>
 
-          {/* Member Portal Routes */}
-          <Route element={<ProtectedRoute allowedRoles={['MEMBER']} />}>
+        {/* Member Portal Routes */}
+        <Route element={<MemberLayout />}>
+          <Route element={<MemberProtectedRoute />}>
             <Route path="/member/dashboard" element={<MemberDashboardPage />} />
             <Route path="/member/chits" element={<MyChitsPage />} />
             <Route path="/member/chits/:id" element={<MyChitDetailPage />} />

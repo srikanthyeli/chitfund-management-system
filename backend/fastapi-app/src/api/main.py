@@ -75,6 +75,7 @@ app.include_router(report_router.router)
 app.include_router(bond_interest_router.router)
 
 
+
 # Register custom exception handler
 @app.exception_handler(AppError)
 def app_error_handler(request: Request, exc: AppError):

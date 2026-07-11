@@ -100,6 +100,7 @@ class Member(Base, AuditMixin):
     pincode = Column(String(10), nullable=True)
     aadhaar_last4 = Column(String(4), nullable=True)
     notes = Column(Text, nullable=True)
+    password_hash = Column(String(255), nullable=True) # Added for Member Portal Login
     is_active = Column(Boolean, nullable=False, default=True, index=True)
 
     organizer = relationship("Organizer", back_populates="members", foreign_keys="[Member.organizer_id]")
@@ -508,3 +509,15 @@ class Notification(Base, AuditMixin):
     __table_args__ = (
         Index('idx_notifications_user_is_read', 'user_id', 'is_read'),
     )
+
+
+class OTPRequest(Base):
+    __tablename__ = "otp_requests"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    mobile = Column(String(15), nullable=False, index=True)
+    otp_hash = Column(String(255), nullable=False)
+    expires_at = Column(DateTime, nullable=False)
+    attempts = Column(Integer, nullable=False, default=0)
+    is_used = Column(Boolean, nullable=False, default=False)
+    created_at = Column(DateTime, nullable=False, server_default=func.now())

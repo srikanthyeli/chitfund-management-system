@@ -82,10 +82,31 @@ async def get_current_organizer(
     return current_user
 
 async def get_current_member(
-    current_user: User = Depends(get_current_user)
-) -> User:
-    if current_user.role != "MEMBER":
+    credentials: HTTPAuthorizationCredentials = Depends(security_scheme),
+    db_object: asyncpg.Connection = Depends(get_db_session)
+):
+    from src.shared.core.repository.member_repository import MemberRepository
+    
+    payload = _extract_token_payload(credentials)
+    
+    if payload.get("role") != "MEMBER":
         raise HTTPException(status_code=403, detail="Member role required")
-    if not current_user.member_id:
-        raise HTTPException(status_code=403, detail="No member profile linked to this user")
-    return current_user
+        
+    member_id = payload.get("member_id")
+    organizer_id = payload.get("organizer_id")
+    
+    if not member_id or not organizer_id:
+        raise HTTPException(status_code=401, detail="Invalid member token payload")
+        
+    member_repo = MemberRepository(db_object)
+    member = await member_repo.get_member_by_id_and_organizer(UUID(member_id), UUID(organizer_id))
+    
+    if not member or not member.is_active:
+        raise HTTPException(status_code=401, detail="Member account disabled")
+        
+    org_repo = OrganizerRepository(db_object)
+    org = await org_repo.get_organizer_by_id(UUID(organizer_id))
+    if not org or not org.is_active:
+        raise HTTPException(status_code=403, detail="Organizer account is disabled")
+
+    return member

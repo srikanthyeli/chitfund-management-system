@@ -35,6 +35,9 @@ services:
     restart: unless-stopped
     ports:
       - "8000:8000"
+    volumes:
+      - ./backend/fastapi-app:/app
+    command: uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --reload
     environment:
       ENVIRONMENT: dev
       DATABASE_URL: postgresql://chitfund_admin:chitfund_password@db:5432/chitfund_db
@@ -44,15 +47,20 @@ services:
       db:
         condition: service_healthy
 
-  # ── React / Vite Frontend (served via Nginx) ─────────────────
+  # ── React / Vite Frontend (served via Vite Dev Server) ───────
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      target: builder
     container_name: chitfund-frontend
     restart: unless-stopped
     ports:
       - "80:80"              # access the app at http://localhost
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    command: npm run dev
     depends_on:
       - backend
 

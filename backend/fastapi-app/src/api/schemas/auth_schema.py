@@ -39,3 +39,11 @@ class RefreshTokenResponse(BaseModel):
 class LogoutResponse(BaseModel):
     success: bool
     message: str
+
+class RequestOTP(BaseModel):
+    mobile: str = Field(..., description="User mobile number")
+
+class ResetPassword(BaseModel):
+    mobile: str = Field(..., description="User mobile number")
+    otp: str = Field(..., description="OTP sent to mobile")
+    new_password: str = Field(..., description="New password")

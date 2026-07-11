@@ -26,7 +26,7 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    
+
     // If 401 and we haven't retried yet
     if (error.response?.status === 401 && !originalRequest._retry && originalRequest.url !== '/auth/login' && originalRequest.url !== '/auth/refresh') {
       originalRequest._retry = true;
@@ -38,10 +38,10 @@ api.interceptors.response.use(
 
         const response = await axios.post(`/api/v1/auth/refresh`, { refresh_token: refreshToken });
         const newAccessToken = response.data.access_token;
-        
+
         localStorage.setItem('access_token', newAccessToken);
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-        
+
         return api(originalRequest);
       } catch (refreshError) {
         // Refresh token failed, force logout
@@ -52,7 +52,7 @@ api.interceptors.response.use(
         return Promise.reject(refreshError);
       }
     }
-    
+
     return Promise.reject(error);
   }
 );

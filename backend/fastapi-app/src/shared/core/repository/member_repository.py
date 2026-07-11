@@ -240,3 +240,20 @@ class MemberRepository:
         rows = await self.db_object.fetch(query, member_ids, organizer_id)
         return [Member(**dict(row)) for row in rows]
 
+    async def get_members_by_mobile(self, mobile: str) -> List[Member]:
+        query = """
+            SELECT id, organizer_id, member_code, full_name, mobile, alternate_mobile, email, address, village, mandal, district, state, pincode, aadhaar_last4, notes, password_hash, is_active, created_at, updated_at
+            FROM members 
+            WHERE mobile = $1 AND is_deleted = FALSE
+        """
+        rows = await self.db_object.fetch(query, mobile)
+        return [Member(**dict(row)) for row in rows]
+
+    async def update_password(self, member_id: UUID, password_hash: str) -> bool:
+        query = """
+            UPDATE members
+            SET password_hash = $1, updated_at = $2
+            WHERE id = $3 AND is_deleted = FALSE
+        """
+        result = await self.db_object.execute(query, password_hash, datetime.utcnow(), member_id)
+        return result == "UPDATE 1"

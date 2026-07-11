@@ -2,7 +2,8 @@ import asyncpg
 from fastapi import APIRouter, Depends
 from src.api.schemas.auth_schema import (
     LoginRequest, ForceLoginRequest, RefreshTokenRequest,
-    LoginResponse, LogoutResponse, CurrentUserResponse
+    LoginResponse, LogoutResponse, CurrentUserResponse,
+    RequestOTP, ResetPassword
 )
 from src.api.schemas.auth_schema import RefreshTokenResponse
 from src.shared.core.services.auth_service import AuthService
@@ -57,6 +58,28 @@ async def refresh_token(
     Issue a new access token using a valid refresh token.
     """
     return await service.refresh_token(request_data)
+
+
+@router.post("/forgot-password/request-otp", status_code=200)
+async def request_otp(
+    request_data: RequestOTP,
+    service: AuthService = Depends(get_auth_service)
+):
+    """
+    Request OTP for password reset.
+    """
+    return await service.request_password_reset(request_data)
+
+
+@router.post("/forgot-password/reset", status_code=200)
+async def reset_password(
+    request_data: ResetPassword,
+    service: AuthService = Depends(get_auth_service)
+):
+    """
+    Verify OTP and reset password.
+    """
+    return await service.verify_otp_and_reset_password(request_data)
 
 
 # ── Protected Endpoints (Bearer token required) ───────────────────────────────
