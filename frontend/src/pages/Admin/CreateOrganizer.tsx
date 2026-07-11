@@ -62,7 +62,7 @@ export const CreateOrganizer = () => {
           </div>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Organizer Created!</h2>
           <p className="text-gray-500 dark:text-gray-400 mb-8">
-            Please copy these credentials. The password will not be shown again.
+            Please share these credentials with the organizer. They can log in using their mobile number and an OTP.
           </p>
 
           <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-6 space-y-4 text-left">
@@ -77,19 +77,6 @@ export const CreateOrganizer = () => {
                 <p className="text-sm text-gray-500 dark:text-gray-400">Login Mobile</p>
                 <p className="font-mono font-medium text-gray-900 dark:text-white mt-1">{successData.login_mobile}</p>
               </div>
-            </div>
-            <div className="flex justify-between items-center">
-              <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Temporary Password</p>
-                <p className="font-mono font-medium text-gray-900 dark:text-white mt-1">{successData.temporary_password}</p>
-              </div>
-              <button 
-                onClick={() => copyToClipboard(successData.temporary_password)}
-                className="p-2 text-gray-500 hover:text-purple-600 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 transition-colors"
-                title="Copy Password"
-              >
-                <Copy size={20} />
-              </button>
             </div>
           </div>
 

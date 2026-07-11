@@ -8,7 +8,6 @@ from src.shared.core.repository.organizer_repository import OrganizerRepository
 from src.shared.core.repository.user_repository import UserRepository
 from src.shared.core.repository.user_session_repository import UserSessionRepository
 from src.shared.core.repository.login_audit_repository import LoginAuditRepository
-from src.shared.common.helpers.password_helper import hash_password
 from src.api.schemas.organizer_schema import OrganizerCreateRequest, OrganizerUpdateRequest, OrganizerStatusRequest
 
 class OrganizerService:
@@ -19,8 +18,6 @@ class OrganizerService:
         self.session_repo = UserSessionRepository(db_object)
         self.audit_repo = LoginAuditRepository(db_object)
 
-    def _generate_temp_password(self, mobile: str):
-        return f"user@{mobile}"
 
     async def create_organizer(self, data: OrganizerCreateRequest, admin_user_id: UUID):
         existing_org_by_mobile = await self.organizer_repo.get_organizer_by_mobile(data.mobile)
@@ -36,18 +33,14 @@ class OrganizerService:
         if existing_user_by_mobile:
             raise HTTPException(status_code=400, detail="User with this mobile already exists")
 
-        temp_password = self._generate_temp_password(data.mobile)
-        hashed_password = hash_password(temp_password)
-
         org = await self.organizer_repo.create_organizer(data.dict(), admin_user_id)
-        
+
         user_data = {
             "organizer_id": org.id,
             "mobile": org.mobile,
-            "password_hash": hashed_password,
             "role": "ORGANIZER",
             "is_active": True,
-            "must_change_password": True
+            "must_change_password": False
         }
         await self.user_repo.create_user(user_data)
         
@@ -58,8 +51,7 @@ class OrganizerService:
             "organizer_code": org.organizer_code,
             "name": org.name,
             "mobile": org.mobile,
-            "login_mobile": org.mobile,
-            "temporary_password": temp_password
+            "login_mobile": org.mobile
         }
 
     async def get_all_organizers(self, skip: int = 0, limit: int = 100):

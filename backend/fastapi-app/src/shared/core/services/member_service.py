@@ -6,7 +6,6 @@ from typing import Optional
 from src.shared.core.repository.member_repository import MemberRepository
 from src.shared.core.repository.member_activity_log_repository import MemberActivityLogRepository
 from src.shared.core.repository.user_repository import UserRepository
-from src.shared.common.helpers.password_helper import hash_password
 from src.api.models.models import User
 from src.api.schemas.member_schema import (
     MemberCreateRequest, MemberUpdateRequest, MemberStatusRequest, MemberMobileUpdateRequest
@@ -89,15 +88,13 @@ class MemberService:
             )
             
             # Auto-provision User account for Member
-            hashed_pw = hash_password("Member@123")
             user_data = {
                 "organizer_id": organizer_id,
                 "member_id": member.id,
                 "mobile": member.mobile,
-                "password_hash": hashed_pw,
                 "role": UserRole.MEMBER.value,
                 "is_active": True,
-                "must_change_password": True
+                "must_change_password": False
             }
             # Ignore if user already exists (e.g. from previous manual seeding)
             existing_user = await self.user_repo.get_user_by_mobile(member.mobile)

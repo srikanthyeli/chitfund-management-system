@@ -745,173 +745,177 @@ export const ChitGroupDetail: React.FC = () => {
       {/* MODAL 1: Allocate Member Shares */}
       {isAllocateOpen && chit && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl max-w-lg w-full border border-slate-100 dark:border-gray-700 shadow-xl overflow-hidden">
-            <div className="p-5 border-b border-slate-100 dark:border-gray-700">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl max-w-lg w-full max-h-[90vh] flex flex-col border border-slate-100 dark:border-gray-700 shadow-xl overflow-hidden">
+            <div className="p-5 border-b border-slate-100 dark:border-gray-700 shrink-0">
               <h3 className="text-base font-bold text-slate-800 dark:text-white">Allocate Shares to Members</h3>
               <p className="text-xs text-slate-500 mt-0.5">
                 Select active members and specify equal shares to allocate.
               </p>
             </div>
             
-            <form onSubmit={handleAllocateSubmit} className="p-5 space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
-                  Search & Select Members <span className="text-rose-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="Search by name, phone, code..."
-                  value={allocSearch}
-                  onChange={(e) => setAllocSearch(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-gray-700 dark:bg-gray-900 text-slate-900 dark:text-white text-sm mb-2"
-                />
-                
-                <div className="flex justify-between items-center mb-2 px-1">
-                  <span className="text-xs text-slate-500 font-semibold">
-                    {filteredMembers.length} members found
-                  </span>
-                  {filteredMembers.length > 0 && (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const filteredIds = filteredMembers.map(m => m.id);
-                        const allSelected = filteredIds.every(id => allocSelectedIds.includes(id));
-                        if (allSelected) {
-                          setAllocSelectedIds(prev => prev.filter(id => !filteredIds.includes(id)));
-                        } else {
-                          setAllocSelectedIds(prev => Array.from(new Set([...prev, ...filteredIds])));
-                        }
-                      }}
-                      className="text-primary hover:text-primary-dark text-xs font-bold"
-                    >
-                      {filteredMembers.map(m => m.id).every(id => allocSelectedIds.includes(id)) ? 'Deselect All' : 'Select All'}
-                    </button>
-                  )}
-                </div>
-
-                <div className="border border-slate-200 dark:border-gray-700 rounded-xl overflow-hidden max-h-48 overflow-y-auto mb-4 bg-slate-50 dark:bg-gray-900/50">
-                  {filteredMembers.length === 0 ? (
-                    <div className="text-center py-6 text-slate-500 text-xs font-semibold">
-                      No active members found.
-                    </div>
-                  ) : (
-                    <div className="divide-y divide-slate-150 dark:divide-gray-800">
-                      {filteredMembers.map((m) => {
-                        const isChecked = allocSelectedIds.includes(m.id);
-                        return (
-                          <label
-                            key={m.id}
-                            className="flex items-center space-x-3 p-3 hover:bg-slate-100 dark:hover:bg-gray-850 cursor-pointer select-none"
-                          >
-                            <input
-                              type="checkbox"
-                              checked={isChecked}
-                              onChange={() => {
-                                if (isChecked) {
-                                  setAllocSelectedIds(prev => prev.filter(id => id !== m.id));
-                                } else {
-                                  setAllocSelectedIds(prev => [...prev, m.id]);
-                                }
-                              }}
-                              className="rounded text-primary focus:ring-primary h-4 w-4"
-                            />
-                            <div className="flex-1 min-w-0">
-                              <p className="text-sm font-bold text-slate-800 dark:text-white truncate">
-                                {m.full_name}
-                              </p>
-                              <p className="text-xs text-slate-500 dark:text-gray-400 font-semibold">
-                                {m.member_code} • {m.mobile} {m.village ? `• ${m.village}` : ''}
-                              </p>
-                            </div>
-                            {m.existing_shares > 0 && (
-                              <span className="text-[10px] bg-purple-50 dark:bg-purple-950/40 text-primary dark:text-purple-300 font-bold px-2.5 py-0.5 rounded-full shrink-0">
-                                {m.existing_shares} existing share(s)
-                              </span>
-                            )}
-                          </label>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <form onSubmit={handleAllocateSubmit} className="flex flex-col overflow-hidden">
+              <div className="p-5 space-y-4 overflow-y-auto flex-1">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
-                    Shares Per Member <span className="text-rose-500">*</span>
-                  </label>
-                  <input
-                    type="number"
-                    required
-                    min="1"
-                    value={allocSharesPerMember}
-                    onChange={(e) => setAllocSharesPerMember(parseInt(e.target.value) || 1)}
-                    className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-gray-700 dark:bg-gray-900 text-slate-900 dark:text-white text-sm"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
-                    Remarks (Optional)
+                  <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">
+                    Search & Select Members <span className="text-rose-500">*</span>
                   </label>
                   <input
                     type="text"
-                    placeholder="e.g. Bulk allocation"
-                    value={allocRemarks}
-                    onChange={(e) => setAllocRemarks(e.target.value)}
-                    className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-gray-700 dark:bg-gray-900 text-slate-900 dark:text-white text-sm"
+                    placeholder="Search by name, phone, code..."
+                    value={allocSearch}
+                    onChange={(e) => setAllocSearch(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-gray-700 dark:bg-gray-900 text-slate-900 dark:text-white text-sm mb-2"
                   />
+                  
+                  <div className="flex justify-between items-center mb-2 px-1">
+                    <span className="text-xs text-slate-500 font-semibold">
+                      {filteredMembers.length} members found
+                    </span>
+                    {filteredMembers.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const filteredIds = filteredMembers.map(m => m.id);
+                          const allSelected = filteredIds.every(id => allocSelectedIds.includes(id));
+                          if (allSelected) {
+                            setAllocSelectedIds(prev => prev.filter(id => !filteredIds.includes(id)));
+                          } else {
+                            setAllocSelectedIds(prev => Array.from(new Set([...prev, ...filteredIds])));
+                          }
+                        }}
+                        className="text-primary hover:text-primary-dark text-xs font-bold"
+                      >
+                        {filteredMembers.map(m => m.id).every(id => allocSelectedIds.includes(id)) ? 'Deselect All' : 'Select All'}
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="border border-slate-200 dark:border-gray-700 rounded-xl overflow-hidden max-h-48 overflow-y-auto mb-4 bg-slate-50 dark:bg-gray-900/50">
+                    {filteredMembers.length === 0 ? (
+                      <div className="text-center py-6 text-slate-500 text-xs font-semibold">
+                        No active members found.
+                      </div>
+                    ) : (
+                      <div className="divide-y divide-slate-150 dark:divide-gray-800">
+                        {filteredMembers.map((m) => {
+                          const isChecked = allocSelectedIds.includes(m.id);
+                          return (
+                            <label
+                              key={m.id}
+                              className="flex items-center space-x-3 p-3 hover:bg-slate-100 dark:hover:bg-gray-850 cursor-pointer select-none"
+                            >
+                              <input
+                                type="checkbox"
+                                checked={isChecked}
+                                onChange={() => {
+                                  if (isChecked) {
+                                    setAllocSelectedIds(prev => prev.filter(id => id !== m.id));
+                                  } else {
+                                    setAllocSelectedIds(prev => [...prev, m.id]);
+                                  }
+                                }}
+                                className="rounded text-primary focus:ring-primary h-4 w-4"
+                              />
+                              <div className="flex-1 min-w-0">
+                                <p className="text-sm font-bold text-slate-800 dark:text-white truncate">
+                                  {m.full_name}
+                                </p>
+                                <p className="text-xs text-slate-500 dark:text-gray-400 font-semibold">
+                                  {m.member_code} • {m.mobile} {m.village ? `• ${m.village}` : ''}
+                                </p>
+                              </div>
+                              {m.existing_shares > 0 && (
+                                <span className="text-[10px] bg-purple-50 dark:bg-purple-950/40 text-primary dark:text-purple-300 font-bold px-2.5 py-0.5 rounded-full shrink-0">
+                                  {m.existing_shares} existing share(s)
+                                </span>
+                              )}
+                            </label>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
                 </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
+                      Shares Per Member <span className="text-rose-500">*</span>
+                    </label>
+                    <input
+                      type="number"
+                      required
+                      min="1"
+                      value={allocSharesPerMember}
+                      onChange={(e) => setAllocSharesPerMember(parseInt(e.target.value) || 1)}
+                      className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-gray-700 dark:bg-gray-900 text-slate-900 dark:text-white text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
+                      Remarks (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Bulk allocation"
+                      value={allocRemarks}
+                      onChange={(e) => setAllocRemarks(e.target.value)}
+                      className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-gray-700 dark:bg-gray-900 text-slate-900 dark:text-white text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div className="bg-slate-50 dark:bg-gray-900 p-4 rounded-xl space-y-2 text-xs">
+                  <h4 className="font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[10px]">
+                    Real-time Calculation
+                  </h4>
+                  <div className="grid grid-cols-2 gap-y-1.5 text-slate-600 dark:text-gray-300">
+                    <div>Selected Members:</div>
+                    <div className="text-right font-bold text-slate-800 dark:text-white">
+                      {allocSelectedIds.length}
+                    </div>
+                    
+                    <div>Shares Per Member:</div>
+                    <div className="text-right font-bold text-slate-800 dark:text-white">
+                      {allocSharesPerMember}
+                    </div>
+                    
+                    <div className="border-t pt-1.5 font-semibold">Total Shares to Add:</div>
+                    <div className={clsx("text-right border-t pt-1.5 font-bold", exceedsAvailable ? "text-rose-500 animate-pulse" : "text-slate-800 dark:text-white")}>
+                      {totalSharesToAdd}
+                    </div>
+                    
+                    <div>Available Shares:</div>
+                    <div className="text-right font-bold text-slate-800 dark:text-white">
+                      {availableSharesLeft}
+                    </div>
+                    
+                    <div className="border-t pt-1.5 font-semibold">Remaining Shares:</div>
+                    <div className={clsx("text-right border-t pt-1.5 font-bold", remainingAfterAlloc < 0 ? "text-rose-500" : "text-green-600 dark:text-green-400")}>
+                      {remainingAfterAlloc}
+                    </div>
+                  </div>
+                </div>
+
+                {allocSelectedIds.length > 0 && !exceedsAvailable && (
+                  <div className="bg-purple-50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-900/40 p-3 rounded-xl text-xs text-primary dark:text-purple-300 font-semibold leading-relaxed">
+                    Confirm: You are allocating {allocSharesPerMember} shares each to {allocSelectedIds.length} members. Total shares to add: {totalSharesToAdd}.
+                  </div>
+                )}
               </div>
 
-              <div className="bg-slate-50 dark:bg-gray-900 p-4 rounded-xl space-y-2 text-xs">
-                <h4 className="font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[10px]">
-                  Real-time Calculation
-                </h4>
-                <div className="grid grid-cols-2 gap-y-1.5 text-slate-600 dark:text-gray-300">
-                  <div>Selected Members:</div>
-                  <div className="text-right font-bold text-slate-800 dark:text-white">
-                    {allocSelectedIds.length}
-                  </div>
-                  
-                  <div>Shares Per Member:</div>
-                  <div className="text-right font-bold text-slate-800 dark:text-white">
-                    {allocSharesPerMember}
-                  </div>
-                  
-                  <div className="border-t pt-1.5 font-semibold">Total Shares to Add:</div>
-                  <div className={clsx("text-right border-t pt-1.5 font-bold", exceedsAvailable ? "text-rose-500 animate-pulse" : "text-slate-800 dark:text-white")}>
-                    {totalSharesToAdd}
-                  </div>
-                  
-                  <div>Available Shares:</div>
-                  <div className="text-right font-bold text-slate-800 dark:text-white">
-                    {availableSharesLeft}
-                  </div>
-                  
-                  <div className="border-t pt-1.5 font-semibold">Remaining Shares:</div>
-                  <div className={clsx("text-right border-t pt-1.5 font-bold", remainingAfterAlloc < 0 ? "text-rose-500" : "text-green-600 dark:text-green-400")}>
-                    {remainingAfterAlloc}
-                  </div>
-                </div>
-              </div>
-
-              {allocSelectedIds.length > 0 && !exceedsAvailable && (
-                <div className="bg-purple-50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-900/40 p-3 rounded-xl text-xs text-primary dark:text-purple-300 font-semibold leading-relaxed">
-                  Confirm: You are allocating {allocSharesPerMember} shares each to {allocSelectedIds.length} members. Total shares to add: {totalSharesToAdd}.
-                </div>
-              )}
-
-              <div className="flex space-x-3 pt-3 border-t border-slate-100 dark:border-gray-700">
+              <div className="p-4 border-t border-slate-100 dark:border-gray-700 shrink-0 flex flex-col sm:flex-row gap-3 bg-white dark:bg-gray-800">
                 <button
                   type="button"
                   onClick={() => setIsAllocateOpen(false)}
-                  className="flex-1 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-slate-700 dark:text-gray-300 font-medium text-xs font-semibold"
-                >{t('common:cancel')}</button>
+                  className="flex flex-1 items-center justify-center py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-slate-700 dark:text-gray-300 text-xs font-semibold"
+                >
+                  {t('common:cancel')}
+                </button>
                 <button
                   type="submit"
                   disabled={submittingAlloc || allocSelectedIds.length === 0 || exceedsAvailable || allocSharesPerMember <= 0 || chit.status !== 'DRAFT'}
-                  className="flex-1 py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white font-medium text-xs font-semibold disabled:opacity-50"
+                  className="flex flex-1 items-center justify-center py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white text-xs font-semibold disabled:opacity-50"
                 >
                   {submittingAlloc ? 'Allocating...' : 'Allocate'}
                 </button>
@@ -924,50 +928,54 @@ export const ChitGroupDetail: React.FC = () => {
       {/* MODAL 2: Edit Share Count */}
       {isEditSharesOpen && selectedMembership && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full border border-slate-100 dark:border-gray-700 shadow-xl overflow-hidden">
-            <div className="p-5 border-b border-slate-100 dark:border-gray-700">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full max-h-[90vh] flex flex-col border border-slate-100 dark:border-gray-700 shadow-xl overflow-hidden">
+            <div className="p-5 border-b border-slate-100 dark:border-gray-700 shrink-0">
               <h3 className="text-base font-bold text-slate-800 dark:text-white">Modify Member Shares</h3>
               <p className="text-xs text-slate-500 mt-0.5">Change share allocations for {selectedMembership.full_name}.</p>
             </div>
             
-            <form onSubmit={handleEditSharesSubmit} className="p-5 space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Share Count <span className="text-rose-500">*</span></label>
-                <input
-                  type="number"
-                  required
-                  min="1"
-                  value={editShareCount}
-                  onChange={(e) => setEditShareCount(parseInt(e.target.value) || 1)}
-                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-gray-700 dark:bg-gray-900 text-slate-900 dark:text-white text-sm"
-                />
-                <p className="text-[10px] text-slate-400 mt-1">
-                  Current: {selectedMembership.share_count} • Max additional allocation limit: +{chit.available_shares} shares
-                </p>
+            <form onSubmit={handleEditSharesSubmit} className="flex flex-col overflow-hidden">
+              <div className="p-5 space-y-4 overflow-y-auto flex-1">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Share Count <span className="text-rose-500">*</span></label>
+                  <input
+                    type="number"
+                    required
+                    min="1"
+                    value={editShareCount}
+                    onChange={(e) => setEditShareCount(parseInt(e.target.value) || 1)}
+                    className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-gray-700 dark:bg-gray-900 text-slate-900 dark:text-white text-sm"
+                  />
+                  <p className="text-[10px] text-slate-400 mt-1">
+                    Current: {selectedMembership.share_count} • Max additional allocation limit: +{chit.available_shares} shares
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Reason for Change <span className="text-rose-500">*</span></label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Member requested higher share allocation"
+                    value={editRemarks}
+                    onChange={(e) => setEditRemarks(e.target.value)}
+                    className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-gray-700 dark:bg-gray-900 text-slate-900 dark:text-white text-sm"
+                  />
+                </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Reason for Change <span className="text-rose-500">*</span></label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Member requested higher share allocation"
-                  value={editRemarks}
-                  onChange={(e) => setEditRemarks(e.target.value)}
-                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-gray-700 dark:bg-gray-900 text-slate-900 dark:text-white text-sm"
-                />
-              </div>
-
-              <div className="flex space-x-3 pt-3 border-t border-slate-100 dark:border-gray-700">
+              <div className="p-4 border-t border-slate-100 dark:border-gray-700 shrink-0 flex flex-col sm:flex-row gap-3 bg-white dark:bg-gray-800">
                 <button
                   type="button"
                   onClick={() => setIsEditSharesOpen(false)}
-                  className="flex-1 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-slate-700 dark:text-gray-300 font-medium text-xs"
-                >{t('common:cancel')}</button>
+                  className="flex flex-1 items-center justify-center py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-slate-700 dark:text-gray-300 font-medium text-xs"
+                >
+                  {t('common:cancel')}
+                </button>
                 <button
                   type="submit"
                   disabled={submittingEditShares}
-                  className="flex-1 py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white font-medium text-xs disabled:opacity-50"
+                  className="flex flex-1 items-center justify-center py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white font-medium text-xs disabled:opacity-50"
                 >
                   {submittingEditShares ? 'Updating...' : 'Update Shares'}
                 </button>
@@ -980,8 +988,8 @@ export const ChitGroupDetail: React.FC = () => {
       {/* MODAL 3: Remove Member */}
       {isRemoveMemberOpen && selectedMembership && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full border border-slate-100 dark:border-gray-700 shadow-xl overflow-hidden">
-            <div className="p-5 border-b border-rose-100 dark:border-rose-900/30 bg-rose-50 dark:bg-rose-950/20 text-rose-800 dark:text-rose-400">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full max-h-[90vh] flex flex-col border border-slate-100 dark:border-gray-700 shadow-xl overflow-hidden">
+            <div className="p-5 border-b border-rose-100 dark:border-rose-900/30 bg-rose-50 dark:bg-rose-950/20 text-rose-800 dark:text-rose-400 shrink-0">
               <h3 className="text-base font-bold flex items-center space-x-2">
                 <AlertTriangle size={18} />
                 <span>Remove Member from Chit</span>
@@ -989,33 +997,37 @@ export const ChitGroupDetail: React.FC = () => {
               <p className="text-xs mt-1">You are about to soft remove {selectedMembership.full_name} from this group.</p>
             </div>
             
-            <form onSubmit={handleRemoveSubmit} className="p-5 space-y-4">
-              <p className="text-xs text-slate-600 dark:text-gray-300 font-semibold">
-                Removed shares ({selectedMembership.share_count} share(s)) will be returned back to the available pool.
-              </p>
+            <form onSubmit={handleRemoveSubmit} className="flex flex-col overflow-hidden">
+              <div className="p-5 space-y-4 overflow-y-auto flex-1">
+                <p className="text-xs text-slate-600 dark:text-gray-300 font-semibold">
+                  Removed shares ({selectedMembership.share_count} share(s)) will be returned back to the available pool.
+                </p>
 
-              <div>
-                <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Reason for Removal <span className="text-rose-500">*</span></label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Switched to another scheme, opted out"
-                  value={removeRemarks}
-                  onChange={(e) => setRemoveRemarks(e.target.value)}
-                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-gray-700 dark:bg-gray-900 text-slate-900 dark:text-white text-sm"
-                />
+                <div>
+                  <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Reason for Removal <span className="text-rose-500">*</span></label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Switched to another scheme, opted out"
+                    value={removeRemarks}
+                    onChange={(e) => setRemoveRemarks(e.target.value)}
+                    className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-gray-700 dark:bg-gray-900 text-slate-900 dark:text-white text-sm"
+                  />
+                </div>
               </div>
 
-              <div className="flex space-x-3 pt-3 border-t border-slate-100 dark:border-gray-700">
+              <div className="p-4 border-t border-slate-100 dark:border-gray-700 shrink-0 flex flex-col sm:flex-row gap-3 bg-white dark:bg-gray-800">
                 <button
                   type="button"
                   onClick={() => setIsRemoveMemberOpen(false)}
-                  className="flex-1 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-slate-700 dark:text-gray-300 font-medium text-xs"
-                >{t('common:cancel')}</button>
+                  className="flex flex-1 items-center justify-center py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-slate-700 dark:text-gray-300 font-medium text-xs"
+                >
+                  {t('common:cancel')}
+                </button>
                 <button
                   type="submit"
                   disabled={submittingRemove}
-                  className="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-medium text-xs disabled:opacity-50"
+                  className="flex flex-1 items-center justify-center py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-medium text-xs disabled:opacity-50"
                 >
                   {submittingRemove ? 'Removing...' : 'Confirm Remove'}
                 </button>
@@ -1028,44 +1040,48 @@ export const ChitGroupDetail: React.FC = () => {
       {/* MODAL 4: Change Status Confirmation */}
       {isStatusModalOpen && targetStatus && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full border border-slate-100 dark:border-gray-700 shadow-xl overflow-hidden">
-            <div className="p-5 border-b border-slate-100 dark:border-gray-700">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full max-h-[90vh] flex flex-col border border-slate-100 dark:border-gray-700 shadow-xl overflow-hidden">
+            <div className="p-5 border-b border-slate-100 dark:border-gray-700 shrink-0">
               <h3 className="text-base font-bold text-slate-800 dark:text-white">Confirm Status Transition</h3>
               <p className="text-xs text-slate-500 mt-0.5">Transition chit group status to {getStatusLabel(targetStatus)}.</p>
             </div>
             
-            <form onSubmit={handleStatusSubmit} className="p-5 space-y-4">
-              <p className="text-xs text-slate-600 dark:text-gray-300 leading-relaxed font-semibold">
-                {targetStatus === 'READY_TO_START' && 'This marks the group as ready to start. Member allocation will be locked.'}
-                {targetStatus === 'DRAFT' && 'Reverting to draft status allows you to edit settings and adjust member shares.'}
-                {targetStatus === 'ACTIVE' && 'Activating the chit starts the monthly cycles. Financial parameters will be locked permanently.'}
-                {targetStatus === 'CANCELLED' && 'Cancelling the chit terminates this group. This cannot be undone.'}
-              </p>
+            <form onSubmit={handleStatusSubmit} className="flex flex-col overflow-hidden">
+              <div className="p-5 space-y-4 overflow-y-auto flex-1">
+                <p className="text-xs text-slate-600 dark:text-gray-300 leading-relaxed font-semibold">
+                  {targetStatus === 'READY_TO_START' && 'This marks the group as ready to start. Member allocation will be locked.'}
+                  {targetStatus === 'DRAFT' && 'Reverting to draft status allows you to edit settings and adjust member shares.'}
+                  {targetStatus === 'ACTIVE' && 'Activating the chit starts the monthly cycles. Financial parameters will be locked permanently.'}
+                  {targetStatus === 'CANCELLED' && 'Cancelling the chit terminates this group. This cannot be undone.'}
+                </p>
 
-              <div>
-                <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
-                  Remarks / Notes {targetStatus === 'CANCELLED' && <span className="text-rose-500">*</span>}
-                </label>
-                <textarea
-                  required={targetStatus === 'CANCELLED'}
-                  rows={2}
-                  placeholder={targetStatus === 'CANCELLED' ? "Provide reason for cancellation..." : "Optional comments..."}
-                  value={statusRemarks}
-                  onChange={(e) => setStatusRemarks(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-gray-700 dark:bg-gray-900 text-slate-900 dark:text-white text-sm resize-none"
-                />
+                <div>
+                  <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
+                    Remarks / Notes {targetStatus === 'CANCELLED' && <span className="text-rose-500">*</span>}
+                  </label>
+                  <textarea
+                    required={targetStatus === 'CANCELLED'}
+                    rows={2}
+                    placeholder={targetStatus === 'CANCELLED' ? "Provide reason for cancellation..." : "Optional comments..."}
+                    value={statusRemarks}
+                    onChange={(e) => setStatusRemarks(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-gray-700 dark:bg-gray-900 text-slate-900 dark:text-white text-sm resize-none"
+                  />
+                </div>
               </div>
 
-              <div className="flex space-x-3 pt-3 border-t border-slate-100 dark:border-gray-700">
+              <div className="p-4 border-t border-slate-100 dark:border-gray-700 shrink-0 flex flex-col sm:flex-row gap-3 bg-white dark:bg-gray-800">
                 <button
                   type="button"
                   onClick={() => setIsStatusModalOpen(false)}
-                  className="flex-1 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-slate-700 dark:text-gray-300 font-medium text-xs"
-                >{t('common:cancel')}</button>
+                  className="flex flex-1 items-center justify-center py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-slate-700 dark:text-gray-300 font-medium text-xs"
+                >
+                  {t('common:cancel')}
+                </button>
                 <button
                   type="submit"
                   disabled={submittingStatus}
-                  className="flex-1 py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white font-medium text-xs disabled:opacity-50"
+                  className="flex flex-1 items-center justify-center py-2.5 rounded-xl bg-primary hover:bg-primary-dark text-white font-medium text-xs disabled:opacity-50"
                 >
                   {submittingStatus ? 'Updating...' : 'Confirm'}
                 </button>

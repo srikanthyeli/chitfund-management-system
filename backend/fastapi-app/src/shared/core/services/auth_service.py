@@ -11,7 +11,7 @@ from src.shared.core.repository.member_repository import MemberRepository
 
 from src.shared.common.helpers.password_helper import verify_password, hash_password
 from src.shared.common.helpers.jwt_helper import create_access_token, create_refresh_token, decode_token
-from src.api.schemas.auth_schema import LoginRequest, ForceLoginRequest, RefreshTokenRequest, RequestOTP, ResetPassword
+from src.api.schemas.auth_schema import LoginRequest, ForceLoginRequest, RefreshTokenRequest, RequestOTP
 from src.shared.core.properties.app_properties import settings
 from src.api.models.models import User, Member
 from src.shared.common.exceptions import AuthenticationError, AuthorizationError, AppError
@@ -28,14 +28,13 @@ class AuthService:
         self.member_repo = MemberRepository(db_object)
         self.otp_service = OtpService(db_object)
 
-    async def _validate_credentials_unified(self, mobile: str, password: str):
+    async def _validate_credentials_unified(self, mobile: str, otp: str):
+        # First verify the OTP
+        await self.otp_service.verify_otp(mobile, otp)
+
         # 1. Check if user is Admin / Organizer
         user = await self.user_repo.get_user_by_mobile(mobile)
         if user:
-            if not verify_password(password, user.password_hash):
-                await self.audit_repo.create_log("LOGIN_FAILED", user_id=user.id, mobile=mobile, remarks="Invalid password")
-                raise AuthenticationError("Invalid credentials")
-
             if not user.is_active:
                 await self.audit_repo.create_log("LOGIN_FAILED", user_id=user.id, mobile=mobile, remarks="User is inactive")
                 raise AuthorizationError("User is inactive")
@@ -51,29 +50,28 @@ class AuthService:
         # 2. If not found in users, check if user is a Member
         members = await self.member_repo.get_members_by_mobile(mobile)
         if members:
-            # Find the first active member with matching password
+            # Find the first active member
             authenticated_member = None
             for member in members:
-                if member.password_hash and verify_password(password, member.password_hash):
-                    if not member.is_active:
-                        continue
-                    org = await self.organizer_repo.get_organizer_by_id(member.organizer_id)
-                    if org and org.is_active:
-                        authenticated_member = member
-                        break
+                if not member.is_active:
+                    continue
+                org = await self.organizer_repo.get_organizer_by_id(member.organizer_id)
+                if org and org.is_active:
+                    authenticated_member = member
+                    break
             
             if authenticated_member:
                 return {"type": "member", "data": authenticated_member}
 
-            await self.audit_repo.create_log("MEMBER_LOGIN_FAILED", mobile=mobile, remarks="Invalid password or inactive account")
-            raise AuthenticationError("Invalid credentials")
+            await self.audit_repo.create_log("MEMBER_LOGIN_FAILED", mobile=mobile, remarks="Inactive account")
+            raise AuthenticationError("Inactive account")
 
         # Not found anywhere
         await self.audit_repo.create_log("LOGIN_FAILED", mobile=mobile, remarks="User/Member not found")
-        raise AuthenticationError("Invalid credentials")
+        raise AuthenticationError("Account not found")
 
     async def login(self, data: LoginRequest):
-        auth_entity = await self._validate_credentials_unified(data.mobile, data.password)
+        auth_entity = await self._validate_credentials_unified(data.mobile, data.otp)
         
         if auth_entity["type"] == "user":
             user: User = auth_entity["data"]
@@ -91,7 +89,7 @@ class AuthService:
             return await self._create_member_tokens(member, data.device_id, data.device_name, "MEMBER_LOGIN_SUCCESS")
 
     async def force_login(self, data: ForceLoginRequest):
-        auth_entity = await self._validate_credentials_unified(data.mobile, data.password)
+        auth_entity = await self._validate_credentials_unified(data.mobile, data.otp)
         
         if auth_entity["type"] == "user":
             user: User = auth_entity["data"]
@@ -149,8 +147,7 @@ class AuthService:
                 "mobile": user.mobile,
                 "role": user.role,
                 "organizer_id": user.organizer_id,
-                "name": name,
-                "must_change_password": user.must_change_password
+                "name": name
             }
         }
 
@@ -298,11 +295,10 @@ class AuthService:
             "mobile": user.mobile,
             "role": user.role,
             "organizer_id": user.organizer_id,
-            "name": name,
-            "must_change_password": user.must_change_password
+            "name": name
         }
 
-    async def request_password_reset(self, data: RequestOTP):
+    async def request_login_otp(self, data: RequestOTP):
         mobile = data.mobile
         user = await self.user_repo.get_user_by_mobile(mobile)
         members = await self.member_repo.get_members_by_mobile(mobile)
@@ -324,22 +320,3 @@ class AuthService:
             raise AuthorizationError("Your account is inactive")
 
         return await self.otp_service.generate_and_send_otp(mobile)
-
-    async def verify_otp_and_reset_password(self, data: ResetPassword):
-        mobile = data.mobile
-        await self.otp_service.verify_otp(mobile, data.otp)
-
-        user = await self.user_repo.get_user_by_mobile(mobile)
-        members = await self.member_repo.get_members_by_mobile(mobile)
-        
-        hashed_password = hash_password(data.new_password)
-
-        if user:
-            # We don't have update_password on user_repo, let's create a raw query or add it
-            await self.db.execute("UPDATE users SET password_hash = $1 WHERE id = $2", hashed_password, user.id)
-
-        if members:
-            for member in members:
-                await self.member_repo.update_password(member.id, hashed_password)
-
-        return {"success": True, "message": "Password set successfully"}

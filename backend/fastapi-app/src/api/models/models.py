@@ -36,7 +36,7 @@ class User(Base, AuditMixin):
     organizer_id = Column(UUID(as_uuid=True), ForeignKey("organizers.id", ondelete="CASCADE"), nullable=True)
     member_id = Column(UUID(as_uuid=True), nullable=True) # for future use
     mobile = Column(String(15), unique=True, nullable=False, index=True)
-    password_hash = Column(Text, nullable=False)
+
     role = Column(String(20), nullable=False, default="MEMBER", index=True)
     is_active = Column(Boolean, nullable=False, default=True)
     last_login_at = Column(DateTime, nullable=True)
@@ -100,7 +100,6 @@ class Member(Base, AuditMixin):
     pincode = Column(String(10), nullable=True)
     aadhaar_last4 = Column(String(4), nullable=True)
     notes = Column(Text, nullable=True)
-    password_hash = Column(String(255), nullable=True) # Added for Member Portal Login
     is_active = Column(Boolean, nullable=False, default=True, index=True)
 
     organizer = relationship("Organizer", back_populates="members", foreign_keys="[Member.organizer_id]")

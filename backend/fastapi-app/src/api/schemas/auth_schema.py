@@ -4,13 +4,13 @@ from typing import Optional
 
 class LoginRequest(BaseModel):
     mobile: str = Field(..., description="User mobile number")
-    password: str = Field(..., description="User password")
+    otp: str = Field(..., description="OTP sent to mobile")
     device_id: Optional[str] = None
     device_name: Optional[str] = None
 
 class ForceLoginRequest(BaseModel):
     mobile: str = Field(..., description="User mobile number")
-    password: str = Field(..., description="User password")
+    otp: str = Field(..., description="OTP sent to mobile")
     device_id: Optional[str] = None
     device_name: Optional[str] = None
 
@@ -23,7 +23,6 @@ class CurrentUserResponse(BaseModel):
     role: str
     organizer_id: Optional[UUID] = None
     name: str
-    must_change_password: bool
 
     class Config:
         from_attributes = True
@@ -42,8 +41,3 @@ class LogoutResponse(BaseModel):
 
 class RequestOTP(BaseModel):
     mobile: str = Field(..., description="User mobile number")
-
-class ResetPassword(BaseModel):
-    mobile: str = Field(..., description="User mobile number")
-    otp: str = Field(..., description="OTP sent to mobile")
-    new_password: str = Field(..., description="New password")

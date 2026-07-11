@@ -8,12 +8,12 @@ interface User {
   role: string;
   organizer_id: string | null;
   name: string;
-  must_change_password: boolean;
 }
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
+  requestLoginOtp: (mobile: string) => Promise<any>;
   login: (data: any) => Promise<any>;
   forceLogin: (data: any) => Promise<any>;
   logout: () => void;
@@ -43,6 +43,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     initializeAuth();
   }, []);
+
+  const requestLoginOtp = async (mobile: string) => {
+    try {
+      const response = await api.post('/auth/login/request-otp', { mobile });
+      return { success: true, message: response.data.message };
+    } catch (error: any) {
+      toast.error(error.response?.data?.detail || 'Failed to request OTP');
+      return { success: false };
+    }
+  };
 
   const login = async (credentials: any) => {
     try {
@@ -95,7 +105,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, forceLogin, logout }}>
+    <AuthContext.Provider value={{ user, loading, requestLoginOtp, login, forceLogin, logout }}>
       {children}
     </AuthContext.Provider>
   );
