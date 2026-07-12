@@ -1,17 +1,17 @@
-import os
 import logging
 from typing import Dict, Any
 from twilio.rest import Client
 from twilio.base.exceptions import TwilioRestException
-from src.shared.common.exceptions import AppError, AuthenticationError
+from src.shared.common.exceptions import AppError
+from src.shared.core.properties.app_properties import settings
 
 logger = logging.getLogger(__name__)
 
 class TwilioService:
     def __init__(self):
-        self.account_sid = os.getenv("TWILIO_ACCOUNT_SID")
-        self.auth_token = os.getenv("TWILIO_AUTH_TOKEN")
-        self.verify_service_sid = os.getenv("TWILIO_VERIFY_SERVICE_SID")
+        self.account_sid = settings.twilio.account_sid
+        self.auth_token = settings.twilio.auth_token
+        self.verify_service_sid = settings.twilio.verify_service_sid
         
         if not all([self.account_sid, self.auth_token, self.verify_service_sid]):
             logger.error("Missing Twilio credentials or Verify Service SID in environment variables.")

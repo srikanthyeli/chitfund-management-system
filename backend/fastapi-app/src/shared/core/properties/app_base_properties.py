@@ -16,7 +16,13 @@ class JwtSettings(BaseModel):
     access_token_expiry: int = 60
     refresh_token_expiry: int = 7
 
+class TwilioSettings(BaseModel):
+    account_sid: str = ""
+    auth_token: str = ""
+    verify_service_sid: str = ""
+
 class BaseConfig(BaseModel):
     database: DatabaseSettings
     app: AppSettings
     jwt: JwtSettings
+    twilio: TwilioSettings
