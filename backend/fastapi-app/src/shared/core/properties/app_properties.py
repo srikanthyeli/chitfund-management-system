@@ -8,7 +8,7 @@ from src.shared.core.properties.app_base_properties import BaseConfig, DatabaseS
 load_dotenv()
 
 def load_properties() -> BaseConfig:
-    env = os.getenv("ENVIRONMENT", "local").lower()
+    env = os.getenv("ENVIRONMENT", "dev").lower()
     
     # Resolve config directory relative to this file
     current_file = Path(__file__).resolve()
