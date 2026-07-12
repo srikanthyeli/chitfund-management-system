@@ -9,7 +9,6 @@ from src.shared.core.repository.user_session_repository import UserSessionReposi
 from src.shared.core.repository.login_audit_repository import LoginAuditRepository
 from src.shared.core.repository.member_repository import MemberRepository
 
-from src.shared.common.helpers.password_helper import verify_password, hash_password
 from src.shared.common.helpers.jwt_helper import create_access_token, create_refresh_token, decode_token
 from src.api.schemas.auth_schema import LoginRequest, ForceLoginRequest, RefreshTokenRequest, RequestOTP
 from src.shared.core.properties.app_properties import settings
@@ -28,9 +27,9 @@ class AuthService:
         self.member_repo = MemberRepository(db_object)
         self.otp_service = OtpService(db_object)
 
-    async def _validate_credentials_unified(self, mobile: str, otp: str):
+    async def _validate_credentials_unified(self, mobile: str, otp: str, mark_used: bool = True):
         # First verify the OTP
-        await self.otp_service.verify_otp(mobile, otp)
+        otp_request_id = await self.otp_service.verify_otp(mobile, otp, mark_used=mark_used)
 
         # 1. Check if user is Admin / Organizer
         user = await self.user_repo.get_user_by_mobile(mobile)
@@ -45,7 +44,7 @@ class AuthService:
                     await self.audit_repo.create_log("LOGIN_FAILED", user_id=user.id, mobile=mobile, remarks="Organizer is inactive")
                     raise AuthorizationError("Organizer account is inactive")
             
-            return {"type": "user", "data": user}
+            return {"type": "user", "data": user, "otp_request_id": otp_request_id}
 
         # 2. If not found in users, check if user is a Member
         members = await self.member_repo.get_members_by_mobile(mobile)
@@ -61,7 +60,7 @@ class AuthService:
                     break
             
             if authenticated_member:
-                return {"type": "member", "data": authenticated_member}
+                return {"type": "member", "data": authenticated_member, "otp_request_id": otp_request_id}
 
             await self.audit_repo.create_log("MEMBER_LOGIN_FAILED", mobile=mobile, remarks="Inactive account")
             raise AuthenticationError("Inactive account")
@@ -71,7 +70,7 @@ class AuthService:
         raise AuthenticationError("Account not found")
 
     async def login(self, data: LoginRequest):
-        auth_entity = await self._validate_credentials_unified(data.mobile, data.otp)
+        auth_entity = await self._validate_credentials_unified(data.mobile, data.otp, mark_used=False)
         
         if auth_entity["type"] == "user":
             user: User = auth_entity["data"]
@@ -82,10 +81,13 @@ class AuthService:
                     status_code=409,
                     details={"code": "FORCE_LOGIN_REQUIRED"}
                 )
+            # If we get here, no active session, mark OTP as used
+            await self.otp_service.mark_otp_used(auth_entity["otp_request_id"])
             return await self._create_user_session_and_tokens(user, data.device_id, data.device_name, "LOGIN_SUCCESS")
         
         elif auth_entity["type"] == "member":
             member: Member = auth_entity["data"]
+            await self.otp_service.mark_otp_used(auth_entity["otp_request_id"])
             return await self._create_member_tokens(member, data.device_id, data.device_name, "MEMBER_LOGIN_SUCCESS")
 
     async def force_login(self, data: ForceLoginRequest):
@@ -186,8 +188,7 @@ class AuthService:
                 "mobile": member.mobile,
                 "role": "MEMBER",
                 "organizer_id": member.organizer_id,
-                "name": member.full_name,
-                "must_change_password": False # Members don't have this explicitly in current schema flow
+                "name": member.full_name
             }
         }
 
@@ -277,8 +278,7 @@ class AuthService:
                 "mobile": current_user.mobile,
                 "role": "MEMBER",
                 "organizer_id": current_user.organizer_id,
-                "name": current_user.full_name,
-                "must_change_password": False
+                "name": current_user.full_name
             }
 
         user = current_user

@@ -72,7 +72,7 @@ class OtpService:
         
         return {"success": True, "message": "OTP sent successfully"}
 
-    async def verify_otp(self, mobile: str, otp: str) -> bool:
+    async def verify_otp(self, mobile: str, otp: str, mark_used: bool = True) -> int:
         otp_request = await self.otp_repo.get_latest_otp_request(mobile)
         if not otp_request:
             raise AuthenticationError("No OTP request found for this number")
@@ -91,6 +91,10 @@ class OtpService:
             await self.otp_repo.increment_attempts(otp_request.id)
             raise AuthenticationError("Invalid OTP")
 
-        # Mark as used
-        await self.otp_repo.mark_as_used(otp_request.id)
-        return True
+        # Mark as used if requested
+        if mark_used:
+            await self.otp_repo.mark_as_used(otp_request.id)
+        return otp_request.id
+
+    async def mark_otp_used(self, otp_request_id) -> None:
+        await self.otp_repo.mark_as_used(otp_request_id)

@@ -3,3 +3,129 @@
 2026-07-12 00:27:23 - src.api.main - INFO - Shutting down application and closing database pool...
 2026-07-12 00:27:24 - src.api.main - INFO - Starting up application and initializing database pool...
 2026-07-12 00:27:43 - src.api.main - INFO - Shutting down application and closing database pool...
+2026-07-12 17:24:49 - src.api.main - INFO - Starting up application and initializing database pool...
+2026-07-12 17:26:54 - src.api.main - ERROR - Request validation error for POST http://localhost:8000/api/v1/auth/login: body={"mobile":"9999999999","password":"1234567890","device_id":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36","device_name":"Browser"} errors=[{'type': 'missing', 'loc': ('body', 'otp'), 'msg': 'Field required', 'input': {'mobile': '9999999999', 'password': '1234567890', 'device_id': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36', 'device_name': 'Browser'}}]
+2026-07-12 17:26:56 - src.api.main - ERROR - Request validation error for POST http://localhost:8000/api/v1/auth/login: body={"mobile":"9999999999","password":"1234567890","device_id":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36","device_name":"Browser"} errors=[{'type': 'missing', 'loc': ('body', 'otp'), 'msg': 'Field required', 'input': {'mobile': '9999999999', 'password': '1234567890', 'device_id': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36', 'device_name': 'Browser'}}]
+2026-07-12 17:26:59 - src.api.main - ERROR - Request validation error for POST http://localhost:8000/api/v1/auth/login: body={"mobile":"9999999999","password":"1234567890","device_id":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36","device_name":"Browser"} errors=[{'type': 'missing', 'loc': ('body', 'otp'), 'msg': 'Field required', 'input': {'mobile': '9999999999', 'password': '1234567890', 'device_id': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36', 'device_name': 'Browser'}}]
+2026-07-12 17:29:45 - src.shared.core.services.otp_service - WARNING - SMS Gateway credentials missing! OTP for 9999999999 is 493343
+2026-07-12 17:29:45 - passlib.handlers.bcrypt - WARNING - (trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/opt/venv/lib/python3.11/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+2026-07-12 17:29:45 - src.api.main - ERROR - [Unhandled Exception] POST http://backend:8000/api/v1/auth/login/request-otp — Traceback (most recent call last):
+  File "/opt/venv/lib/python3.11/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/middleware/cors.py", line 96, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/middleware/cors.py", line 154, in simple_response
+    await self.app(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 2683, in app
+    await route.handle(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 1753, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 2738, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 1773, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 1264, in handle
+    await app(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 150, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 136, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 690, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 344, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/api/routers/auth_router.py", line 71, in request_otp
+    return await service.request_login_otp(request_data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/shared/core/services/auth_service.py", line 319, in request_login_otp
+    return await self.otp_service.generate_and_send_otp(mobile)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/shared/core/services/otp_service.py", line 68, in generate_and_send_otp
+    otp_hash = hash_password(otp_str)
+               ^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/shared/common/helpers/password_helper.py", line 6, in hash_password
+    return pwd_context.hash(password)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/passlib/context.py", line 2258, in hash
+    return record.hash(secret, **kwds)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/passlib/utils/handlers.py", line 779, in hash
+    self.checksum = self._calc_checksum(secret)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/passlib/handlers/bcrypt.py", line 591, in _calc_checksum
+    self._stub_requires_backend()
+  File "/opt/venv/lib/python3.11/site-packages/passlib/utils/handlers.py", line 2254, in _stub_requires_backend
+    cls.set_backend()
+  File "/opt/venv/lib/python3.11/site-packages/passlib/utils/handlers.py", line 2156, in set_backend
+    return owner.set_backend(name, dryrun=dryrun)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/passlib/utils/handlers.py", line 2163, in set_backend
+    return cls.set_backend(name, dryrun=dryrun)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/passlib/utils/handlers.py", line 2188, in set_backend
+    cls._set_backend(name, dryrun)
+  File "/opt/venv/lib/python3.11/site-packages/passlib/utils/handlers.py", line 2311, in _set_backend
+    super(SubclassBackendMixin, cls)._set_backend(name, dryrun)
+  File "/opt/venv/lib/python3.11/site-packages/passlib/utils/handlers.py", line 2224, in _set_backend
+    ok = loader(**kwds)
+         ^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/passlib/handlers/bcrypt.py", line 626, in _load_backend_mixin
+    return mixin_cls._finalize_backend_mixin(name, dryrun)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/passlib/handlers/bcrypt.py", line 421, in _finalize_backend_mixin
+    if detect_wrap_bug(IDENT_2A):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/passlib/handlers/bcrypt.py", line 380, in detect_wrap_bug
+    if verify(secret, bug_hash):
+       ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/passlib/utils/handlers.py", line 792, in verify
+    return consteq(self._calc_checksum(secret), chk)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/passlib/handlers/bcrypt.py", line 655, in _calc_checksum
+    hash = _bcrypt.hashpw(secret, config)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])
+
+2026-07-12 17:31:10 - src.api.main - INFO - Shutting down application and closing database pool...
+2026-07-12 17:31:11 - src.api.main - INFO - Starting up application and initializing database pool...
+2026-07-12 17:31:42 - src.shared.core.services.otp_service - WARNING - SMS Gateway credentials missing! OTP for 9999999999 is 179172
+2026-07-12 17:32:04 - src.api.main - ERROR - Application error: status_code=409, message='This account is active on another phone.'
+2026-07-12 17:32:07 - src.api.main - ERROR - Application error: status_code=401, message='OTP has already been used'
+2026-07-12 17:32:19 - src.shared.core.services.otp_service - WARNING - SMS Gateway credentials missing! OTP for 9999999999 is 351997
+2026-07-12 17:32:22 - src.api.main - ERROR - Application error: status_code=401, message='Invalid OTP'
+2026-07-12 17:32:37 - src.api.main - ERROR - Application error: status_code=409, message='This account is active on another phone.'
+2026-07-12 17:32:40 - src.api.main - ERROR - Application error: status_code=401, message='OTP has already been used'
+2026-07-12 17:33:32 - src.shared.core.services.otp_service - WARNING - SMS Gateway credentials missing! OTP for 9999999999 is 217828
+2026-07-12 17:33:44 - src.api.main - ERROR - Application error: status_code=409, message='This account is active on another phone.'
+2026-07-12 17:33:50 - src.api.main - ERROR - Application error: status_code=401, message='OTP has already been used'
+2026-07-12 17:34:55 - src.api.main - INFO - Shutting down application and closing database pool...
+2026-07-12 17:34:56 - src.api.main - INFO - Starting up application and initializing database pool...
+2026-07-12 17:35:10 - src.api.main - INFO - Shutting down application and closing database pool...
+2026-07-12 17:35:11 - src.api.main - INFO - Starting up application and initializing database pool...
+2026-07-12 17:38:14 - src.api.main - INFO - Shutting down application and closing database pool...
+2026-07-12 17:38:16 - src.api.main - INFO - Starting up application and initializing database pool...
+2026-07-12 17:38:36 - src.shared.core.services.otp_service - WARNING - SMS Gateway credentials missing! OTP for 9999999999 is 786510
+2026-07-12 17:38:56 - src.api.main - ERROR - Application error: status_code=409, message='This account is active on another phone.'
+2026-07-12 17:39:12 - src.shared.core.services.otp_service - WARNING - SMS Gateway credentials missing! OTP for 9110770030 is 732909
