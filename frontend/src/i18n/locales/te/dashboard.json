@@ -25,5 +25,7 @@
   "dashboard_member_engagement": "సభ్యుల నిమగ్నత",
   "dashboard_performance": "పనితీరు",
   "dashboard_statistics": "గణాంకాలు",
-  "dashboard_no_data": "ఈ కాలానికి డేటా ఉపలభ్యం కాలేదు"
+  "dashboard_no_data": "ఈ కాలానికి డేటా అందుబాటులో లేదు",
+  "dashboard_members_directory": "సభ్యుల డైరెక్టరీ",
+  "dashboard_manage_members": "మీ సంస్థలోని అందరు కస్టమర్/సభ్యుల రికార్డులను నిర్వహించండి"
 }

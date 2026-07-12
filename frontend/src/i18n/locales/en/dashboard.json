@@ -25,5 +25,7 @@
   "dashboard_member_engagement": "Member Engagement",
   "dashboard_performance": "Performance",
   "dashboard_statistics": "Statistics",
-  "dashboard_no_data": "No data available for this period"
+  "dashboard_no_data": "No data available for this period",
+  "dashboard_members_directory": "Members Directory",
+  "dashboard_manage_members": "Manage all customer/member records in your organization"
 }

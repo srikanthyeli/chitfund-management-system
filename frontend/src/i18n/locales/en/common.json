@@ -112,5 +112,8 @@
   "receipt_system_generated": "This is a system-generated payout receipt.",
   "breadcrumb_home": "Home",
   "footer_copyright": "© 2026 Chit Fund Manager. All rights reserved.",
-  "currency_symbol": "₹"
+  "currency_symbol": "₹",
+  "try_adjusting_search": "Try adjusting your search terms or status filters",
+  "get_started_add_member": "Get started by onboarding your first member using the \"Add Member\" button above.",
+  "code": "Code"
 }

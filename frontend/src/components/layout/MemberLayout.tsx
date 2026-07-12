@@ -77,9 +77,7 @@ export const MemberLayout: React.FC = () => {
               <img src="/logo.png" alt="Logo" className="w-8 h-8 rounded-lg shadow-sm border border-purple-100 dark:border-purple-900/30 shrink-0" />
               <div className="min-w-0">
                 <h1 className="text-lg font-bold text-purple-600 dark:text-purple-400 truncate">ChitMate</h1>
-                <p className="text-xs text-gray-500 dark:text-gray-400 truncate mt-0.5">
-                  Member Portal
-                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 truncate mt-0.5">{t('common:portal_member')}</p>
               </div>
             </div>
           ) : (

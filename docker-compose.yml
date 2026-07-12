@@ -41,6 +41,10 @@ services:
     environment:
       ENVIRONMENT: ${ENVIRONMENT:-dev}
       DATABASE_URL: ${DATABASE_URL:-postgresql://chitfund_admin:chitfund_password@db:5432/chitfund_db}
+      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID}
+      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
+      TWILIO_VERIFY_SERVICE_SID: ${TWILIO_VERIFY_SERVICE_SID}
+      TZ: Asia/Kolkata
       # CORS: allow Nginx frontend + local dev
       ALLOWED_ORIGINS: "*"
     depends_on:

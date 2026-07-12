@@ -111,8 +111,8 @@ export const MemberList: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800 dark:text-white">Members Directory</h1>
-          <p className="text-sm text-slate-500">Manage all customer/member records in your organization</p>
+          <h1 className="text-2xl font-bold text-slate-800 dark:text-white">{t('dashboard:dashboard_members_directory')}</h1>
+          <p className="text-sm text-slate-500">{t('dashboard:dashboard_manage_members')}</p>
         </div>
         <Link
           to="/organizer/members/new"
@@ -132,7 +132,7 @@ export const MemberList: React.FC = () => {
           </span>
           <input
             type="text"
-            placeholder="Search by name, mobile number or member code..."
+            placeholder={t('members:members_search_placeholder')}
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-gray-700 dark:bg-gray-900 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary"
@@ -163,17 +163,17 @@ export const MemberList: React.FC = () => {
         <div className="flex justify-center py-12 text-slate-500">
           <div className="flex items-center space-x-2">
             <div className="animate-spin rounded-full h-6 w-6 border-2 border-primary border-t-transparent"></div>
-            <span>Loading members...</span>
+            <span>{t('common:loading')}</span>
           </div>
         </div>
       ) : members.length === 0 ? (
         <div className="bg-white dark:bg-gray-800 text-center py-16 rounded-2xl border border-slate-100 dark:border-gray-700">
           <User className="mx-auto text-slate-300 dark:text-gray-600 mb-4" size={48} />
-          <h3 className="text-lg font-bold text-slate-800 dark:text-white">No Members Found</h3>
+          <h3 className="text-lg font-bold text-slate-800 dark:text-white">{t('members:members_no_results')}</h3>
           <p className="text-slate-500 text-sm mt-1 max-w-sm mx-auto">
             {search || statusFilter !== 'all'
-              ? 'Try adjusting your search terms or status filters'
-              : 'Get started by onboarding your first member using the "Add Member" button above.'}
+              ? t('common:try_adjusting_search')
+              : t('common:get_started_add_member')}
           </p>
         </div>
       ) : (
@@ -184,9 +184,9 @@ export const MemberList: React.FC = () => {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-slate-50 dark:bg-gray-850 text-slate-500 dark:text-gray-400 font-semibold text-xs uppercase tracking-wider border-b border-slate-100 dark:border-gray-700">
-                  <th className="px-6 py-4">Code</th>
-                  <th className="px-6 py-4">Full Name</th>
-                  <th className="px-6 py-4">Mobile</th>
+                  <th className="px-6 py-4">{t('common:code')}</th>
+                  <th className="px-6 py-4">{t('members:members_name')}</th>
+                  <th className="px-6 py-4">{t('members:members_mobile')}</th>
                   <th className="px-6 py-4">{t('members:members_village')}</th>
                   <th className="px-6 py-4">{t('collections:collections_status')}</th>
                   <th className="px-6 py-4 text-right">{t('collections:collections_action')}</th>
@@ -214,7 +214,7 @@ export const MemberList: React.FC = () => {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <span className="text-primary hover:text-primary-dark font-medium text-xs">View Profile</span>
+                      <span className="text-primary hover:text-primary-dark font-medium text-xs">{t('members:members_view')}</span>
                     </td>
                   </tr>
                 ))}
