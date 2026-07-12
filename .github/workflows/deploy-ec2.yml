@@ -3,7 +3,8 @@ name: Deploy Hybrid (ECR -> EC2)
 on:
   push:
     branches:
-      - main # It's best practice to only auto-deploy pushes to the main branch to production
+      - main # Auto-deploys to production ONLY on pushes to main
+  workflow_dispatch: # Allows manual deployment from any branch in the Actions tab
 
 jobs:
   build-and-deploy:
@@ -55,15 +56,18 @@ jobs:
         AWS_REGION: ${{ secrets.AWS_REGION }}
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        BRANCH_NAME: ${{ github.ref_name }}
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ubuntu
         key: ${{ secrets.EC2_SSH_KEY }}
-        envs: ECR_REGISTRY, IMAGE_TAG, AWS_REGION, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
+        envs: ECR_REGISTRY, IMAGE_TAG, AWS_REGION, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, BRANCH_NAME
         script: |
           # 1. Go to the project directory & pull the latest docker-compose.prod.yml
           cd chitfund-management-system
-          git pull origin main
+          git fetch origin
+          git checkout $BRANCH_NAME
+          git pull origin $BRANCH_NAME
           
           # 2. Authenticate the EC2 Docker Daemon with AWS ECR
           aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
