@@ -5,7 +5,7 @@ from src.api.main import app
 
 if __name__ == "__main__":
     # Determine reload based on local/development environment
-    reload_enabled = settings.app.env == "local"
+    reload_enabled = settings.app.env == "dev"
     
     # Run the application
     uvicorn.run(

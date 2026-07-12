@@ -39,8 +39,8 @@ services:
       - ./backend/fastapi-app:/app
     command: uvicorn src.api.main:app --host 0.0.0.0 --port 8000 --reload
     environment:
-      ENVIRONMENT: dev
-      DATABASE_URL: postgresql://chitfund_admin:chitfund_password@db:5432/chitfund_db
+      ENVIRONMENT: ${ENVIRONMENT:-dev}
+      DATABASE_URL: ${DATABASE_URL:-postgresql://chitfund_admin:chitfund_password@db:5432/chitfund_db}
       # CORS: allow Nginx frontend + local dev
       ALLOWED_ORIGINS: "*"
     depends_on:

@@ -24,8 +24,18 @@ def load_properties() -> BaseConfig:
         config.add_section("jwt")
         
     # Read values with fallbacks
-    db_url = os.getenv("DATABASE_URL") or os.getenv("DB_URL") or config.get("database", "db_url", fallback="postgresql://chitfund_admin:chitfund_password@localhost:5432/chitfund_db")
-    
+    if config.has_section("Postgres"):
+        pg_user = config.get("Postgres", "username", fallback="postgres")
+        pg_pass = config.get("Postgres", "password", fallback="")
+        pg_host = config.get("Postgres", "host", fallback="localhost")
+        pg_port = config.get("Postgres", "port", fallback="5432")
+        pg_db = config.get("Postgres", "database", fallback="postgres")
+        fallback_db_url = f"postgresql://{pg_user}:{pg_pass}@{pg_host}:{pg_port}/{pg_db}"
+    else:
+        fallback_db_url = config.get("database", "db_url", fallback="postgresql://chitfund_admin:chitfund_password@localhost:5432/chitfund_db")
+
+    db_url = os.getenv("DATABASE_URL") or os.getenv("DB_URL") or fallback_db_url
+
     app_env = os.getenv("ENVIRONMENT") or config.get("app", "env", fallback=env)
     debug_val = os.getenv("DEBUG")
     if debug_val is not None:
