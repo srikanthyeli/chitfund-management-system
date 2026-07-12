@@ -59,7 +59,7 @@ jobs:
         BRANCH_NAME: ${{ github.ref_name }}
       with:
         host: ${{ secrets.EC2_HOST }}
-        username: ubuntu
+        username: ec2-user
         key: ${{ secrets.EC2_SSH_KEY }}
         envs: ECR_REGISTRY, IMAGE_TAG, AWS_REGION, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, BRANCH_NAME
         script: |
