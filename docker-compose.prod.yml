@@ -18,7 +18,7 @@ services:
     command: uvicorn src.api.main:app --host 0.0.0.0 --port 8000
 
     environment:
-      ENVIRONMENT: prod
+      ENVIRONMENT: dev
 
   # ── React / Vite Frontend (served via Nginx) ─────────────────
   frontend:
