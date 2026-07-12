@@ -17,8 +17,12 @@ services:
       - "8000:8000"
     command: uvicorn src.api.main:app --host 0.0.0.0 --port 8000
 
+    env_file:
+      - .env
     environment:
-      ENVIRONMENT: dev
+      ENVIRONMENT: production
+      TZ: Asia/Kolkata
+      ALLOWED_ORIGINS: "*"
 
   # ── React / Vite Frontend (served via Nginx) ─────────────────
   frontend:
