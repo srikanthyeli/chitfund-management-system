@@ -20,7 +20,6 @@ class OrganizerCreateResponse(BaseModel):
     name: str
     mobile: str
     login_mobile: str
-    temporary_password: str
 
 class OrganizerUpdateRequest(BaseModel):
     name: Optional[str] = Field(None, max_length=150)

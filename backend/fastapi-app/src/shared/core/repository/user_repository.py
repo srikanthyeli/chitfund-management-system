@@ -10,7 +10,7 @@ class UserRepository:
 
     async def get_user_by_mobile(self, mobile: str) -> Optional[User]:
         query = """
-            SELECT id, organizer_id, member_id, mobile, role, is_active, last_login_at, must_change_password
+            SELECT id, organizer_id, member_id, mobile, role, is_active, last_login_at
             FROM users 
             WHERE mobile = $1 AND is_deleted = FALSE
         """
@@ -21,7 +21,7 @@ class UserRepository:
 
     async def get_user_by_id(self, user_id: UUID) -> Optional[User]:
         query = """
-            SELECT id, organizer_id, member_id, mobile, role, is_active, last_login_at, must_change_password 
+            SELECT id, organizer_id, member_id, mobile, role, is_active, last_login_at 
             FROM users 
             WHERE id = $1 AND is_deleted = FALSE
         """
@@ -34,9 +34,9 @@ class UserRepository:
         user_id = user_data.get("id") or uuid.uuid4()
         now = datetime.utcnow()
         query = """
-            INSERT INTO users (id, organizer_id, member_id, mobile, role, is_active, must_change_password, created_at, is_deleted, version)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, FALSE, 1)
-            RETURNING id, organizer_id, member_id, mobile, role, is_active, last_login_at, must_change_password
+            INSERT INTO users (id, organizer_id, member_id, mobile, role, is_active, created_at, is_deleted, version)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, FALSE, 1)
+            RETURNING id, organizer_id, member_id, mobile, role, is_active, last_login_at
         """
         row = await self.db_object.fetchrow(
             query,
@@ -46,7 +46,6 @@ class UserRepository:
             user_data["mobile"],
             user_data.get("role", "MEMBER"),
             user_data.get("is_active", True),
-            user_data.get("must_change_password", False),
             now
         )
         if row:

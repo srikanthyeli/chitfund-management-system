@@ -28,10 +28,10 @@ async def create_admin():
                 admin_id = str(uuid.uuid4())
                 await conn.execute(
                     """
-                    INSERT INTO users (id, mobile, role, is_active, must_change_password)
-                    VALUES ($1, $2, $3, $4, $5)
-                    """,
-                    admin_id, admin_mobile, UserRole.ADMIN.value, True, False
+                INSERT INTO users (id, mobile, role, is_active, is_deleted, version)
+                VALUES ($1, $2, $3, $4, $5, $6)
+                """,
+                admin_id, admin_mobile, UserRole.ADMIN.value, True, False, 1
                 )
                 print(f"✅ Successfully created ADMIN user with mobile: {admin_mobile}")
         except Exception as e:

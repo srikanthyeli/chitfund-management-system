@@ -39,8 +39,7 @@ class OrganizerService:
             "organizer_id": org.id,
             "mobile": org.mobile,
             "role": "ORGANIZER",
-            "is_active": True,
-            "must_change_password": False
+            "is_active": True
         }
         await self.user_repo.create_user(user_data)
         

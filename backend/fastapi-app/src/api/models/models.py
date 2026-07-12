@@ -40,7 +40,6 @@ class User(Base, AuditMixin):
     role = Column(String(20), nullable=False, default="MEMBER", index=True)
     is_active = Column(Boolean, nullable=False, default=True)
     last_login_at = Column(DateTime, nullable=True)
-    must_change_password = Column(Boolean, nullable=False, default=True)
 
     organizer = relationship("Organizer", back_populates="users", foreign_keys="[User.organizer_id]")
     sessions = relationship("UserSession", back_populates="user", cascade="all, delete-orphan", foreign_keys="[UserSession.user_id]")

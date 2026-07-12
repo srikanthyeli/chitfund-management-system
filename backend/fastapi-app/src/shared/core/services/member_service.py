@@ -93,8 +93,7 @@ class MemberService:
                 "member_id": member.id,
                 "mobile": member.mobile,
                 "role": UserRole.MEMBER.value,
-                "is_active": True,
-                "must_change_password": False
+                "is_active": True
             }
             # Ignore if user already exists (e.g. from previous manual seeding)
             existing_user = await self.user_repo.get_user_by_mobile(member.mobile)
