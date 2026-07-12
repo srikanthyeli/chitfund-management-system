@@ -41,3 +41,14 @@ class LogoutResponse(BaseModel):
 
 class RequestOTP(BaseModel):
     mobile: str = Field(..., description="User mobile number")
+
+class SendOTPRequest(BaseModel):
+    phone_number: str = Field(..., description="E.164 formatted phone number")
+
+class VerifyOTPRequest(BaseModel):
+    phone_number: str = Field(..., description="E.164 formatted phone number")
+    otp: str = Field(..., description="6-digit OTP", min_length=6, max_length=6)
+
+class TwilioOTPResponse(BaseModel):
+    success: bool
+    message: str

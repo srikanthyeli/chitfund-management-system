@@ -14,8 +14,8 @@ class ReportsRepository:
         q_groups = """
             SELECT 
                 COUNT(*) as total_chit_groups,
-                SUM(CASE WHEN status IN ('OPEN', 'ACTIVE') THEN 1 ELSE 0 END) as active_chit_groups,
-                SUM(CASE WHEN status = 'CLOSED' THEN 1 ELSE 0 END) as completed_chit_groups,
+                COALESCE(SUM(CASE WHEN status IN ('OPEN', 'ACTIVE') THEN 1 ELSE 0 END), 0) as active_chit_groups,
+                COALESCE(SUM(CASE WHEN status = 'CLOSED' THEN 1 ELSE 0 END), 0) as completed_chit_groups,
                 COALESCE(SUM(total_shares), 0) as total_shares,
                 COALESCE(SUM(allocated_shares), 0) as allocated_shares,
                 COALESCE(SUM(available_shares), 0) as available_shares
@@ -29,7 +29,7 @@ class ReportsRepository:
         q_members = """
             SELECT 
                 COUNT(*) as total_members,
-                SUM(CASE WHEN is_active = TRUE THEN 1 ELSE 0 END) as active_members
+                COALESCE(SUM(CASE WHEN is_active = TRUE THEN 1 ELSE 0 END), 0) as active_members
             FROM members
             WHERE organizer_id = $1 AND is_deleted = FALSE
         """

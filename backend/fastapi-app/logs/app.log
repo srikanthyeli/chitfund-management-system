@@ -129,3 +129,704 @@ ValueError: password cannot be longer than 72 bytes, truncate manually if necess
 2026-07-12 17:38:36 - src.shared.core.services.otp_service - WARNING - SMS Gateway credentials missing! OTP for 9999999999 is 786510
 2026-07-12 17:38:56 - src.api.main - ERROR - Application error: status_code=409, message='This account is active on another phone.'
 2026-07-12 17:39:12 - src.shared.core.services.otp_service - WARNING - SMS Gateway credentials missing! OTP for 9110770030 is 732909
+2026-07-12 18:26:00 - src.api.main - INFO - Shutting down application and closing database pool...
+2026-07-12 18:26:10 - src.api.main - INFO - Starting up application and initializing database pool...
+2026-07-12 18:26:14 - src.api.main - ERROR - Application error: status_code=401, message='Session is inactive or expired'
+2026-07-12 18:26:14 - src.api.main - ERROR - Application error: status_code=401, message='Session is inactive or expired'
+2026-07-12 18:26:24 - src.shared.core.services.otp_service - WARNING - SMS Gateway credentials missing! OTP for 9505563253 is 289195
+2026-07-12 18:26:37 - src.api.main - ERROR - Application error: status_code=409, message='This account is active on another phone.'
+2026-07-12 18:29:48 - src.api.main - INFO - Shutting down application and closing database pool...
+2026-07-12 18:30:08 - src.api.main - INFO - Starting up application and initializing database pool...
+2026-07-12 18:32:07 - src.api.main - INFO - Starting up application and initializing database pool...
+2026-07-12 18:32:26 - src.shared.core.services.otp_service - WARNING - SMS Gateway credentials missing! OTP for 9505563253 is 667601
+2026-07-12 18:34:27 - src.api.main - ERROR - [Unhandled Exception] GET http://backend:8000/api/v1/reports/dashboard — Traceback (most recent call last):
+  File "/opt/venv/lib/python3.11/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/middleware/cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 2683, in app
+    await route.handle(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 1753, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 2738, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 1773, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 1264, in handle
+    await app(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 150, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 136, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 690, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 344, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/api/dependencies/auth_decorator.py", line 29, in wrapper
+    return await func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/api/routers/report_router.py", line 23, in get_dashboard_metrics
+    return await controller.get_dashboard_metrics(current_user)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/api/controllers/report_controller.py", line 22, in get_dashboard_metrics
+    return await self.service.get_dashboard_metrics(tenant_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/shared/core/services/report_service.py", line 50, in get_dashboard_metrics
+    return DashboardMetricsResponse(**metrics)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/pydantic/main.py", line 263, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 3 validation errors for DashboardMetricsResponse
+active_chit_groups
+  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/int_type
+completed_chit_groups
+  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/int_type
+active_members
+  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/int_type
+
+2026-07-12 18:34:27 - src.api.main - ERROR - [Unhandled Exception] GET http://backend:8000/api/v1/reports/dashboard — Traceback (most recent call last):
+  File "/opt/venv/lib/python3.11/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/middleware/cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 2683, in app
+    await route.handle(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 1753, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 2738, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 1773, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 1264, in handle
+    await app(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 150, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 136, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 690, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 344, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/api/dependencies/auth_decorator.py", line 29, in wrapper
+    return await func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/api/routers/report_router.py", line 23, in get_dashboard_metrics
+    return await controller.get_dashboard_metrics(current_user)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/api/controllers/report_controller.py", line 22, in get_dashboard_metrics
+    return await self.service.get_dashboard_metrics(tenant_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/shared/core/services/report_service.py", line 50, in get_dashboard_metrics
+    return DashboardMetricsResponse(**metrics)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/pydantic/main.py", line 263, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 3 validation errors for DashboardMetricsResponse
+active_chit_groups
+  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/int_type
+completed_chit_groups
+  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/int_type
+active_members
+  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/int_type
+
+2026-07-12 18:34:35 - src.api.main - ERROR - [Unhandled Exception] GET http://backend:8000/api/v1/reports/dashboard — Traceback (most recent call last):
+  File "/opt/venv/lib/python3.11/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/middleware/cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 2683, in app
+    await route.handle(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 1753, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 2738, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 1773, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 1264, in handle
+    await app(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 150, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 136, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 690, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 344, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/api/dependencies/auth_decorator.py", line 29, in wrapper
+    return await func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/api/routers/report_router.py", line 23, in get_dashboard_metrics
+    return await controller.get_dashboard_metrics(current_user)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/api/controllers/report_controller.py", line 22, in get_dashboard_metrics
+    return await self.service.get_dashboard_metrics(tenant_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/shared/core/services/report_service.py", line 50, in get_dashboard_metrics
+    return DashboardMetricsResponse(**metrics)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/pydantic/main.py", line 263, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 3 validation errors for DashboardMetricsResponse
+active_chit_groups
+  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/int_type
+completed_chit_groups
+  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/int_type
+active_members
+  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/int_type
+
+2026-07-12 18:34:36 - src.api.main - ERROR - [Unhandled Exception] GET http://backend:8000/api/v1/reports/dashboard — Traceback (most recent call last):
+  File "/opt/venv/lib/python3.11/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/middleware/cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 2683, in app
+    await route.handle(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 1753, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 2738, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 1773, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 1264, in handle
+    await app(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 150, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 136, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 690, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 344, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/api/dependencies/auth_decorator.py", line 29, in wrapper
+    return await func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/api/routers/report_router.py", line 23, in get_dashboard_metrics
+    return await controller.get_dashboard_metrics(current_user)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/api/controllers/report_controller.py", line 22, in get_dashboard_metrics
+    return await self.service.get_dashboard_metrics(tenant_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/shared/core/services/report_service.py", line 50, in get_dashboard_metrics
+    return DashboardMetricsResponse(**metrics)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/pydantic/main.py", line 263, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 3 validation errors for DashboardMetricsResponse
+active_chit_groups
+  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/int_type
+completed_chit_groups
+  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/int_type
+active_members
+  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/int_type
+
+2026-07-12 18:34:49 - src.api.main - ERROR - [Unhandled Exception] GET http://backend:8000/api/v1/reports/dashboard — Traceback (most recent call last):
+  File "/opt/venv/lib/python3.11/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/middleware/cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 2683, in app
+    await route.handle(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 1753, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 2738, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 1773, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 1264, in handle
+    await app(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 150, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 136, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 690, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 344, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/api/dependencies/auth_decorator.py", line 29, in wrapper
+    return await func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/api/routers/report_router.py", line 23, in get_dashboard_metrics
+    return await controller.get_dashboard_metrics(current_user)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/api/controllers/report_controller.py", line 22, in get_dashboard_metrics
+    return await self.service.get_dashboard_metrics(tenant_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/shared/core/services/report_service.py", line 50, in get_dashboard_metrics
+    return DashboardMetricsResponse(**metrics)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/pydantic/main.py", line 263, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 3 validation errors for DashboardMetricsResponse
+active_chit_groups
+  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/int_type
+completed_chit_groups
+  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/int_type
+active_members
+  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/int_type
+
+2026-07-12 18:34:50 - src.api.main - ERROR - [Unhandled Exception] GET http://backend:8000/api/v1/reports/dashboard — Traceback (most recent call last):
+  File "/opt/venv/lib/python3.11/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/middleware/cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 2683, in app
+    await route.handle(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 1753, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 2738, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 1773, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 1264, in handle
+    await app(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 150, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 136, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 690, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 344, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/api/dependencies/auth_decorator.py", line 29, in wrapper
+    return await func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/api/routers/report_router.py", line 23, in get_dashboard_metrics
+    return await controller.get_dashboard_metrics(current_user)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/api/controllers/report_controller.py", line 22, in get_dashboard_metrics
+    return await self.service.get_dashboard_metrics(tenant_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/shared/core/services/report_service.py", line 50, in get_dashboard_metrics
+    return DashboardMetricsResponse(**metrics)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/pydantic/main.py", line 263, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 3 validation errors for DashboardMetricsResponse
+active_chit_groups
+  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/int_type
+completed_chit_groups
+  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/int_type
+active_members
+  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/int_type
+
+2026-07-12 18:34:51 - src.api.main - ERROR - [Unhandled Exception] GET http://backend:8000/api/v1/reports/dashboard — Traceback (most recent call last):
+  File "/opt/venv/lib/python3.11/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/middleware/cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 2683, in app
+    await route.handle(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 1753, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 2738, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 1773, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 1264, in handle
+    await app(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 150, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 136, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 690, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 344, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/api/dependencies/auth_decorator.py", line 29, in wrapper
+    return await func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/api/routers/report_router.py", line 23, in get_dashboard_metrics
+    return await controller.get_dashboard_metrics(current_user)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/api/controllers/report_controller.py", line 22, in get_dashboard_metrics
+    return await self.service.get_dashboard_metrics(tenant_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/shared/core/services/report_service.py", line 50, in get_dashboard_metrics
+    return DashboardMetricsResponse(**metrics)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/pydantic/main.py", line 263, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 3 validation errors for DashboardMetricsResponse
+active_chit_groups
+  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/int_type
+completed_chit_groups
+  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/int_type
+active_members
+  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/int_type
+
+2026-07-12 18:34:51 - src.api.main - ERROR - [Unhandled Exception] GET http://backend:8000/api/v1/reports/dashboard — Traceback (most recent call last):
+  File "/opt/venv/lib/python3.11/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/middleware/cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 2683, in app
+    await route.handle(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 1753, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 2738, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 1773, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 1264, in handle
+    await app(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 150, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/opt/venv/lib/python3.11/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 136, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 690, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/fastapi/routing.py", line 344, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/api/dependencies/auth_decorator.py", line 29, in wrapper
+    return await func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/api/routers/report_router.py", line 23, in get_dashboard_metrics
+    return await controller.get_dashboard_metrics(current_user)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/api/controllers/report_controller.py", line 22, in get_dashboard_metrics
+    return await self.service.get_dashboard_metrics(tenant_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/src/shared/core/services/report_service.py", line 50, in get_dashboard_metrics
+    return DashboardMetricsResponse(**metrics)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/venv/lib/python3.11/site-packages/pydantic/main.py", line 263, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 3 validation errors for DashboardMetricsResponse
+active_chit_groups
+  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/int_type
+completed_chit_groups
+  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/int_type
+active_members
+  Input should be a valid integer [type=int_type, input_value=None, input_type=NoneType]
+    For further information visit https://errors.pydantic.dev/2.13/v/int_type
+
+2026-07-12 18:35:36 - src.api.main - INFO - Shutting down application and closing database pool...
+2026-07-12 18:35:37 - src.api.main - INFO - Starting up application and initializing database pool...
+2026-07-12 18:35:49 - src.api.main - INFO - Shutting down application and closing database pool...
+2026-07-12 18:35:51 - src.api.main - INFO - Starting up application and initializing database pool...
+2026-07-12 18:37:31 - src.api.main - INFO - Shutting down application and closing database pool...
+2026-07-12 18:37:41 - src.api.main - INFO - Starting up application and initializing database pool...
+2026-07-12 18:37:45 - src.api.main - ERROR - Application error: status_code=401, message='Invalid or expired refresh token'
+2026-07-12 18:37:45 - src.api.main - ERROR - Application error: status_code=401, message='Invalid or expired refresh token'
+2026-07-12 18:37:57 - src.shared.core.services.otp_service - WARNING - SMS Gateway credentials missing! OTP for 9110770030 is 750093
+2026-07-12 18:38:15 - src.api.main - ERROR - Application error: status_code=401, message='Invalid OTP'
+2026-07-12 18:52:02 - src.api.main - INFO - Shutting down application and closing database pool...
+2026-07-12 18:52:03 - src.api.main - INFO - Starting up application and initializing database pool...
+2026-07-12 18:52:31 - src.api.main - INFO - Shutting down application and closing database pool...
+2026-07-12 18:54:02 - src.api.main - INFO - Starting up application and initializing database pool...
+2026-07-12 18:55:03 - src.shared.core.services.otp_service - WARNING - SMS Gateway credentials missing! OTP for 9110770030 is 395967
+2026-07-12 18:57:05 - src.api.main - INFO - Shutting down application and closing database pool...
+2026-07-12 18:57:07 - src.api.main - INFO - Starting up application and initializing database pool...
+2026-07-12 18:57:24 - src.api.main - INFO - Shutting down application and closing database pool...
+2026-07-12 18:57:25 - src.api.main - INFO - Starting up application and initializing database pool...
+2026-07-12 18:57:57 - twilio.http_client - INFO - -- BEGIN Twilio API Request --
+2026-07-12 18:57:57 - twilio.http_client - INFO - POST Request: https://verify.twilio.com/v2/Services/VA44eaf5a7d53857a58d96df68916e31ce/Verifications
+2026-07-12 18:57:57 - twilio.http_client - INFO - Headers:
+2026-07-12 18:57:57 - twilio.http_client - INFO - Content-Type : application/x-www-form-urlencoded
+2026-07-12 18:57:57 - twilio.http_client - INFO - Accept : application/json
+2026-07-12 18:57:57 - twilio.http_client - INFO - User-Agent : twilio-python/9.10.9 (Linux x86_64) Python/3.11.15
+2026-07-12 18:57:57 - twilio.http_client - INFO - X-Twilio-Client : python-9.10.9
+2026-07-12 18:57:57 - twilio.http_client - INFO - Accept-Charset : utf-8
+2026-07-12 18:57:57 - twilio.http_client - INFO - -- END Twilio API Request --
+2026-07-12 18:57:58 - twilio.http_client - INFO - Response Status Code: 201
+2026-07-12 18:57:58 - twilio.http_client - INFO - Response Headers: {'Content-Type': 'application/json;charset=utf-8', 'Content-Length': '634', 'Connection': 'keep-alive', 'Date': 'Sun, 12 Jul 2026 18:57:58 GMT', 'Twilio-Concurrent-Requests': '1', 'Twilio-Request-Id': 'RQedb6b015153bcd56e4515211bf8324d2', 'Twilio-Request-Duration': '0.241', 'X-Home-Region': 'us1', 'X-API-Domain': 'verify.twilio.com', 'Strict-Transport-Security': 'max-age=31536000', 'X-Cache': 'Miss from cloudfront', 'Via': '1.1 70d0dc8fbdbb425873629b3f881a749a.cloudfront.net (CloudFront)', 'X-Amz-Cf-Pop': 'HYD57-P7', 'X-Amz-Cf-Id': '0UoWK1WgSj5baRFGG6sUN9UzCDdi3UO-uuU3qw27Dq7X9Sw1R7_HcQ==', 'X-Powered-By': 'AT-5000', 'X-Shenanigans': 'none', 'Vary': 'Origin'}
+2026-07-12 18:57:58 - src.shared.core.services.twilio_service - INFO - OTP send attempt initiated for +919110770030. Status: pending
+2026-07-12 18:58:29 - twilio.http_client - INFO - -- BEGIN Twilio API Request --
+2026-07-12 18:58:29 - twilio.http_client - INFO - POST Request: https://verify.twilio.com/v2/Services/VA44eaf5a7d53857a58d96df68916e31ce/VerificationCheck
+2026-07-12 18:58:29 - twilio.http_client - INFO - Headers:
+2026-07-12 18:58:29 - twilio.http_client - INFO - Content-Type : application/x-www-form-urlencoded
+2026-07-12 18:58:29 - twilio.http_client - INFO - Accept : application/json
+2026-07-12 18:58:29 - twilio.http_client - INFO - User-Agent : twilio-python/9.10.9 (Linux x86_64) Python/3.11.15
+2026-07-12 18:58:29 - twilio.http_client - INFO - X-Twilio-Client : python-9.10.9
+2026-07-12 18:58:29 - twilio.http_client - INFO - Accept-Charset : utf-8
+2026-07-12 18:58:29 - twilio.http_client - INFO - -- END Twilio API Request --
+2026-07-12 18:58:29 - twilio.http_client - INFO - Response Status Code: 200
+2026-07-12 18:58:29 - twilio.http_client - INFO - Response Headers: {'Content-Type': 'application/json;charset=utf-8', 'Content-Length': '340', 'Connection': 'keep-alive', 'Date': 'Sun, 12 Jul 2026 18:58:29 GMT', 'Twilio-Concurrent-Requests': '1', 'Twilio-Request-Id': 'RQfa363dcebb4f3d95cfcd468a55e2773b', 'Twilio-Request-Duration': '0.092', 'X-Home-Region': 'us1', 'X-API-Domain': 'verify.twilio.com', 'Strict-Transport-Security': 'max-age=31536000', 'X-Cache': 'Miss from cloudfront', 'Via': '1.1 1591be758e8bb44871a76bc3ca6cc860.cloudfront.net (CloudFront)', 'X-Amz-Cf-Pop': 'HYD57-P7', 'X-Amz-Cf-Id': '0_0ctgky6o3HH2S8-AfKky-vle2K0APBiMZRSQuGJt3B_R1HIvo3FQ==', 'X-Powered-By': 'AT-5000', 'X-Shenanigans': 'none', 'Vary': 'Origin'}
+2026-07-12 18:58:29 - src.shared.core.services.twilio_service - INFO - OTP verified successfully for +919110770030.
+2026-07-12 18:58:29 - src.api.main - ERROR - Application error: status_code=409, message='This account is active on another phone.'
+2026-07-12 18:58:33 - twilio.http_client - INFO - -- BEGIN Twilio API Request --
+2026-07-12 18:58:33 - twilio.http_client - INFO - POST Request: https://verify.twilio.com/v2/Services/VA44eaf5a7d53857a58d96df68916e31ce/VerificationCheck
+2026-07-12 18:58:33 - twilio.http_client - INFO - Headers:
+2026-07-12 18:58:33 - twilio.http_client - INFO - Content-Type : application/x-www-form-urlencoded
+2026-07-12 18:58:33 - twilio.http_client - INFO - Accept : application/json
+2026-07-12 18:58:33 - twilio.http_client - INFO - User-Agent : twilio-python/9.10.9 (Linux x86_64) Python/3.11.15
+2026-07-12 18:58:33 - twilio.http_client - INFO - X-Twilio-Client : python-9.10.9
+2026-07-12 18:58:33 - twilio.http_client - INFO - Accept-Charset : utf-8
+2026-07-12 18:58:33 - twilio.http_client - INFO - -- END Twilio API Request --
+2026-07-12 18:58:33 - twilio.http_client - INFO - Response Status Code: 404
+2026-07-12 18:58:33 - twilio.http_client - INFO - Response Headers: {'Content-Type': 'application/json', 'Content-Length': '197', 'Connection': 'keep-alive', 'Date': 'Sun, 12 Jul 2026 18:58:33 GMT', 'X-Twilio-Error-Code': '20404', 'Twilio-Concurrent-Requests': '1', 'Twilio-Request-Id': 'RQea76cab43d7cea738ca2055caf7c3b36', 'Twilio-Request-Duration': '0.047', 'X-Home-Region': 'us1', 'X-API-Domain': 'verify.twilio.com', 'Strict-Transport-Security': 'max-age=31536000', 'X-Cache': 'Error from cloudfront', 'Via': '1.1 d17697ecd2381c4260bce97d1d6a2232.cloudfront.net (CloudFront)', 'X-Amz-Cf-Pop': 'HYD57-P7', 'X-Amz-Cf-Id': 'RyPgQTsJQ4z8Erzt25P6897gts9bwaF5sFWBI0qebbwZLh5_hPaWag==', 'X-Powered-By': 'AT-5000', 'X-Shenanigans': 'none', 'Vary': 'Origin'}
+2026-07-12 18:58:33 - src.shared.core.services.twilio_service - WARNING - OTP verification not found or expired for +919110770030.
+2026-07-12 18:58:33 - src.api.main - ERROR - Application error: status_code=401, message='Invalid or expired OTP'
+2026-07-12 19:00:48 - twilio.http_client - INFO - -- BEGIN Twilio API Request --
+2026-07-12 19:00:48 - twilio.http_client - INFO - POST Request: https://verify.twilio.com/v2/Services/VA44eaf5a7d53857a58d96df68916e31ce/Verifications
+2026-07-12 19:00:48 - twilio.http_client - INFO - Headers:
+2026-07-12 19:00:48 - twilio.http_client - INFO - Content-Type : application/x-www-form-urlencoded
+2026-07-12 19:00:48 - twilio.http_client - INFO - Accept : application/json
+2026-07-12 19:00:48 - twilio.http_client - INFO - User-Agent : twilio-python/9.10.9 (Linux x86_64) Python/3.11.15
+2026-07-12 19:00:48 - twilio.http_client - INFO - X-Twilio-Client : python-9.10.9
+2026-07-12 19:00:48 - twilio.http_client - INFO - Accept-Charset : utf-8
+2026-07-12 19:00:48 - twilio.http_client - INFO - -- END Twilio API Request --
+2026-07-12 19:00:49 - twilio.http_client - INFO - Response Status Code: 201
+2026-07-12 19:00:49 - twilio.http_client - INFO - Response Headers: {'Content-Type': 'application/json;charset=utf-8', 'Content-Length': '634', 'Connection': 'keep-alive', 'Date': 'Sun, 12 Jul 2026 19:00:49 GMT', 'Twilio-Concurrent-Requests': '1', 'Twilio-Request-Id': 'RQd825644e1be139770c709e27f39401ad', 'Twilio-Request-Duration': '0.240', 'X-Home-Region': 'us1', 'X-API-Domain': 'verify.twilio.com', 'Strict-Transport-Security': 'max-age=31536000', 'X-Cache': 'Miss from cloudfront', 'Via': '1.1 d6f522c03196a5114acad7a98a443dbc.cloudfront.net (CloudFront)', 'X-Amz-Cf-Pop': 'HYD57-P7', 'X-Amz-Cf-Id': 'myIYTdx556vQCDwXQm53J3Kj6YLj37pJZm7V57mpFxFBsor-mDLECQ==', 'X-Powered-By': 'AT-5000', 'X-Shenanigans': 'none', 'Vary': 'Origin'}
+2026-07-12 19:00:49 - src.shared.core.services.twilio_service - INFO - OTP send attempt initiated for +919110770030. Status: pending
+2026-07-12 19:01:04 - twilio.http_client - INFO - -- BEGIN Twilio API Request --
+2026-07-12 19:01:04 - twilio.http_client - INFO - POST Request: https://verify.twilio.com/v2/Services/VA44eaf5a7d53857a58d96df68916e31ce/VerificationCheck
+2026-07-12 19:01:04 - twilio.http_client - INFO - Headers:
+2026-07-12 19:01:04 - twilio.http_client - INFO - Content-Type : application/x-www-form-urlencoded
+2026-07-12 19:01:04 - twilio.http_client - INFO - Accept : application/json
+2026-07-12 19:01:04 - twilio.http_client - INFO - User-Agent : twilio-python/9.10.9 (Linux x86_64) Python/3.11.15
+2026-07-12 19:01:04 - twilio.http_client - INFO - X-Twilio-Client : python-9.10.9
+2026-07-12 19:01:04 - twilio.http_client - INFO - Accept-Charset : utf-8
+2026-07-12 19:01:04 - twilio.http_client - INFO - -- END Twilio API Request --
+2026-07-12 19:01:04 - twilio.http_client - INFO - Response Status Code: 200
+2026-07-12 19:01:04 - twilio.http_client - INFO - Response Headers: {'Content-Type': 'application/json;charset=utf-8', 'Content-Length': '340', 'Connection': 'keep-alive', 'Date': 'Sun, 12 Jul 2026 19:01:04 GMT', 'Twilio-Concurrent-Requests': '1', 'Twilio-Request-Id': 'RQc56d98a864c0661bf8cabcc2da2a88fa', 'Twilio-Request-Duration': '0.058', 'X-Home-Region': 'us1', 'X-API-Domain': 'verify.twilio.com', 'Strict-Transport-Security': 'max-age=31536000', 'X-Cache': 'Miss from cloudfront', 'Via': '1.1 9a2311315daa641063be7ce809e02ec4.cloudfront.net (CloudFront)', 'X-Amz-Cf-Pop': 'HYD57-P7', 'X-Amz-Cf-Id': '-b-RPLJOJo0cmyELPccdHZMsrSELCTPtgXwv97KToUkax05cOhBvUw==', 'X-Powered-By': 'AT-5000', 'X-Shenanigans': 'none', 'Vary': 'Origin'}
+2026-07-12 19:01:04 - src.shared.core.services.twilio_service - INFO - OTP verified successfully for +919110770030.
+2026-07-12 19:01:05 - src.api.main - ERROR - Application error: status_code=409, message='This account is active on another phone.'
+2026-07-12 19:01:10 - twilio.http_client - INFO - -- BEGIN Twilio API Request --
+2026-07-12 19:01:10 - twilio.http_client - INFO - POST Request: https://verify.twilio.com/v2/Services/VA44eaf5a7d53857a58d96df68916e31ce/VerificationCheck
+2026-07-12 19:01:10 - twilio.http_client - INFO - Headers:
+2026-07-12 19:01:10 - twilio.http_client - INFO - Content-Type : application/x-www-form-urlencoded
+2026-07-12 19:01:10 - twilio.http_client - INFO - Accept : application/json
+2026-07-12 19:01:10 - twilio.http_client - INFO - User-Agent : twilio-python/9.10.9 (Linux x86_64) Python/3.11.15
+2026-07-12 19:01:10 - twilio.http_client - INFO - X-Twilio-Client : python-9.10.9
+2026-07-12 19:01:10 - twilio.http_client - INFO - Accept-Charset : utf-8
+2026-07-12 19:01:10 - twilio.http_client - INFO - -- END Twilio API Request --
+2026-07-12 19:01:10 - twilio.http_client - INFO - Response Status Code: 404
+2026-07-12 19:01:10 - twilio.http_client - INFO - Response Headers: {'Content-Type': 'application/json', 'Content-Length': '197', 'Connection': 'keep-alive', 'Date': 'Sun, 12 Jul 2026 19:01:10 GMT', 'X-Twilio-Error-Code': '20404', 'Twilio-Concurrent-Requests': '1', 'Twilio-Request-Id': 'RQ3f8b300ee33f0e77b33a45675495601c', 'Twilio-Request-Duration': '0.051', 'X-Home-Region': 'us1', 'X-API-Domain': 'verify.twilio.com', 'Strict-Transport-Security': 'max-age=31536000', 'X-Cache': 'Error from cloudfront', 'Via': '1.1 d3f943c585dbc140703b80fb53f9b362.cloudfront.net (CloudFront)', 'X-Amz-Cf-Pop': 'HYD57-P7', 'X-Amz-Cf-Id': '9xtfMzCS2raeP967ylk2bGfWSmQxr_IIWjbuxkHG9-OsArfGdjGP_A==', 'X-Powered-By': 'AT-5000', 'X-Shenanigans': 'none', 'Vary': 'Origin'}
+2026-07-12 19:01:10 - src.shared.core.services.twilio_service - WARNING - OTP verification not found or expired for +919110770030.
+2026-07-12 19:01:10 - src.api.main - ERROR - Application error: status_code=401, message='Invalid or expired OTP'
+2026-07-12 19:01:42 - src.api.main - INFO - Shutting down application and closing database pool...
+2026-07-12 19:01:44 - src.api.main - INFO - Starting up application and initializing database pool...
+2026-07-12 19:02:39 - src.api.main - INFO - Shutting down application and closing database pool...
+2026-07-12 19:02:40 - src.api.main - INFO - Starting up application and initializing database pool...
+2026-07-12 19:03:04 - twilio.http_client - INFO - -- BEGIN Twilio API Request --
+2026-07-12 19:03:04 - twilio.http_client - INFO - POST Request: https://verify.twilio.com/v2/Services/VA44eaf5a7d53857a58d96df68916e31ce/Verifications
+2026-07-12 19:03:04 - twilio.http_client - INFO - Headers:
+2026-07-12 19:03:04 - twilio.http_client - INFO - Content-Type : application/x-www-form-urlencoded
+2026-07-12 19:03:04 - twilio.http_client - INFO - Accept : application/json
+2026-07-12 19:03:04 - twilio.http_client - INFO - User-Agent : twilio-python/9.10.9 (Linux x86_64) Python/3.11.15
+2026-07-12 19:03:04 - twilio.http_client - INFO - X-Twilio-Client : python-9.10.9
+2026-07-12 19:03:04 - twilio.http_client - INFO - Accept-Charset : utf-8
+2026-07-12 19:03:04 - twilio.http_client - INFO - -- END Twilio API Request --
+2026-07-12 19:03:04 - twilio.http_client - INFO - Response Status Code: 201
+2026-07-12 19:03:04 - twilio.http_client - INFO - Response Headers: {'Content-Type': 'application/json;charset=utf-8', 'Content-Length': '634', 'Connection': 'keep-alive', 'Date': 'Sun, 12 Jul 2026 19:03:04 GMT', 'Twilio-Concurrent-Requests': '1', 'Twilio-Request-Id': 'RQ2003e30fafcad86504304ae275dce2da', 'Twilio-Request-Duration': '0.212', 'X-Home-Region': 'us1', 'X-API-Domain': 'verify.twilio.com', 'Strict-Transport-Security': 'max-age=31536000', 'X-Cache': 'Miss from cloudfront', 'Via': '1.1 d3f943c585dbc140703b80fb53f9b362.cloudfront.net (CloudFront)', 'X-Amz-Cf-Pop': 'HYD57-P7', 'X-Amz-Cf-Id': 'pqKSIDxbrv1J9K1xxDafiRAYZcomPL96njEvhOmyDHTRyE7aQCj0wQ==', 'X-Powered-By': 'AT-5000', 'X-Shenanigans': 'none', 'Vary': 'Origin'}
+2026-07-12 19:03:04 - src.shared.core.services.twilio_service - INFO - OTP send attempt initiated for +919110770030. Status: pending
+2026-07-12 19:03:20 - twilio.http_client - INFO - -- BEGIN Twilio API Request --
+2026-07-12 19:03:20 - twilio.http_client - INFO - POST Request: https://verify.twilio.com/v2/Services/VA44eaf5a7d53857a58d96df68916e31ce/VerificationCheck
+2026-07-12 19:03:20 - twilio.http_client - INFO - Headers:
+2026-07-12 19:03:20 - twilio.http_client - INFO - Content-Type : application/x-www-form-urlencoded
+2026-07-12 19:03:20 - twilio.http_client - INFO - Accept : application/json
+2026-07-12 19:03:20 - twilio.http_client - INFO - User-Agent : twilio-python/9.10.9 (Linux x86_64) Python/3.11.15
+2026-07-12 19:03:20 - twilio.http_client - INFO - X-Twilio-Client : python-9.10.9
+2026-07-12 19:03:20 - twilio.http_client - INFO - Accept-Charset : utf-8
+2026-07-12 19:03:20 - twilio.http_client - INFO - -- END Twilio API Request --
+2026-07-12 19:03:21 - twilio.http_client - INFO - Response Status Code: 200
+2026-07-12 19:03:21 - twilio.http_client - INFO - Response Headers: {'Content-Type': 'application/json;charset=utf-8', 'Content-Length': '340', 'Connection': 'keep-alive', 'Date': 'Sun, 12 Jul 2026 19:03:21 GMT', 'Twilio-Concurrent-Requests': '1', 'Twilio-Request-Id': 'RQaac27f4dd2c64b24adcdf9f6f67baab3', 'Twilio-Request-Duration': '0.071', 'X-Home-Region': 'us1', 'X-API-Domain': 'verify.twilio.com', 'Strict-Transport-Security': 'max-age=31536000', 'X-Cache': 'Miss from cloudfront', 'Via': '1.1 4d77a860b3a459d181999b9e4433ff82.cloudfront.net (CloudFront)', 'X-Amz-Cf-Pop': 'HYD57-P7', 'X-Amz-Cf-Id': 'EmCVH_mP6COp-bEw3iDSsl83eq0_UZYgnLf00CuP9jJj9Q5aoskQtw==', 'X-Powered-By': 'AT-5000', 'X-Shenanigans': 'none', 'Vary': 'Origin'}
+2026-07-12 19:03:21 - src.shared.core.services.twilio_service - WARNING - OTP verification failed for +919110770030. Status: pending
+2026-07-12 19:03:21 - src.api.main - ERROR - Application error: status_code=401, message='Invalid or expired OTP'
+2026-07-12 19:06:18 - src.api.main - INFO - Shutting down application and closing database pool...
+2026-07-13 00:36:21 - src.api.main - INFO - Starting up application and initializing database pool...
+2026-07-13 00:36:39 - twilio.http_client - INFO - -- BEGIN Twilio API Request --
+2026-07-13 00:36:39 - twilio.http_client - INFO - POST Request: https://verify.twilio.com/v2/Services/VA44eaf5a7d53857a58d96df68916e31ce/Verifications
+2026-07-13 00:36:39 - twilio.http_client - INFO - Headers:
+2026-07-13 00:36:39 - twilio.http_client - INFO - Content-Type : application/x-www-form-urlencoded
+2026-07-13 00:36:39 - twilio.http_client - INFO - Accept : application/json
+2026-07-13 00:36:39 - twilio.http_client - INFO - User-Agent : twilio-python/9.10.9 (Linux x86_64) Python/3.11.15
+2026-07-13 00:36:39 - twilio.http_client - INFO - X-Twilio-Client : python-9.10.9
+2026-07-13 00:36:39 - twilio.http_client - INFO - Accept-Charset : utf-8
+2026-07-13 00:36:39 - twilio.http_client - INFO - -- END Twilio API Request --
+2026-07-13 00:36:40 - twilio.http_client - INFO - Response Status Code: 201
+2026-07-13 00:36:40 - twilio.http_client - INFO - Response Headers: {'Content-Type': 'application/json;charset=utf-8', 'Content-Length': '743', 'Connection': 'keep-alive', 'Date': 'Sun, 12 Jul 2026 19:06:39 GMT', 'Twilio-Concurrent-Requests': '1', 'Twilio-Request-Id': 'RQ5c76e8782ee75c44724c45fe0f0f6f79', 'Twilio-Request-Duration': '0.205', 'X-Home-Region': 'us1', 'X-API-Domain': 'verify.twilio.com', 'Strict-Transport-Security': 'max-age=31536000', 'X-Cache': 'Miss from cloudfront', 'Via': '1.1 4d77a860b3a459d181999b9e4433ff82.cloudfront.net (CloudFront)', 'X-Amz-Cf-Pop': 'HYD57-P7', 'X-Amz-Cf-Id': 's_24NAhRIcnnfDxFPfbFIjtSqPHY9rijtHx6V-3P3jLcnMn_pbxrQQ==', 'X-Powered-By': 'AT-5000', 'X-Shenanigans': 'none', 'Vary': 'Origin'}
+2026-07-13 00:36:40 - src.shared.core.services.twilio_service - INFO - OTP send attempt initiated for +919110770030. Status: pending
+2026-07-13 00:36:58 - twilio.http_client - INFO - -- BEGIN Twilio API Request --
+2026-07-13 00:36:58 - twilio.http_client - INFO - POST Request: https://verify.twilio.com/v2/Services/VA44eaf5a7d53857a58d96df68916e31ce/VerificationCheck
+2026-07-13 00:36:58 - twilio.http_client - INFO - Headers:
+2026-07-13 00:36:58 - twilio.http_client - INFO - Content-Type : application/x-www-form-urlencoded
+2026-07-13 00:36:58 - twilio.http_client - INFO - Accept : application/json
+2026-07-13 00:36:58 - twilio.http_client - INFO - User-Agent : twilio-python/9.10.9 (Linux x86_64) Python/3.11.15
+2026-07-13 00:36:58 - twilio.http_client - INFO - X-Twilio-Client : python-9.10.9
+2026-07-13 00:36:58 - twilio.http_client - INFO - Accept-Charset : utf-8
+2026-07-13 00:36:58 - twilio.http_client - INFO - -- END Twilio API Request --
+2026-07-13 00:36:59 - twilio.http_client - INFO - Response Status Code: 200
+2026-07-13 00:36:59 - twilio.http_client - INFO - Response Headers: {'Content-Type': 'application/json;charset=utf-8', 'Content-Length': '340', 'Connection': 'keep-alive', 'Date': 'Sun, 12 Jul 2026 19:06:59 GMT', 'Twilio-Concurrent-Requests': '1', 'Twilio-Request-Id': 'RQ409c0501668daeacb7a57e93fdeca9d0', 'Twilio-Request-Duration': '0.068', 'X-Home-Region': 'us1', 'X-API-Domain': 'verify.twilio.com', 'Strict-Transport-Security': 'max-age=31536000', 'X-Cache': 'Miss from cloudfront', 'Via': '1.1 73dc1be376b3a19f8d898f27eb229e06.cloudfront.net (CloudFront)', 'X-Amz-Cf-Pop': 'HYD57-P7', 'X-Amz-Cf-Id': 'Dj9DTu3DIn_WnWmqKwMK-Y2dUgJrD8AuFaT05nm1qGfv5AeklsgORA==', 'X-Powered-By': 'AT-5000', 'X-Shenanigans': 'none', 'Vary': 'Origin'}
+2026-07-13 00:36:59 - src.shared.core.services.twilio_service - INFO - OTP verified successfully for +919110770030.
+2026-07-13 00:36:59 - src.api.main - ERROR - Application error: status_code=409, message='This account is active on another phone.'
+2026-07-13 00:37:02 - twilio.http_client - INFO - -- BEGIN Twilio API Request --
+2026-07-13 00:37:02 - twilio.http_client - INFO - POST Request: https://verify.twilio.com/v2/Services/VA44eaf5a7d53857a58d96df68916e31ce/VerificationCheck
+2026-07-13 00:37:02 - twilio.http_client - INFO - Headers:
+2026-07-13 00:37:02 - twilio.http_client - INFO - Content-Type : application/x-www-form-urlencoded
+2026-07-13 00:37:02 - twilio.http_client - INFO - Accept : application/json
+2026-07-13 00:37:02 - twilio.http_client - INFO - User-Agent : twilio-python/9.10.9 (Linux x86_64) Python/3.11.15
+2026-07-13 00:37:02 - twilio.http_client - INFO - X-Twilio-Client : python-9.10.9
+2026-07-13 00:37:02 - twilio.http_client - INFO - Accept-Charset : utf-8
+2026-07-13 00:37:02 - twilio.http_client - INFO - -- END Twilio API Request --
+2026-07-13 00:37:03 - twilio.http_client - INFO - Response Status Code: 404
+2026-07-13 00:37:03 - twilio.http_client - INFO - Response Headers: {'Content-Type': 'application/json', 'Content-Length': '197', 'Connection': 'keep-alive', 'Date': 'Sun, 12 Jul 2026 19:07:03 GMT', 'X-Twilio-Error-Code': '20404', 'Twilio-Concurrent-Requests': '1', 'Twilio-Request-Id': 'RQ9ddc11674240f01ae140a7887828f3ed', 'Twilio-Request-Duration': '0.051', 'X-Home-Region': 'us1', 'X-API-Domain': 'verify.twilio.com', 'Strict-Transport-Security': 'max-age=31536000', 'X-Cache': 'Error from cloudfront', 'Via': '1.1 b67118a2a9a653c9579f0a68639824fe.cloudfront.net (CloudFront)', 'X-Amz-Cf-Pop': 'HYD57-P7', 'X-Amz-Cf-Id': 'oq41a3-P9t4BTYPSM3iYdFzD_ORhskpQXbhexJgVMxLiZIVgVHuBdA==', 'X-Powered-By': 'AT-5000', 'X-Shenanigans': 'none', 'Vary': 'Origin'}
+2026-07-13 00:37:03 - src.shared.core.services.twilio_service - WARNING - OTP verification not found or expired for +919110770030.

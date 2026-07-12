@@ -15,8 +15,9 @@ from src.shared.core.properties.app_properties import settings
 from src.api.models.models import User, Member
 from src.shared.common.exceptions import AuthenticationError, AuthorizationError, AppError
 from src.shared.core.properties.constants import UserRole
+from src.shared.core.services.twilio_service import TwilioService
 from src.shared.core.services.otp_service import OtpService
-
+from src.shared.common.helpers.password_helper import hash_password
 class AuthService:
     def __init__(self, db_object: asyncpg.Connection):
         self.db = db_object
@@ -25,11 +26,17 @@ class AuthService:
         self.session_repo = UserSessionRepository(db_object)
         self.audit_repo = LoginAuditRepository(db_object)
         self.member_repo = MemberRepository(db_object)
+        self.twilio_service = TwilioService()
         self.otp_service = OtpService(db_object)
 
-    async def _validate_credentials_unified(self, mobile: str, otp: str, mark_used: bool = True):
-        # First verify the OTP
-        otp_request_id = await self.otp_service.verify_otp(mobile, otp, mark_used=mark_used)
+    async def _validate_credentials_unified(self, mobile: str, otp: str):
+        # Format mobile to E.164 assuming Indian numbers for now
+        phone_number = f"+91{mobile[-10:]}" if len(mobile) >= 10 else mobile
+
+        # First verify the OTP via Twilio
+        verify_response = self.twilio_service.verify_otp(phone_number, otp)
+        if not verify_response.get("success"):
+            raise AuthenticationError(verify_response.get("message", "Invalid OTP"))
 
         # 1. Check if user is Admin / Organizer
         user = await self.user_repo.get_user_by_mobile(mobile)
@@ -44,7 +51,7 @@ class AuthService:
                     await self.audit_repo.create_log("LOGIN_FAILED", user_id=user.id, mobile=mobile, remarks="Organizer is inactive")
                     raise AuthorizationError("Organizer account is inactive")
             
-            return {"type": "user", "data": user, "otp_request_id": otp_request_id}
+            return {"type": "user", "data": user}
 
         # 2. If not found in users, check if user is a Member
         members = await self.member_repo.get_members_by_mobile(mobile)
@@ -60,7 +67,7 @@ class AuthService:
                     break
             
             if authenticated_member:
-                return {"type": "member", "data": authenticated_member, "otp_request_id": otp_request_id}
+                return {"type": "member", "data": authenticated_member}
 
             await self.audit_repo.create_log("MEMBER_LOGIN_FAILED", mobile=mobile, remarks="Inactive account")
             raise AuthenticationError("Inactive account")
@@ -70,28 +77,49 @@ class AuthService:
         raise AuthenticationError("Account not found")
 
     async def login(self, data: LoginRequest):
-        auth_entity = await self._validate_credentials_unified(data.mobile, data.otp, mark_used=False)
+        auth_entity = await self._validate_credentials_unified(data.mobile, data.otp)
         
         if auth_entity["type"] == "user":
             user: User = auth_entity["data"]
             active_session = await self.session_repo.get_active_session_by_user_id(user.id)
             if active_session:
+                # Twilio Verify consumed the OTP. To allow the frontend to call force_login 
+                # with the same OTP, we temporarily store its hash in our local DB.
+                expires_at = datetime.utcnow() + timedelta(minutes=5)
+                await self.otp_service.otp_repo.create_otp_request(
+                    data.mobile, hash_password(data.otp), expires_at
+                )
                 raise AppError(
                     message="This account is active on another phone.",
                     status_code=409,
                     details={"code": "FORCE_LOGIN_REQUIRED"}
                 )
-            # If we get here, no active session, mark OTP as used
-            await self.otp_service.mark_otp_used(auth_entity["otp_request_id"])
             return await self._create_user_session_and_tokens(user, data.device_id, data.device_name, "LOGIN_SUCCESS")
         
         elif auth_entity["type"] == "member":
             member: Member = auth_entity["data"]
-            await self.otp_service.mark_otp_used(auth_entity["otp_request_id"])
             return await self._create_member_tokens(member, data.device_id, data.device_name, "MEMBER_LOGIN_SUCCESS")
 
     async def force_login(self, data: ForceLoginRequest):
-        auth_entity = await self._validate_credentials_unified(data.mobile, data.otp)
+        try:
+            auth_entity = await self._validate_credentials_unified(data.mobile, data.otp)
+        except AuthenticationError as e:
+            # Twilio Verify might return 404 if the OTP was already consumed in the login() step.
+            # We fallback to our local OTP store to check if it was cached during a 409 response.
+            try:
+                await self.otp_service.verify_otp(data.mobile, data.otp, mark_used=True)
+                
+                # If verified, recreate auth_entity manually
+                user = await self.user_repo.get_user_by_mobile(data.mobile)
+                if user:
+                    if not user.is_active:
+                        raise AuthorizationError("User is inactive")
+                    auth_entity = {"type": "user", "data": user}
+                else:
+                    raise AuthenticationError("Account not found")
+            except Exception:
+                # If it fails here too, then it really is invalid
+                raise e
         
         if auth_entity["type"] == "user":
             user: User = auth_entity["data"]
@@ -319,4 +347,7 @@ class AuthService:
         if not is_active:
             raise AuthorizationError("Your account is inactive")
 
-        return await self.otp_service.generate_and_send_otp(mobile)
+        # Format mobile to E.164 assuming Indian numbers
+        phone_number = f"+91{mobile[-10:]}" if len(mobile) >= 10 else mobile
+
+        return self.twilio_service.send_otp(phone_number)

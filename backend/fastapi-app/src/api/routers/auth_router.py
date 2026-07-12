@@ -3,10 +3,11 @@ from fastapi import APIRouter, Depends
 from src.api.schemas.auth_schema import (
     LoginRequest, ForceLoginRequest, RefreshTokenRequest,
     LoginResponse, LogoutResponse, CurrentUserResponse,
-    RequestOTP
+    RequestOTP, SendOTPRequest, VerifyOTPRequest, TwilioOTPResponse,
+    RefreshTokenResponse
 )
-from src.api.schemas.auth_schema import RefreshTokenResponse
 from src.shared.core.services.auth_service import AuthService
+from src.shared.core.services.twilio_service import TwilioService
 from src.shared.core.database import get_db_session
 from src.api.dependencies.auth_dependency import get_current_user, get_current_session_id
 from src.api.models.models import User
@@ -22,6 +23,9 @@ def get_auth_service(
     db: asyncpg.Connection = Depends(get_db_session)
 ) -> AuthService:
     return AuthService(db)
+
+def get_twilio_service() -> TwilioService:
+    return TwilioService()
 
 
 # ── Public Endpoints (no auth required) ──────────────────────────────────────
@@ -69,6 +73,42 @@ async def request_otp(
     Request OTP for login.
     """
     return await service.request_login_otp(request_data)
+
+@router.post("/send-otp", response_model=TwilioOTPResponse, status_code=200)
+async def send_otp(
+    request_data: SendOTPRequest,
+    service: TwilioService = Depends(get_twilio_service)
+):
+    """
+    Send an OTP using Twilio Verify API.
+    """
+    import re
+    from fastapi import HTTPException
+    
+    if not re.match(r"^\+[1-9]\d{1,14}$", request_data.phone_number):
+        raise HTTPException(status_code=400, detail="Invalid phone number format. Must be E.164")
+    
+    return service.send_otp(request_data.phone_number)
+
+@router.post("/verify-otp", response_model=TwilioOTPResponse, status_code=200)
+async def verify_otp(
+    request_data: VerifyOTPRequest,
+    service: TwilioService = Depends(get_twilio_service)
+):
+    """
+    Verify an OTP using Twilio Verify API.
+    """
+    import re
+    from fastapi import HTTPException
+    
+    if not re.match(r"^\+[1-9]\d{1,14}$", request_data.phone_number):
+        raise HTTPException(status_code=400, detail="Invalid phone number format. Must be E.164")
+    
+    response = service.verify_otp(request_data.phone_number, request_data.otp)
+    
+    # Send a structured 200 OK with success=False if verification fails
+    # (or could raise HTTPException if preferred, but schema requires success/message)
+    return TwilioOTPResponse(**response)
 
 
 # ── Protected Endpoints (Bearer token required) ───────────────────────────────
