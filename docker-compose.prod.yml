@@ -21,6 +21,9 @@ services:
       ENVIRONMENT: dev
       TZ: Asia/Kolkata
       ALLOWED_ORIGINS: "*"
+      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID:-}
+      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN:-}
+      TWILIO_VERIFY_SERVICE_SID: ${TWILIO_VERIFY_SERVICE_SID:-}
 
   # ── React / Vite Frontend (served via Nginx) ─────────────────
   frontend:
