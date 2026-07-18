@@ -19,7 +19,7 @@ class MemberRepository:
 
     async def get_member_by_id_and_organizer(self, member_id: UUID, organizer_id: UUID) -> Optional[Member]:
         query = """
-            SELECT id, organizer_id, member_code, full_name, mobile, alternate_mobile, email, address, village, mandal, district, state, pincode, aadhaar_last4, notes, is_active, created_at, updated_at
+            SELECT id, organizer_id, member_code, full_name, mobile, alternate_mobile, email, address, village, mandal, district, state, pincode, aadhaar_last4, notes, is_active, created_at, updated_at, password_hash
             FROM members 
             WHERE id = $1 AND organizer_id = $2 AND is_deleted = FALSE
         """
@@ -30,7 +30,7 @@ class MemberRepository:
 
     async def get_member_by_mobile_and_organizer(self, mobile: str, organizer_id: UUID) -> Optional[Member]:
         query = """
-            SELECT id, organizer_id, member_code, full_name, mobile, alternate_mobile, email, address, village, mandal, district, state, pincode, aadhaar_last4, notes, is_active, created_at, updated_at
+            SELECT id, organizer_id, member_code, full_name, mobile, alternate_mobile, email, address, village, mandal, district, state, pincode, aadhaar_last4, notes, is_active, created_at, updated_at, password_hash
             FROM members 
             WHERE mobile = $1 AND organizer_id = $2 AND is_deleted = FALSE
         """
@@ -41,7 +41,7 @@ class MemberRepository:
 
     async def get_member_by_code_and_organizer(self, member_code: str, organizer_id: UUID) -> Optional[Member]:
         query = """
-            SELECT id, organizer_id, member_code, full_name, mobile, alternate_mobile, email, address, village, mandal, district, state, pincode, aadhaar_last4, notes, is_active, created_at, updated_at
+            SELECT id, organizer_id, member_code, full_name, mobile, alternate_mobile, email, address, village, mandal, district, state, pincode, aadhaar_last4, notes, is_active, created_at, updated_at, password_hash
             FROM members 
             WHERE member_code = $1 AND organizer_id = $2 AND is_deleted = FALSE
         """
@@ -135,7 +135,7 @@ class MemberRepository:
 
         # Select query
         select_query = f"""
-            SELECT id, organizer_id, member_code, full_name, mobile, alternate_mobile, email, address, village, mandal, district, state, pincode, aadhaar_last4, notes, is_active, created_at, updated_at
+            SELECT id, organizer_id, member_code, full_name, mobile, alternate_mobile, email, address, village, mandal, district, state, pincode, aadhaar_last4, notes, is_active, created_at, updated_at, password_hash
             FROM members
             {base_where}
             ORDER BY {sort_by} {sort_order}
@@ -233,7 +233,7 @@ class MemberRepository:
         if not member_ids:
             return []
         query = """
-            SELECT id, organizer_id, member_code, full_name, mobile, alternate_mobile, email, address, village, mandal, district, state, pincode, aadhaar_last4, notes, is_active, created_at, updated_at
+            SELECT id, organizer_id, member_code, full_name, mobile, alternate_mobile, email, address, village, mandal, district, state, pincode, aadhaar_last4, notes, is_active, created_at, updated_at, password_hash
             FROM members 
             WHERE id = ANY($1) AND organizer_id = $2 AND is_deleted = FALSE
         """
@@ -242,7 +242,7 @@ class MemberRepository:
 
     async def get_members_by_mobile(self, mobile: str) -> List[Member]:
         query = """
-            SELECT id, organizer_id, member_code, full_name, mobile, alternate_mobile, email, address, village, mandal, district, state, pincode, aadhaar_last4, notes, is_active, created_at, updated_at
+            SELECT id, organizer_id, member_code, full_name, mobile, alternate_mobile, email, address, village, mandal, district, state, pincode, aadhaar_last4, notes, is_active, created_at, updated_at, password_hash
             FROM members 
             WHERE mobile = $1 AND is_deleted = FALSE
         """

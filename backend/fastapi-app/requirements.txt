@@ -15,4 +15,3 @@ jinja2
 bcrypt
 python-dateutil
 aiohttp
-twilio

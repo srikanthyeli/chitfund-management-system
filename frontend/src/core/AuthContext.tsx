@@ -13,9 +13,7 @@ interface User {
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  requestLoginOtp: (mobile: string) => Promise<any>;
   login: (data: any) => Promise<any>;
-  forceLogin: (data: any) => Promise<any>;
   logout: () => void;
 }
 
@@ -44,15 +42,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     initializeAuth();
   }, []);
 
-  const requestLoginOtp = async (mobile: string) => {
-    try {
-      const response = await api.post('/auth/login/request-otp', { mobile });
-      return { success: true, message: response.data.message };
-    } catch (error: any) {
-      toast.error(error.response?.data?.detail || 'Failed to request OTP');
-      return { success: false };
-    }
-  };
 
   const login = async (credentials: any) => {
     try {
@@ -62,34 +51,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUser(response.data.user);
       return { success: true, user: response.data.user };
     } catch (error: any) {
-      const responseData = error.response?.data;
-      const isForceLogin =
-        responseData?.details?.code === 'FORCE_LOGIN_REQUIRED' ||
-        responseData?.code === 'FORCE_LOGIN_REQUIRED' ||
-        responseData?.detail?.code === 'FORCE_LOGIN_REQUIRED';
 
-      if (isForceLogin) {
-        const message = responseData?.message || responseData?.detail?.message || 'This account is active on another device.';
-        return { success: false, forceLoginRequired: true, message };
-      }
       toast.error(error.response?.data?.detail || 'Login failed');
       return { success: false };
     }
   };
 
-  const forceLogin = async (credentials: any) => {
-    try {
-      const response = await api.post('/auth/force-login', credentials);
-      localStorage.setItem('access_token', response.data.access_token);
-      localStorage.setItem('refresh_token', response.data.refresh_token);
-      setUser(response.data.user);
-      toast.success('Logged in successfully');
-      return { success: true, user: response.data.user };
-    } catch (error: any) {
-      toast.error(error.response?.data?.detail || 'Force login failed');
-      return { success: false };
-    }
-  };
 
   const logout = async () => {
     try {
@@ -105,7 +72,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, requestLoginOtp, login, forceLogin, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

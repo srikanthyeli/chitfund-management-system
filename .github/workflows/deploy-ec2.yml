@@ -57,14 +57,11 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         BRANCH_NAME: ${{ github.ref_name }}
-        TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-        TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
-        TWILIO_VERIFY_SERVICE_SID: ${{ secrets.TWILIO_VERIFY_SERVICE_SID }}
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ec2-user
         key: ${{ secrets.EC2_SSH_KEY }}
-        envs: ECR_REGISTRY, IMAGE_TAG, AWS_REGION, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, BRANCH_NAME, TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_VERIFY_SERVICE_SID
+        envs: ECR_REGISTRY, IMAGE_TAG, AWS_REGION, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, BRANCH_NAME
         script: |
           # 1. Go to the project directory & pull the latest docker-compose.prod.yml
           cd chitfund-management-system
@@ -81,7 +78,4 @@ jobs:
           # 3. Pull the new images and restart the containers
           export ECR_REGISTRY=$ECR_REGISTRY
           export IMAGE_TAG=$IMAGE_TAG
-          export TWILIO_ACCOUNT_SID=$TWILIO_ACCOUNT_SID
-          export TWILIO_AUTH_TOKEN=$TWILIO_AUTH_TOKEN
-          export TWILIO_VERIFY_SERVICE_SID=$TWILIO_VERIFY_SERVICE_SID
           docker compose -f docker-compose.prod.yml up -d

@@ -10,7 +10,7 @@ class UserRepository:
 
     async def get_user_by_mobile(self, mobile: str) -> Optional[User]:
         query = """
-            SELECT id, organizer_id, member_id, mobile, role, is_active, last_login_at
+            SELECT id, organizer_id, member_id, mobile, role, is_active, last_login_at, password_hash
             FROM users 
             WHERE mobile = $1 AND is_deleted = FALSE
         """
@@ -21,7 +21,7 @@ class UserRepository:
 
     async def get_user_by_id(self, user_id: UUID) -> Optional[User]:
         query = """
-            SELECT id, organizer_id, member_id, mobile, role, is_active, last_login_at 
+            SELECT id, organizer_id, member_id, mobile, role, is_active, last_login_at, password_hash
             FROM users 
             WHERE id = $1 AND is_deleted = FALSE
         """

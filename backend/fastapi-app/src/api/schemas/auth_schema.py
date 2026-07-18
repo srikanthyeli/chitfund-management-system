@@ -4,13 +4,7 @@ from typing import Optional
 
 class LoginRequest(BaseModel):
     mobile: str = Field(..., description="User mobile number")
-    otp: str = Field(..., description="OTP sent to mobile")
-    device_id: Optional[str] = None
-    device_name: Optional[str] = None
-
-class ForceLoginRequest(BaseModel):
-    mobile: str = Field(..., description="User mobile number")
-    otp: str = Field(..., description="OTP sent to mobile")
+    password: str = Field(..., description="User password")
     device_id: Optional[str] = None
     device_name: Optional[str] = None
 
@@ -39,16 +33,3 @@ class LogoutResponse(BaseModel):
     success: bool
     message: str
 
-class RequestOTP(BaseModel):
-    mobile: str = Field(..., description="User mobile number")
-
-class SendOTPRequest(BaseModel):
-    phone_number: str = Field(..., description="E.164 formatted phone number")
-
-class VerifyOTPRequest(BaseModel):
-    phone_number: str = Field(..., description="E.164 formatted phone number")
-    otp: str = Field(..., description="6-digit OTP", min_length=6, max_length=6)
-
-class TwilioOTPResponse(BaseModel):
-    success: bool
-    message: str

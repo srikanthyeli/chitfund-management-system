@@ -2,7 +2,7 @@ import os
 import configparser
 from pathlib import Path
 from dotenv import load_dotenv
-from src.shared.core.properties.app_base_properties import BaseConfig, DatabaseSettings, AppSettings, JwtSettings, TwilioSettings
+from src.shared.core.properties.app_base_properties import BaseConfig, DatabaseSettings, AppSettings, JwtSettings
 
 # Load environment variables from .env file if it exists
 load_dotenv()
@@ -57,10 +57,6 @@ def load_properties() -> BaseConfig:
     jwt_access_expiry = int(os.getenv("JWT_ACCESS_TOKEN_EXPIRY") or config.get("jwt", "access_token_expiry", fallback="60"))
     jwt_refresh_expiry = int(os.getenv("JWT_REFRESH_TOKEN_EXPIRY") or config.get("jwt", "refresh_token_expiry", fallback="7"))
 
-    # Twilio values
-    twilio_account_sid = os.getenv("TWILIO_ACCOUNT_SID") or (config.get("twilio", "account_sid", fallback="") if config.has_section("twilio") else "")
-    twilio_auth_token = os.getenv("TWILIO_AUTH_TOKEN") or (config.get("twilio", "auth_token", fallback="") if config.has_section("twilio") else "")
-    twilio_verify_service_sid = os.getenv("TWILIO_VERIFY_SERVICE_SID") or (config.get("twilio", "verify_service_sid", fallback="") if config.has_section("twilio") else "")
 
     return BaseConfig(
         database=DatabaseSettings(db_url=db_url),
@@ -75,12 +71,8 @@ def load_properties() -> BaseConfig:
             algorithm=jwt_algorithm,
             access_token_expiry=jwt_access_expiry,
             refresh_token_expiry=jwt_refresh_expiry
-        ),
-        twilio=TwilioSettings(
-            account_sid=twilio_account_sid,
-            auth_token=twilio_auth_token,
-            verify_service_sid=twilio_verify_service_sid
         )
+
     )
 
 # Export a singleton instance of properties
