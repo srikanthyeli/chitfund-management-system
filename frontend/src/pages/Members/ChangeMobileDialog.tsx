@@ -3,6 +3,7 @@ import { X } from 'lucide-react';
 import api from '../../core/api';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
+import { normalizeIndianMobile } from '../../core/phone';
 
 interface ChangeMobileDialogProps {
   isOpen: boolean;
@@ -36,7 +37,15 @@ export const ChangeMobileDialog: React.FC<ChangeMobileDialogProps> = ({
       return;
     }
 
-    if (newMobile !== confirmNewMobile) {
+    const normalizedOld = normalizeIndianMobile(oldMobile);
+    const normalizedNew = normalizeIndianMobile(newMobile);
+    const normalizedConfirm = normalizeIndianMobile(confirmNewMobile);
+    if (!normalizedOld || !normalizedNew || !normalizedConfirm) {
+      toast.error('Please enter a valid 10-digit Indian mobile number');
+      return;
+    }
+
+    if (normalizedNew !== normalizedConfirm) {
       toast.error('New mobile and confirmation do not match');
       return;
     }
@@ -45,9 +54,9 @@ export const ChangeMobileDialog: React.FC<ChangeMobileDialogProps> = ({
     try {
       setLoading(true);
       const response = await api.patch(`/members/${memberId}/mobile`, {
-        old_mobile: oldMobile,
-        new_mobile: newMobile,
-        confirm_new_mobile: confirmNewMobile,
+        old_mobile: normalizedOld,
+        new_mobile: normalizedNew,
+        confirm_new_mobile: normalizedConfirm,
       });
       toast.success('Mobile number updated successfully');
       onSuccess(response.data);

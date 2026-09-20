@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, Edit, UserPlus, Play, CheckCircle2, 
   XCircle, RotateCcw, AlertTriangle, Calendar, User, 
-  MapPin, Phone, RefreshCw, BookOpen, Gavel
+  MapPin, Phone, RefreshCw, BookOpen, Gavel, Minus, Plus
 } from 'lucide-react';
 import api from '../../core/api';
 import toast from 'react-hot-toast';
@@ -298,10 +298,22 @@ export const ChitGroupDetail: React.FC = () => {
     );
   });
 
+  const parseShareCount = (raw: string, maxValue: number) => {
+    const digits = raw.replace(/\D/g, '');
+    if (digits === '') return 0;
+    const parsed = parseInt(digits, 10);
+    if (Number.isNaN(parsed)) return 0;
+    return Math.min(parsed, Math.max(maxValue, 1));
+  };
+
   const totalSharesToAdd = allocSelectedIds.length * allocSharesPerMember;
   const availableSharesLeft = chit ? chit.available_shares : 0;
   const remainingAfterAlloc = availableSharesLeft - totalSharesToAdd;
   const exceedsAvailable = totalSharesToAdd > availableSharesLeft;
+  const maxSharesPerMember = availableSharesLeft > 0 ? availableSharesLeft : 1;
+  const maxEditShareCount = selectedMembership && chit
+    ? selectedMembership.share_count + chit.available_shares
+    : 1;
 
   if (loading) {
     return <div className="text-center py-12 text-slate-500">Loading chit group details...</div>;
@@ -842,14 +854,38 @@ export const ChitGroupDetail: React.FC = () => {
                     <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
                       Shares Per Member <span className="text-rose-500">*</span>
                     </label>
-                    <input
-                      type="number"
-                      required
-                      min="1"
-                      value={allocSharesPerMember}
-                      onChange={(e) => setAllocSharesPerMember(parseInt(e.target.value) || 1)}
-                      className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-gray-700 dark:bg-gray-900 text-slate-900 dark:text-white text-sm"
-                    />
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        aria-label="Decrease shares"
+                        onClick={() => setAllocSharesPerMember((prev) => Math.max(1, prev - 1))}
+                        disabled={allocSharesPerMember <= 1}
+                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-gray-200 disabled:opacity-40"
+                      >
+                        <Minus size={16} />
+                      </button>
+                      <input
+                        type="text"
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                        required
+                        value={allocSharesPerMember === 0 ? '' : allocSharesPerMember}
+                        onChange={(e) => setAllocSharesPerMember(parseShareCount(e.target.value, maxSharesPerMember))}
+                        className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-gray-700 dark:bg-gray-900 text-slate-900 dark:text-white text-sm text-center font-semibold"
+                      />
+                      <button
+                        type="button"
+                        aria-label="Increase shares"
+                        onClick={() => setAllocSharesPerMember((prev) => Math.min(maxSharesPerMember, Math.max(1, prev) + 1))}
+                        disabled={allocSharesPerMember >= maxSharesPerMember}
+                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-gray-200 disabled:opacity-40"
+                      >
+                        <Plus size={16} />
+                      </button>
+                    </div>
+                    <p className="text-[10px] text-slate-400 mt-1">
+                      Use + or type a number to allocate more than 1 share per member. Max {maxSharesPerMember}.
+                    </p>
                   </div>
                   <div>
                     <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
@@ -938,14 +974,35 @@ export const ChitGroupDetail: React.FC = () => {
               <div className="p-5 space-y-4 overflow-y-auto flex-1">
                 <div>
                   <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Share Count <span className="text-rose-500">*</span></label>
-                  <input
-                    type="number"
-                    required
-                    min="1"
-                    value={editShareCount}
-                    onChange={(e) => setEditShareCount(parseInt(e.target.value) || 1)}
-                    className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-gray-700 dark:bg-gray-900 text-slate-900 dark:text-white text-sm"
-                  />
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      aria-label="Decrease share count"
+                      onClick={() => setEditShareCount((prev) => Math.max(1, prev - 1))}
+                      disabled={editShareCount <= 1}
+                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-gray-200 disabled:opacity-40"
+                    >
+                      <Minus size={16} />
+                    </button>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      required
+                      value={editShareCount === 0 ? '' : editShareCount}
+                      onChange={(e) => setEditShareCount(parseShareCount(e.target.value, maxEditShareCount))}
+                      className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-gray-700 dark:bg-gray-900 text-slate-900 dark:text-white text-sm text-center font-semibold"
+                    />
+                    <button
+                      type="button"
+                      aria-label="Increase share count"
+                      onClick={() => setEditShareCount((prev) => Math.min(maxEditShareCount, Math.max(1, prev) + 1))}
+                      disabled={editShareCount >= maxEditShareCount}
+                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-slate-200 dark:border-gray-700 text-slate-700 dark:text-gray-200 disabled:opacity-40"
+                    >
+                      <Plus size={16} />
+                    </button>
+                  </div>
                   <p className="text-[10px] text-slate-400 mt-1">
                     Current: {selectedMembership.share_count} • Max additional allocation limit: +{chit.available_shares} shares
                   </p>

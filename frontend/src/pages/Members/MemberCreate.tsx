@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import api from '../../core/api';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
+import { normalizeIndianMobile } from '../../core/phone';
 
 export const MemberCreate: React.FC = () => {
   const { t } = useTranslation(['common', 'organisers', 'auth']);
@@ -31,20 +32,14 @@ export const MemberCreate: React.FC = () => {
   };
 
   const validate = (): boolean => {
-    // Validate mobile
-    const cleanMobile = formData.mobile.replace(/[\s\-()]/g, '').replace(/^(\+91|91|0)/, '');
-    if (!/^[6-9]\d{9}$/.test(cleanMobile)) {
+    if (!normalizeIndianMobile(formData.mobile)) {
       toast.error('Please enter a valid 10-digit Indian mobile number');
       return false;
     }
 
-    // Validate alternate mobile if supplied
-    if (formData.alternate_mobile) {
-      const cleanAlt = formData.alternate_mobile.replace(/[\s\-()]/g, '').replace(/^(\+91|91|0)/, '');
-      if (!/^[6-9]\d{9}$/.test(cleanAlt)) {
-        toast.error('Please enter a valid 10-digit Indian alternate mobile number');
-        return false;
-      }
+    if (formData.alternate_mobile && !normalizeIndianMobile(formData.alternate_mobile)) {
+      toast.error('Please enter a valid 10-digit Indian alternate mobile number');
+      return false;
     }
 
     // Validate pincode if supplied
@@ -70,7 +65,10 @@ export const MemberCreate: React.FC = () => {
     try {
       const payload = {
         ...formData,
-        alternate_mobile: formData.alternate_mobile || null,
+        mobile: normalizeIndianMobile(formData.mobile),
+        alternate_mobile: formData.alternate_mobile
+          ? normalizeIndianMobile(formData.alternate_mobile)
+          : null,
         email: formData.email || null,
         address: formData.address || null,
         village: formData.village || null,

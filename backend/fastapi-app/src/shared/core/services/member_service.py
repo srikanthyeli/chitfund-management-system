@@ -11,17 +11,15 @@ from src.api.schemas.member_schema import (
     MemberCreateRequest, MemberUpdateRequest, MemberStatusRequest, MemberMobileUpdateRequest
 )
 from src.shared.core.properties.constants import UserRole, ActivityAction
+from src.shared.common.utils.mobile_utils import normalize_indian_mobile
 
 def normalize_and_validate_indian_mobile(mobile: str) -> str:
     if not mobile:
         raise HTTPException(status_code=400, detail="Mobile number is required")
-    # Strip whitespace, dashes, parentheses
-    cleaned = re.sub(r'[\s\-()]', '', mobile)
-    # Validate format: matches optional +91/91/0 followed by 10 digits starting with 6-9
-    match = re.match(r'^(?:\+91|91|0)?([6-9]\d{9})$', cleaned)
-    if not match:
+    normalized = normalize_indian_mobile(mobile)
+    if not normalized:
         raise HTTPException(status_code=400, detail="Invalid Indian mobile number format")
-    return match.group(1)
+    return normalized
 
 class MemberService:
     def __init__(self, db_object):

@@ -72,6 +72,26 @@ async def test_create_member_invalid_inputs(client, test_organizer_a):
     assert response.status_code == 422
 
 @pytest.mark.anyio
+async def test_create_member_mobile_starting_with_91(client, test_organizer_a):
+    headers = {"Authorization": f"Bearer {test_organizer_a['token']}"}
+
+    res = await client.post(
+        "/api/v1/members",
+        json={"full_name": "Ninety One Member", "mobile": "9110770030"},
+        headers=headers,
+    )
+    assert res.status_code == 201
+    assert res.json()["mobile"] == "9110770030"
+
+    res_prefix = await client.post(
+        "/api/v1/members",
+        json={"full_name": "Country Code Member", "mobile": "+919110770031"},
+        headers=headers,
+    )
+    assert res_prefix.status_code == 201
+    assert res_prefix.json()["mobile"] == "9110770031"
+
+@pytest.mark.anyio
 async def test_duplicate_mobile_validation(client, test_organizer_a, test_organizer_b):
     # Setup - Organizer A creates member with mobile 9876543210
     headers_a = {"Authorization": f"Bearer {test_organizer_a['token']}"}
