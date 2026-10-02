@@ -160,14 +160,14 @@ export const ChitGroupList: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-800 dark:text-white">{t('common:navigation_chitgroups')}</h1>
-          <p className="text-sm text-slate-500">Organize chit groups, allocate member shares, and start funds</p>
+          <p className="text-sm text-slate-500">{t('chitGroups:chitgroups_subtitle')}</p>
         </div>
         <Link
           to="/organizer/chit-groups/new"
           className="inline-flex items-center justify-center space-x-2 bg-primary hover:bg-primary-dark text-white px-5 py-2.5 rounded-xl font-medium text-sm transition-colors shadow-sm self-start sm:self-auto"
         >
           <Plus size={18} />
-          <span>New Chit Group</span>
+          <span>{t('chitGroups:chitgroups_new')}</span>
         </Link>
       </div>
 
@@ -198,7 +198,7 @@ export const ChitGroupList: React.FC = () => {
             <UserCheck size={20} />
           </div>
           <div>
-            <p className="text-xs font-medium text-slate-500">Ready to Start</p>
+            <p className="text-xs font-medium text-slate-500">{t('chitGroups:chitgroups_ready_to_start')}</p>
             <h3 className="text-lg font-bold text-slate-800 dark:text-white">{summary.ready_to_start_chits}</h3>
           </div>
         </div>
@@ -208,7 +208,7 @@ export const ChitGroupList: React.FC = () => {
             <Folder size={20} />
           </div>
           <div>
-            <p className="text-xs font-medium text-slate-500">Draft / Allocating</p>
+            <p className="text-xs font-medium text-slate-500">{t('chitGroups:chitgroups_draft_allocating')}</p>
             <h3 className="text-lg font-bold text-slate-800 dark:text-white">{summary.draft_chits}</h3>
           </div>
         </div>
@@ -222,7 +222,7 @@ export const ChitGroupList: React.FC = () => {
           </span>
           <input
             type="text"
-            placeholder="Search by chit group name or code..."
+            placeholder={t('chitGroups:chitgroups_search_placeholder')}
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-gray-700 dark:bg-gray-900 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary"
@@ -252,13 +252,13 @@ export const ChitGroupList: React.FC = () => {
         <div className="flex justify-center py-12 text-slate-500">
           <div className="flex items-center space-x-2">
             <div className="animate-spin rounded-full h-6 w-6 border-2 border-primary border-t-transparent"></div>
-            <span>Loading chit groups...</span>
+            <span>{t('chitGroups:chitgroups_loading')}</span>
           </div>
         </div>
       ) : chits.length === 0 ? (
         <div className="bg-white dark:bg-gray-800 text-center py-16 rounded-2xl border border-slate-100 dark:border-gray-700">
           <Briefcase className="mx-auto text-slate-300 dark:text-gray-600 mb-4" size={48} />
-          <h3 className="text-lg font-bold text-slate-800 dark:text-white">No Chit Groups Found</h3>
+          <h3 className="text-lg font-bold text-slate-800 dark:text-white">{t('chitGroups:chitgroups_empty_title')}</h3>
           <p className="text-slate-500 text-sm mt-1 max-w-sm mx-auto">
             {search || statusFilter !== 'all'
               ? 'Try adjusting your search terms or filters'
@@ -273,7 +273,7 @@ export const ChitGroupList: React.FC = () => {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-slate-50 dark:bg-gray-855 text-slate-500 dark:text-gray-400 font-semibold text-xs uppercase tracking-wider border-b border-slate-100 dark:border-gray-700">
-                  <th className="px-6 py-4">Code</th>
+                  <th className="px-6 py-4">{t('common:code')}</th>
                   <th className="px-6 py-4">{t('chitGroups:chitgroups_name')}</th>
                   <th className="px-6 py-4">Chit Value</th>
                   <th className="px-6 py-4">Allocated Shares</th>
@@ -327,7 +327,7 @@ export const ChitGroupList: React.FC = () => {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <span className="text-primary hover:text-primary-dark font-medium text-xs">Manage</span>
+                      <span className="text-primary hover:text-primary-dark font-medium text-xs">{t('chitGroups:chitgroups_view')}</span>
                     </td>
                   </tr>
                 ))}
@@ -388,10 +388,10 @@ export const ChitGroupList: React.FC = () => {
             {loadingMore ? (
               <div className="flex items-center space-x-2 text-slate-500 text-sm">
                 <div className="animate-spin rounded-full h-4 w-4 border-2 border-primary border-t-transparent"></div>
-                <span>Loading more groups...</span>
+                <span>{t('common:loading_more')}</span>
               </div>
             ) : chits.length < total ? (
-              <span className="text-xs text-slate-400">Scroll down to load more</span>
+              <span className="text-xs text-slate-400">{t('common:scroll_load_more')}</span>
             ) : (
               <span className="text-xs text-slate-400">
                 Showing all {total} groups

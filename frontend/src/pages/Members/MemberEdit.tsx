@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { normalizeIndianMobile } from '../../core/phone';
 
 export const MemberEdit: React.FC = () => {
-  const { t } = useTranslation(['common', 'organisers', 'auth']);
+  const { t } = useTranslation(['members', 'common']);
 
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
@@ -117,7 +117,7 @@ export const MemberEdit: React.FC = () => {
   };
 
   if (fetching) {
-    return <div className="flex justify-center p-8">Loading member profile...</div>;
+    return <div className="flex justify-center p-8">{t('members:members_loading_profile')}</div>;
   }
 
   return (
@@ -127,8 +127,8 @@ export const MemberEdit: React.FC = () => {
           <ArrowLeft size={20} />
         </Link>
         <div>
-          <h1 className="text-xl font-bold text-slate-800 dark:text-white">Edit Member Profile</h1>
-          <p className="text-sm text-slate-500">Update personal and address details</p>
+          <h1 className="text-xl font-bold text-slate-800 dark:text-white">{t('members:members_edit_profile')}</h1>
+          <p className="text-sm text-slate-500">{t('members:members_edit_subtitle')}</p>
         </div>
       </div>
 
@@ -136,7 +136,7 @@ export const MemberEdit: React.FC = () => {
         
         {/* Profile Info Section */}
         <div className="space-y-4">
-          <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider border-b pb-1">Personal Details</h3>
+          <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider border-b pb-1">{t('members:members_personal_details')}</h3>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -197,7 +197,7 @@ export const MemberEdit: React.FC = () => {
                   className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-gray-500 cursor-not-allowed text-sm focus:outline-none"
                 />
               </div>
-              <p className="text-[11px] text-slate-400 mt-1">To change mobile number, use the action on the member profile page.</p>
+              <p className="text-[11px] text-slate-400 mt-1">{t('members:members_change_mobile_hint')}</p>
             </div>
 
             <div>
@@ -240,7 +240,7 @@ export const MemberEdit: React.FC = () => {
 
         {/* Address Info Section */}
         <div className="space-y-4">
-          <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider border-b pb-1">Address Details</h3>
+          <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider border-b pb-1">{t('members:members_address')}</h3>
           
           <div>
             <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
@@ -337,7 +337,7 @@ export const MemberEdit: React.FC = () => {
 
         {/* Other Info */}
         <div className="space-y-4">
-          <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider border-b pb-1">Additional Notes</h3>
+          <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider border-b pb-1">{t('members:members_remarks_notes')}</h3>
           <div>
             <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
               Internal Remarks

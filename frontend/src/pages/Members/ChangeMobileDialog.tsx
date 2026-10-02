@@ -20,7 +20,7 @@ export const ChangeMobileDialog: React.FC<ChangeMobileDialogProps> = ({
   currentMobile,
   onSuccess,
 }) => {
-  const { t } = useTranslation(['common']);
+  const { t } = useTranslation(['members', 'common']);
 
   const [oldMobile, setOldMobile] = useState('');
   const [newMobile, setNewMobile] = useState('');
@@ -73,7 +73,7 @@ export const ChangeMobileDialog: React.FC<ChangeMobileDialogProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
       <div className="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-md overflow-hidden shadow-xl animate-in fade-in zoom-in-95 duration-200">
         <div className="flex items-center justify-between p-4 border-b border-gray-100 dark:border-gray-700 bg-slate-50 dark:bg-gray-850">
-          <h3 className="font-bold text-gray-900 dark:text-white">Change Mobile Number</h3>
+          <h3 className="font-bold text-gray-900 dark:text-white">{t('members:members_change_mobile')}</h3>
           <button onClick={onClose} className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full">
             <X size={20} className="text-gray-500 dark:text-gray-400" />
           </button>
@@ -127,7 +127,7 @@ export const ChangeMobileDialog: React.FC<ChangeMobileDialogProps> = ({
             <input
               type="text"
               required
-              placeholder="Re-enter new mobile"
+              placeholder={t('members:members_reenter_mobile')}
               value={confirmNewMobile}
               onChange={(e) => setConfirmNewMobile(e.target.value)}
               className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 dark:bg-gray-900 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"

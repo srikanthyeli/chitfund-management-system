@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 // Generic Report Page Component to avoid code duplication
 export const GenericReportPage = ({ title, description, apiCall, columns, exportFilename }: any) => {
-  const { t } = useTranslation(['common', 'reports']);
+  const { t } = useTranslation(['reports', 'common', 'payouts']);
 
   const [data, setData] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
@@ -76,7 +76,7 @@ export const GenericReportPage = ({ title, description, apiCall, columns, export
               {loading ? (
                 <tr><td colSpan={columns.length} className="px-6 py-4 text-center text-gray-500">{t('common:loading')}</td></tr>
               ) : data.length === 0 ? (
-                <tr><td colSpan={columns.length} className="px-6 py-4 text-center text-gray-500">No data found</td></tr>
+                <tr><td colSpan={columns.length} className="px-6 py-4 text-center text-gray-500">{t('reports:reports_no_data_found')}</td></tr>
               ) : (
                 data.map((row, idx) => (
                   <tr key={idx} className="hover:bg-gray-50">
@@ -119,12 +119,12 @@ export const AuctionReport = () => (
     apiCall={reportApi.getAuctionReport}
     exportFilename="auction_report"
     columns={[
-      { key: 'chit_group_name', label: 'Chit Group' },
-      { key: 'auction_month', label: 'Month' },
-      { key: 'winner_name', label: 'Winner' },
-      { key: 'gross_amount', label: 'Gross Amount' },
-      { key: 'discount_amount', label: 'Discount' },
-      { key: 'status', label: 'Status' }
+      { key: 'chit_group_name', label: t('common:group') },
+      { key: 'auction_month', label: t('common:receipt_month') },
+      { key: 'winner_name', label: t('reports:reports_winner') },
+      { key: 'gross_amount', label: t('reports:reports_gross_amount') },
+      { key: 'discount_amount', label: t('reports:reports_discount') },
+      { key: 'status', label: t('common:status') }
     ]}
   />
 );
@@ -136,10 +136,10 @@ export const WinnerPayoutReport = () => (
     apiCall={reportApi.getWinnerPayoutReport}
     exportFilename="winner_payout_report"
     columns={[
-      { key: 'chit_group_name', label: 'Chit Group' },
-      { key: 'winner_name', label: 'Winner' },
+      { key: 'chit_group_name', label: t('common:group') },
+      { key: 'winner_name', label: t('reports:reports_winner') },
       { key: 'net_amount', label: 'Net Amount' },
-      { key: 'payment_status', label: 'Status' },
+      { key: 'payment_status', label: t('common:status') },
       { key: 'payment_mode', label: 'Mode' },
       { key: 'payout_date', label: 'Date' }
     ]}
@@ -165,12 +165,12 @@ export const MemberFinancialReport = () => (
 
 export const OrganizerFinancialReport = () => (
   <GenericReportPage 
-    title="Organizer Financial Report" 
+    title={t('reports:reports_organizer_financial_title')} 
     description="Monthly revenue, commissions, and cash flow."
     apiCall={reportApi.getOrganizerFinancialReport}
     exportFilename="organizer_financial_report"
     columns={[
-      { key: 'month', label: 'Month' },
+      { key: 'month', label: t('common:receipt_month') },
       { key: 'collections_received', label: 'Collections' },
       { key: 'commission_income', label: 'Commission' },
       { key: 'maintenance_income', label: 'Maintenance' },
@@ -186,8 +186,8 @@ export const ChitPerformanceReport = () => (
     apiCall={reportApi.getChitPerformanceReport}
     exportFilename="chit_performance_report"
     columns={[
-      { key: 'chit_group_name', label: 'Chit Group' },
-      { key: 'status', label: 'Status' },
+      { key: 'chit_group_name', label: t('common:group') },
+      { key: 'status', label: t('common:status') },
       { key: 'completion_percentage', label: 'Completion %' },
       { key: 'total_collections', label: 'Total Collected' },
       { key: 'total_pending', label: 'Total Pending' },

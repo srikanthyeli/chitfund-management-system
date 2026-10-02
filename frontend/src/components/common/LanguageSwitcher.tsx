@@ -4,7 +4,7 @@ import { SUPPORTED_LANGUAGES, type LanguageCode } from '../../i18n/config';
 import { Globe } from 'lucide-react';
 
 export const LanguageSwitcher = () => {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
 
   const currentLanguage = SUPPORTED_LANGUAGES[i18n.language as LanguageCode] || SUPPORTED_LANGUAGES.en;
@@ -20,7 +20,7 @@ export const LanguageSwitcher = () => {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-        aria-label="Change language"
+        aria-label={t('change_language')}
         aria-expanded={isOpen}
         aria-haspopup="menu"
       >

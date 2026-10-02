@@ -6,7 +6,7 @@ import { Plus, IndianRupee, Search, ChevronRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 export const WinnerPayoutListPage: React.FC = () => {
-  const { t } = useTranslation(['payouts']);
+  const { t } = useTranslation(['payouts', 'common']);
 
   const navigate = useNavigate();
   const [payouts, setPayouts] = useState<any[]>([]);
@@ -35,7 +35,7 @@ export const WinnerPayoutListPage: React.FC = () => {
       <div className="flex justify-between items-center mb-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('payouts:payouts_title')}</h1>
-          <p className="text-gray-500 text-sm">Manage auction winner payouts and receipts</p>
+          <p className="text-gray-500 text-sm">{t('payouts:payouts_manage_subtitle')}</p>
         </div>
       </div>
 
@@ -43,8 +43,8 @@ export const WinnerPayoutListPage: React.FC = () => {
         <div className="flex justify-center py-10"><div className="animate-spin h-8 w-8 border-b-2 border-purple-600 rounded-full"></div></div>
       ) : payouts.length === 0 ? (
         <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 text-center border border-gray-200 dark:border-gray-700">
-          <p className="text-gray-500 mb-4">No winner payouts found.</p>
-          <p className="text-sm text-gray-400">Go to a finalized auction to create a payout.</p>
+          <p className="text-gray-500 mb-4">{t('payouts:payouts_no_results')}</p>
+          <p className="text-sm text-gray-400">{t('payouts:payouts_empty_hint')}</p>
         </div>
       ) : (
         <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">

@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useTranslation } from 'react-i18next';
 
 export const WinnerPayoutPage: React.FC = () => {
-  const { t } = useTranslation(['dashboard', 'common', 'payouts']);
+  const { t } = useTranslation(['payouts', 'common', 'collections']);
 
   const { chitGroupId, monthNumber } = useParams<{ chitGroupId: string; monthNumber: string }>();
   const navigate = useNavigate();
@@ -85,7 +85,7 @@ export const WinnerPayoutPage: React.FC = () => {
     return (
       <div className="p-4 max-w-4xl mx-auto flex flex-col items-center justify-center py-20 text-center">
         <CheckCircle2 size={64} className="text-emerald-500 mb-4" />
-        <h2 className="text-2xl font-bold">Payout Already Completed</h2>
+        <h2 className="text-2xl font-bold">{t('payouts:payouts_already_done')}</h2>
         <p className="text-gray-500 mt-2">The winner for month {monthNumber} has already been paid.</p>
         <button onClick={() => navigate(`/organizer/winner-payouts`)} className="mt-6 px-6 py-2 bg-purple-600 text-white rounded-lg font-bold">
           View Payouts
@@ -99,14 +99,14 @@ export const WinnerPayoutPage: React.FC = () => {
       <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-gray-500 hover:text-gray-700 mb-6 font-medium">
         <ArrowLeft size={20} />{t('common:back')}</button>
 
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Process Winner Payout</h1>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{t('payouts:payouts_process_winner')}</h1>
       <p className="text-gray-500 mb-6">Review the financials and pay the auction winner for Month {monthNumber}.</p>
 
       {isShort && (
         <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl flex items-start gap-3">
           <AlertCircle className="text-amber-600 shrink-0 mt-0.5" />
           <div>
-            <h3 className="font-bold text-amber-800 dark:text-amber-400">Collection Shortfall</h3>
+            <h3 className="font-bold text-amber-800 dark:text-amber-400">{t('payouts:payouts_collection_shortfall')}</h3>
             <p className="text-amber-700 dark:text-amber-500 text-sm mt-1">
               Collection is {fmt(shortAmount)} short of the payout amount. You can wait for more payments or contribute the balance as the organizer.
             </p>
@@ -133,7 +133,7 @@ export const WinnerPayoutPage: React.FC = () => {
               <span className="font-medium text-red-500">-{fmt(data.auction.maintenance_charge_amount)}</span>
             </div>
             <div className="pt-3 mt-3 border-t border-gray-100 flex justify-between font-bold text-lg">
-              <span>Final Payout Amount</span>
+              <span>{t('payouts:payouts_final_amount')}</span>
               <span className="text-purple-600">{fmt(data.auction.payout_amount)}</span>
             </div>
           </div>
@@ -145,19 +145,19 @@ export const WinnerPayoutPage: React.FC = () => {
           
           <div className="space-y-3">
             <div className="flex justify-between text-sm">
-              <span className="text-gray-500">Expected Collection</span>
+              <span className="text-gray-500">{t('payouts:payouts_expected_collection')}</span>
               <span className="font-medium">{fmt(data.collection.expected_collection_amount)}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-gray-500">Collected Amount</span>
+              <span className="text-gray-500">{t('payouts:payouts_collected_amount')}</span>
               <span className="font-medium text-emerald-600">{fmt(data.collection.actual_collection_amount)}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-gray-500">Pending Dues</span>
+              <span className="text-gray-500">{t('payouts:payouts_pending_dues')}</span>
               <span className="font-medium text-amber-500">{fmt(data.collection.pending_collection_amount)}</span>
             </div>
             <div className="pt-3 mt-3 border-t border-gray-100 flex justify-between font-bold">
-              <span>Organizer Contribution</span>
+              <span>{t('payouts:payouts_organizer_contribution')}</span>
               <span className={isShort ? "text-amber-600" : "text-gray-400"}>
                 {isShort ? fmt(shortAmount) : '₹0'}
               </span>

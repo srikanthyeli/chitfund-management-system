@@ -27,5 +27,20 @@
   "calculator_print": "Print",
   "calculator_copied": "Copied to clipboard",
   "calculator_invalid_input": "Please enter valid values",
-  "calculator_clear": "Clear all"
+  "calculator_clear": "Clear all",
+  "calculator_principal": "Principal Amount",
+  "calculator_principal_short": "Principal",
+  "calculator_principal_placeholder": "e.g. 100000",
+  "calculator_interest_rate": "Interest Rate (₹ per ₹100 per month)",
+  "calculator_custom_rate": "Enter custom rate",
+  "calculator_bond_start": "Bond Start Date",
+  "calculator_calc_date": "Calculation Date",
+  "calculator_bond_validity": "Bond Validity",
+  "calculator_statement": "Bond Statement",
+  "calculator_statement_title": "Bond Interest Statement",
+  "calculator_total_payable": "Total Amount Payable",
+  "calculator_bond_date": "Bond Date",
+  "calculator_calc_date_short": "Calc Date",
+  "calculator_breakdown": "Calculation Breakdown",
+  "calculator_expired_renewal": "Bond Expired — Renewal Info"
 }

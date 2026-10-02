@@ -72,7 +72,7 @@ export const BondStatementActions: React.FC<Props> = ({ result, onPreview }) => 
         if (!blob) return;
         const file = new File([blob], 'Bond_Statement.png', { type: 'image/png' });
         if (navigator.share && navigator.canShare?.({ files: [file] })) {
-          await navigator.share({ title: 'Bond Interest Statement', files: [file] });
+          await navigator.share({ title: t('bondCalculator:calculator_statement_title'), files: [file] });
         } else {
           const url = URL.createObjectURL(blob);
           const a = document.createElement('a');
@@ -96,7 +96,7 @@ export const BondStatementActions: React.FC<Props> = ({ result, onPreview }) => 
     if (!el) return;
     const w = window.open('', '_blank');
     if (!w) return;
-    w.document.write(`<html><head><title>Bond Statement</title><style>body{margin:0;display:flex;justify-content:center;}@media print{body{margin:0;}}</style></head><body>${el.outerHTML}</body></html>`);
+    w.document.write(`<html><head><title>${t('bondCalculator:calculator_statement')}</title><style>body{margin:0;display:flex;justify-content:center;}@media print{body{margin:0;}}</style></head><body>${el.outerHTML}</body></html>`);
     w.document.close();
     w.focus();
     setTimeout(() => { w.print(); w.close(); }, 300);
@@ -105,7 +105,7 @@ export const BondStatementActions: React.FC<Props> = ({ result, onPreview }) => 
   const whatsappText = () => {
     const lines = [
       '--------------------------------',
-      '*Bond Interest Statement*',
+      t('bondCalculator:calculator_statement_title'),
       '',
       `Principal: ${fmtINR(result.principal)}`,
       `Interest Rate: ₹${result.interest_rate} per ₹100/month`,

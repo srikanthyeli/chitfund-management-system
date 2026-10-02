@@ -51,7 +51,7 @@ const FinalizeAuctionDialog: React.FC<Props> = ({
               <AlertTriangle size={20} />
             </div>
             <div>
-              <h2 className="font-bold text-lg text-gray-900 dark:text-white">Finalize Auction</h2>
+              <h2 className="font-bold text-lg text-gray-900 dark:text-white">{t('auctions:auctions_finalize')}</h2>
               <p className="text-xs text-gray-500 dark:text-gray-400">Month {auctionMonth} — This cannot be undone</p>
             </div>
           </div>
@@ -67,15 +67,15 @@ const FinalizeAuctionDialog: React.FC<Props> = ({
             <span className="font-semibold text-sm text-gray-900 dark:text-white">{t('common:receipt_winner')}</span>
           </div>
           <p className="font-bold text-base text-gray-900 dark:text-white">{winnerName}</p>
-          <p className="text-xs mt-0.5 text-gray-600 dark:text-gray-400">Highest bid: {fmt(winningDiscount)}</p>
+          <p className="text-xs mt-0.5 text-gray-600 dark:text-gray-400">{t('auctions:auctions_highest_bid')}: {fmt(winningDiscount)}</p>
         </div>
 
         {/* Summary table */}
         <div className="space-y-2 mb-5">
           {[
-            { label: 'Gross Chit Amount', value: fmt(grossAmount), icon: <IndianRupee size={13} /> },
-            { label: 'Maintenance Charge', value: `- ${fmt(maintenanceCharge)}`, icon: <TrendingDown size={13} /> },
-            { label: 'Auction Discount', value: `- ${fmt(winningDiscount)}`, icon: <TrendingDown size={13} /> },
+            { label: t('auctions:auctions_gross_chit'), value: fmt(grossAmount), icon: <IndianRupee size={13} /> },
+            { label: t('auctions:auctions_maintenance_charge'), value: `- ${fmt(maintenanceCharge)}`, icon: <TrendingDown size={13} /> },
+            { label: t('auctions:auctions_discount_label'), value: `- ${fmt(winningDiscount)}`, icon: <TrendingDown size={13} /> },
           ].map(row => (
             <div key={row.label} className="flex items-center justify-between text-sm">
               <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
@@ -85,7 +85,7 @@ const FinalizeAuctionDialog: React.FC<Props> = ({
             </div>
           ))}
           <div className="border-t border-gray-200 dark:border-gray-700 pt-2 flex items-center justify-between font-bold text-sm">
-            <span className="text-gray-900 dark:text-white">Winner Payout</span>
+            <span className="text-gray-900 dark:text-white">{t('auctions:auctions_winner_payout')}</span>
             <span className="text-emerald-600 dark:text-emerald-400">{fmt(winnerPayout)}</span>
           </div>
           <div className="flex items-center justify-between text-sm pt-1">

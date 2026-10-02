@@ -47,7 +47,7 @@ export const MemberDashboardPage: React.FC = () => {
             <Briefcase size={24} />
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Active Chits</p>
+            <p className="text-sm font-medium text-gray-500 dark:text-gray-400">{t('common:active_chits')}</p>
             <p className="text-2xl font-bold text-gray-900 dark:text-white">{data.stats.active_chit_groups}</p>
           </div>
         </div>
@@ -57,7 +57,7 @@ export const MemberDashboardPage: React.FC = () => {
             <Trophy size={24} />
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Shares Held</p>
+            <p className="text-sm font-medium text-gray-500 dark:text-gray-400">{t('common:shares_held')}</p>
             <p className="text-2xl font-bold text-gray-900 dark:text-white">{data.stats.total_shares_held}</p>
           </div>
         </div>
@@ -67,7 +67,7 @@ export const MemberDashboardPage: React.FC = () => {
             <AlertCircle size={24} />
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Overdue Amount</p>
+            <p className="text-sm font-medium text-gray-500 dark:text-gray-400">{t('common:overdue_amount')}</p>
             <p className="text-2xl font-bold text-red-600 dark:text-red-400">₹{data.stats.pending_overdue_amount}</p>
           </div>
         </div>
@@ -77,7 +77,7 @@ export const MemberDashboardPage: React.FC = () => {
             <IndianRupee size={24} />
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Dividends Earned</p>
+            <p className="text-sm font-medium text-gray-500 dark:text-gray-400">{t('common:dividends_earned')}</p>
             <p className="text-2xl font-bold text-gray-900 dark:text-white">₹{data.stats.total_dividends_earned}</p>
           </div>
         </div>

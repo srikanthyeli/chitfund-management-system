@@ -25,11 +25,11 @@ interface Auction {
   created_at: string;
 }
 
-const STATUS_CONFIG: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
-  OPEN: { label: 'Open', color: 'bg-emerald-100 text-emerald-700 border border-emerald-200 dark:bg-emerald-500/20 dark:text-emerald-400 dark:border-emerald-500/30', icon: <Clock size={12} /> },
-  FINALIZED: { label: 'Finalized', color: 'bg-blue-100 text-blue-700 border border-blue-200 dark:bg-blue-500/20 dark:text-blue-400 dark:border-blue-500/30', icon: <CheckCircle2 size={12} /> },
-  CANCELLED: { label: 'Cancelled', color: 'bg-red-100 text-red-700 border border-red-200 dark:bg-red-500/20 dark:text-red-400 dark:border-red-500/30', icon: <XCircle size={12} /> },
-  DRAFT: { label: 'Draft', color: 'bg-gray-100 text-gray-600 border border-gray-200 dark:bg-gray-500/20 dark:text-gray-400 dark:border-gray-500/30', icon: <AlertCircle size={12} /> },
+const STATUS_CONFIG: Record<string, { labelKey: string; color: string; icon: React.ReactNode }> = {
+  OPEN: { labelKey: 'auctions:auctions_open', color: 'bg-emerald-100 text-emerald-700 border border-emerald-200 dark:bg-emerald-500/20 dark:text-emerald-400 dark:border-emerald-500/30', icon: <Clock size={12} /> },
+  FINALIZED: { labelKey: 'auctions:auctions_finalized', color: 'bg-blue-100 text-blue-700 border border-blue-200 dark:bg-blue-500/20 dark:text-blue-400 dark:border-blue-500/30', icon: <CheckCircle2 size={12} /> },
+  CANCELLED: { labelKey: 'auctions:auctions_cancelled', color: 'bg-red-100 text-red-700 border border-red-200 dark:bg-red-500/20 dark:text-red-400 dark:border-red-500/30', icon: <XCircle size={12} /> },
+  DRAFT: { labelKey: 'auctions:auctions_draft', color: 'bg-gray-100 text-gray-600 border border-gray-200 dark:bg-gray-500/20 dark:text-gray-400 dark:border-gray-500/30', icon: <AlertCircle size={12} /> },
 };
 
 const fmt = (v: string | number | null | undefined) => {
@@ -38,7 +38,7 @@ const fmt = (v: string | number | null | undefined) => {
 };
 
 export const AuctionsPage: React.FC = () => {
-  const { t } = useTranslation(['auctions', 'reports']);
+  const { t } = useTranslation(['common', 'auctions', 'reports']);
 
   const { id: chitGroupId } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -58,7 +58,7 @@ export const AuctionsPage: React.FC = () => {
       setAuctions(aRes.data.items || []);
       setChitName(cRes.data.chit_name || '');
     } catch {
-      toast.error('Failed to load auctions');
+      toast.error(t('auctions:auctions_failed_load'));
     } finally {
       setLoading(false);
     }
@@ -78,14 +78,14 @@ export const AuctionsPage: React.FC = () => {
           </button>
           <div className="flex-1 min-w-0">
             <p className="text-xs truncate" style={{ color: 'var(--text-secondary)' }}>{chitName}</p>
-            <h1 className="font-bold text-lg leading-tight" style={{ color: 'var(--text-primary)' }}>Monthly Auctions</h1>
+            <h1 className="font-bold text-lg leading-tight" style={{ color: 'var(--text-primary)' }}>{t('auctions:auctions_monthly_title')}</h1>
           </div>
           <button
             onClick={() => setShowCreate(true)}
             className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold transition-all active:scale-95 bg-purple-600 hover:bg-purple-700 text-white"
           >
             <Plus size={16} />
-            <span>New Auction</span>
+            <span>{t('auctions:auctions_new')}</span>
           </button>
         </div>
       </div>
@@ -100,7 +100,7 @@ export const AuctionsPage: React.FC = () => {
             <div className="w-16 h-16 rounded-2xl flex items-center justify-center" style={{ background: 'var(--surface-card)' }}>
               <Gavel size={28} style={{ color: 'var(--text-secondary)' }} />
             </div>
-            <p className="text-sm text-center" style={{ color: 'var(--text-secondary)' }}>No auctions yet. Create the first monthly auction.</p>
+            <p className="text-sm text-center" style={{ color: 'var(--text-secondary)' }}>{t('auctions:auctions_empty')}</p>
             <button
               onClick={() => setShowCreate(true)}
               className="px-4 py-2 rounded-xl text-sm font-semibold"
@@ -133,12 +133,12 @@ export const AuctionsPage: React.FC = () => {
                     </div>
                     <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${cfg.color}`}>
                       {cfg.icon}
-                      {cfg.label}
+                      {t(cfg.labelKey)}
                     </div>
                   </div>
                   <div className="grid grid-cols-3 gap-2">
                     <div className="text-center">
-                      <p className="text-xs mb-0.5" style={{ color: 'var(--text-secondary)' }}>Gross</p>
+                      <p className="text-xs mb-0.5" style={{ color: 'var(--text-secondary)' }}>{t('common:gross')}</p>
                       <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>{fmt(auction.gross_chit_amount)}</p>
                     </div>
                     <div className="text-center">

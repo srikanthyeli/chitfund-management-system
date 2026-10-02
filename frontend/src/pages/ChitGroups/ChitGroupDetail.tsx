@@ -66,7 +66,7 @@ interface ActivityLogItem {
 }
 
 export const ChitGroupDetail: React.FC = () => {
-  const { t } = useTranslation(['collections', 'common', 'members', 'payouts', 'chitGroups']);
+  const { t } = useTranslation(['chitGroups', 'common', 'members', 'auctions']);
 
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -316,11 +316,11 @@ export const ChitGroupDetail: React.FC = () => {
     : 1;
 
   if (loading) {
-    return <div className="text-center py-12 text-slate-500">Loading chit group details...</div>;
+    return <div className="text-center py-12 text-slate-500">{t('chitGroups:chitgroups_loading_details')}</div>;
   }
 
   if (!chit) {
-    return <div className="text-center py-12 text-red-500">Chit group not found.</div>;
+    return <div className="text-center py-12 text-red-500">{t('chitGroups:chitgroups_not_found')}</div>;
   }
 
   const isDraft = chit.status === 'DRAFT';
@@ -367,7 +367,7 @@ export const ChitGroupDetail: React.FC = () => {
                 className="inline-flex items-center space-x-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-gray-750 dark:hover:bg-gray-700 text-slate-700 dark:text-gray-300 px-4 py-2 rounded-xl text-sm font-semibold transition-colors"
               >
                 <Edit size={16} />
-                <span>Edit Settings</span>
+                <span>{t('chitGroups:chitgroups_edit_settings')}</span>
               </Link>
               {chit.allocated_shares === chit.total_shares && (
                 <button
@@ -375,7 +375,7 @@ export const ChitGroupDetail: React.FC = () => {
                   className="inline-flex items-center space-x-1.5 bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-xl text-sm font-semibold transition-colors shadow-sm"
                 >
                   <CheckCircle2 size={16} />
-                  <span>Mark Ready to Start</span>
+                  <span>{t('chitGroups:chitgroups_mark_ready')}</span>
                 </button>
               )}
               <button
@@ -383,7 +383,7 @@ export const ChitGroupDetail: React.FC = () => {
                 className="inline-flex items-center space-x-1.5 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/20 dark:hover:bg-rose-900/20 text-rose-700 dark:text-rose-400 px-4 py-2 rounded-xl text-sm font-semibold transition-colors"
               >
                 <XCircle size={16} />
-                <span>Cancel Group</span>
+                <span>{t('chitGroups:chitgroups_cancel_group')}</span>
               </button>
             </>
           )}
@@ -395,21 +395,21 @@ export const ChitGroupDetail: React.FC = () => {
                 className="inline-flex items-center space-x-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-gray-750 dark:hover:bg-gray-700 text-slate-700 dark:text-gray-300 px-4 py-2 rounded-xl text-sm font-semibold transition-colors"
               >
                 <RotateCcw size={16} />
-                <span>Revert to Draft</span>
+                <span>{t('chitGroups:chitgroups_revert_draft')}</span>
               </button>
               <button
                 onClick={() => handleOpenStatusChange('ACTIVE')}
                 className="inline-flex items-center space-x-1.5 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-colors shadow-sm"
               >
                 <Play size={16} />
-                <span>Activate Chit Group</span>
+                <span>{t('chitGroups:chitgroups_activate')}</span>
               </button>
               <button
                 onClick={() => handleOpenStatusChange('CANCELLED')}
                 className="inline-flex items-center space-x-1.5 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/20 dark:hover:bg-rose-900/20 text-rose-700 dark:text-rose-400 px-4 py-2 rounded-xl text-sm font-semibold transition-colors"
               >
                 <XCircle size={16} />
-                <span>Cancel Group</span>
+                <span>{t('chitGroups:chitgroups_cancel_group')}</span>
               </button>
             </>
           )}
@@ -418,14 +418,14 @@ export const ChitGroupDetail: React.FC = () => {
             <div className="flex items-center gap-3 flex-wrap">
               <div className="bg-green-50 dark:bg-green-950/25 border border-green-200 dark:border-green-800/40 text-green-700 dark:text-green-400 px-4 py-2 rounded-xl text-sm font-bold flex items-center space-x-2">
                 <CheckCircle2 size={16} />
-                <span>Chit is Active (Financials Locked)</span>
+                <span>{t('chitGroups:chitgroups_active_locked')}</span>
               </div>
               <Link
                 to={`/organizer/chit-groups/${chit.id}/auctions`}
                 className="inline-flex items-center space-x-2 bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-xl text-sm font-semibold transition-colors shadow-sm"
               >
                 <Gavel size={16} />
-                <span>Monthly Auctions</span>
+                <span>{t('auctions:auctions_monthly_title')}</span>
               </Link>
             </div>
           )}

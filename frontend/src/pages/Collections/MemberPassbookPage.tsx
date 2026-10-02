@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 
 export const MemberPassbookPage: React.FC = () => {
-  const { t } = useTranslation(['collections']);
+  const { t } = useTranslation(['collections', 'common', 'members']);
 
   const { memberId } = useParams();
   const navigate = useNavigate();
@@ -24,14 +24,14 @@ export const MemberPassbookPage: React.FC = () => {
       const response = await chitCollectionApi.getMemberPassbook(memberId as string);
       setData(response);
     } catch (error) {
-      toast.error('Failed to load passbook');
+      toast.error(t('members:members_passbook_failed'));
     } finally {
       setLoading(false);
     }
   };
 
-  if (loading) return <div className="p-4 text-center mt-10">Loading Passbook...</div>;
-  if (!data) return <div className="p-4 text-center text-red-500 mt-10">Data not found.</div>;
+  if (loading) return <div className="p-4 text-center mt-10 text-base">{t('members:members_loading_passbook')}</div>;
+  if (!data) return <div className="p-4 text-center text-red-500 mt-10 text-base">{t('common:data_not_found')}</div>;
 
   return (
     <div className="pb-24 max-w-lg mx-auto bg-gray-50 min-h-screen">
@@ -41,7 +41,7 @@ export const MemberPassbookPage: React.FC = () => {
             <ArrowLeft className="w-6 h-6" />
           </button>
           <BookOpen className="w-5 h-5 mr-2" />
-          <h1 className="text-xl font-bold">Digital Passbook</h1>
+          <h1 className="text-xl font-bold">{t('members:members_digital_passbook')}</h1>
         </div>
       </div>
 
@@ -52,14 +52,14 @@ export const MemberPassbookPage: React.FC = () => {
 
       <div className="px-4 space-y-4">
         {data.entries.length === 0 ? (
-          <p className="text-center text-gray-500 py-10">No records found.</p>
+          <p className="text-center text-gray-500 py-10 text-base">{t('members:members_no_records')}</p>
         ) : (
           data.entries.map((entry: any, index: number) => (
             <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
               <div className="bg-purple-50 p-3 border-b border-purple-100 flex justify-between items-center">
                 <div>
                   <h3 className="font-bold text-purple-900">{entry.chit_name}</h3>
-                  <p className="text-xs text-purple-600 font-semibold">Month {entry.month_number} ({entry.share_count} Shares)</p>
+                  <p className="text-sm text-purple-600 font-semibold">{t('common:month_shares', { month: entry.month_number, count: entry.share_count })}</p>
                 </div>
                 <span className={`px-2 py-1 rounded text-xs font-bold ${
                   entry.payment_status === 'PAID' ? 'bg-green-100 text-green-700' :
@@ -72,22 +72,22 @@ export const MemberPassbookPage: React.FC = () => {
               
               <div className="p-3">
                 <div className="grid grid-cols-2 gap-y-2 text-sm mb-3">
-                  <div className="text-gray-600">Net Payable</div>
+                  <div className="text-gray-600 text-sm">{t('common:net_payable')}</div>
                   <div className="text-right font-semibold text-gray-900">₹{entry.net_payable}</div>
                   
-                  <div className="text-gray-600">Total Paid</div>
+                  <div className="text-gray-600 text-sm">{t('common:total_paid')}</div>
                   <div className="text-right font-semibold text-green-600">₹{entry.total_paid}</div>
                   
-                  <div className="text-gray-600 font-bold">Remaining</div>
+                  <div className="text-gray-600 font-bold text-sm">{t('common:remaining')}</div>
                   <div className="text-right font-bold text-red-600">₹{entry.remaining}</div>
                 </div>
 
                 {entry.receipt_numbers && entry.receipt_numbers.length > 0 && (
                   <div className="mt-3 pt-3 border-t border-dashed border-gray-200">
-                    <p className="text-xs text-gray-500 mb-1">Receipts:</p>
+                    <p className="text-sm text-gray-500 mb-1">{t('common:receipts_label')}</p>
                     <div className="flex flex-wrap gap-1">
                       {entry.receipt_numbers.map((receipt: string) => (
-                        <span key={receipt} className="text-[10px] bg-gray-100 px-2 py-1 rounded text-gray-600 font-mono">
+                        <span key={receipt} className="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600 font-mono">
                           {receipt}
                         </span>
                       ))}

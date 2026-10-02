@@ -26,7 +26,7 @@ export const MyChitsPage: React.FC = () => {
   }, []);
 
   if (loading) {
-    return <div className="p-8 text-center text-gray-500">Loading chits...</div>;
+    return <div className="p-8 text-center text-gray-500">{t('common:loading_chits')}</div>;
   }
 
   return (
@@ -35,15 +35,15 @@ export const MyChitsPage: React.FC = () => {
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center">
             <Briefcase className="w-6 h-6 mr-2 text-purple-600" />{t('common:navigation_my_chits')}</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">View all your active and past chit groups.</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{t('common:view_my_chits_subtitle')}</p>
         </div>
       </div>
 
       {chits.length === 0 ? (
         <div className="bg-white dark:bg-gray-800 rounded-xl p-12 text-center border border-gray-200 dark:border-gray-700 shadow-sm">
           <Info className="w-12 h-12 mx-auto text-gray-400 mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white">No chits found</h3>
-          <p className="text-gray-500 mt-2">You are not part of any chit groups yet.</p>
+          <h3 className="text-lg font-medium text-gray-900 dark:text-white">{t('common:no_chits_found')}</h3>
+          <p className="text-gray-500 mt-2">{t('common:not_in_any_chit')}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -67,7 +67,7 @@ export const MyChitsPage: React.FC = () => {
                 
                 <div className="space-y-3 mt-4">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-500 dark:text-gray-400">Total Value</span>
+                    <span className="text-gray-500 dark:text-gray-400">{t('common:total_value')}</span>
                     <span className="font-semibold text-gray-900 dark:text-white">₹{chit.duration_months * chit.monthly_installment_per_share}</span>
                   </div>
                   <div className="flex justify-between text-sm">
@@ -75,11 +75,11 @@ export const MyChitsPage: React.FC = () => {
                     <span className="font-semibold text-gray-900 dark:text-white">₹{chit.monthly_installment_per_share}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-500 dark:text-gray-400">Shares Held</span>
+                    <span className="text-gray-500 dark:text-gray-400">{t('common:shares_held')}</span>
                     <span className="font-semibold text-gray-900 dark:text-white">{chit.shares_held} Share(s)</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-500 dark:text-gray-400">Current Month</span>
+                    <span className="text-gray-500 dark:text-gray-400">{t('common:current_month')}</span>
                     <span className="font-semibold text-gray-900 dark:text-white">{chit.current_month} / {chit.duration_months}</span>
                   </div>
                 </div>

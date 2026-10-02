@@ -18,7 +18,7 @@ interface MemberListItem {
 }
 
 export const MemberList: React.FC = () => {
-  const { t } = useTranslation(['dashboard', 'collections', 'members']);
+  const { t } = useTranslation(['dashboard', 'collections', 'members', 'common']);
 
   const navigate = useNavigate();
   const [members, setMembers] = useState<MemberListItem[]>([]);
@@ -64,7 +64,7 @@ export const MemberList: React.FC = () => {
       setMembers((prev) => (isReset ? items : [...prev, ...items]));
       setTotal(newTotal);
     } catch (error) {
-      toast.error('Failed to load members');
+      toast.error(t('members:members_failed_load'));
     } finally {
       setLoading(false);
       setLoadingMore(false);
@@ -269,10 +269,10 @@ export const MemberList: React.FC = () => {
             {loadingMore ? (
               <div className="flex items-center space-x-2 text-slate-500 text-sm">
                 <div className="animate-spin rounded-full h-4 w-4 border-2 border-primary border-t-transparent"></div>
-                <span>Loading more members...</span>
+                <span>{t('common:loading_more')}</span>
               </div>
             ) : members.length < total ? (
-              <span className="text-xs text-slate-400">Scroll down to load more</span>
+              <span className="text-xs text-slate-400">{t('common:scroll_load_more')}</span>
             ) : (
               <span className="text-xs text-slate-400">
                 Showing all {total} members

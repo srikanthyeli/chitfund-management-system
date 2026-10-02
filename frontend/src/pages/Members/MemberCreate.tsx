@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { normalizeIndianMobile } from '../../core/phone';
 
 export const MemberCreate: React.FC = () => {
-  const { t } = useTranslation(['common', 'organisers', 'auth']);
+  const { t } = useTranslation(['members', 'common']);
 
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -98,8 +98,8 @@ export const MemberCreate: React.FC = () => {
           <ArrowLeft size={20} />
         </Link>
         <div>
-          <h1 className="text-xl font-bold text-slate-800 dark:text-white">Register New Member</h1>
-          <p className="text-sm text-slate-500">Onboard a member under your organization</p>
+          <h1 className="text-xl font-bold text-slate-800 dark:text-white">{t('members:members_register')}</h1>
+          <p className="text-sm text-slate-500">{t('members:members_register_subtitle')}</p>
         </div>
       </div>
 
@@ -107,7 +107,7 @@ export const MemberCreate: React.FC = () => {
         
         {/* Profile Info Section */}
         <div className="space-y-4">
-          <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider border-b pb-1">Personal Details</h3>
+          <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider border-b pb-1">{t('members:members_personal_details')}</h3>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -211,7 +211,7 @@ export const MemberCreate: React.FC = () => {
 
         {/* Address Info Section */}
         <div className="space-y-4">
-          <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider border-b pb-1">Address Details</h3>
+          <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider border-b pb-1">{t('members:members_address')}</h3>
           
           <div>
             <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
@@ -308,7 +308,7 @@ export const MemberCreate: React.FC = () => {
 
         {/* Other Info */}
         <div className="space-y-4">
-          <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider border-b pb-1">Additional Notes</h3>
+          <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider border-b pb-1">{t('members:members_remarks_notes')}</h3>
           <div>
             <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
               Internal Remarks

@@ -30,7 +30,7 @@ export const PaymentHistoryDialog: React.FC<PaymentHistoryDialogProps> = ({ isOp
       const data = await chitCollectionApi.getPaymentHistory(dueId);
       setHistory(data);
     } catch {
-      toast.error('Failed to load payment history');
+      toast.error(t('common:failed_load_history'));
     } finally {
       setIsLoading(false);
     }
@@ -38,17 +38,17 @@ export const PaymentHistoryDialog: React.FC<PaymentHistoryDialogProps> = ({ isOp
 
   const handleReverse = async (receiptId: string) => {
     if (!reversalReason.trim() || reversalReason.length < 5) {
-      toast.error('Please provide a reason (min 5 characters)');
+      toast.error(t('common:reversal_reason_min'));
       return;
     }
     try {
       await chitCollectionApi.reversePayment(receiptId, { reversal_reason: reversalReason });
-      toast.success('Payment reversed');
+      toast.success(t('common:payment_reversed'));
       setReversingReceiptId(null);
       setReversalReason('');
       fetchHistory();
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Failed to reverse payment');
+      toast.error(error.response?.data?.message || t('common:failed_reverse_payment'));
     }
   };
 
@@ -59,7 +59,7 @@ export const PaymentHistoryDialog: React.FC<PaymentHistoryDialogProps> = ({ isOp
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-md overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
         <div className="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700">
-          <h2 className="text-lg font-bold text-gray-900 dark:text-white">Payment History</h2>
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white">{t('common:payment_history')}</h2>
           <button onClick={onClose} className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
             <X size={18} className="text-gray-500 dark:text-gray-400" />
           </button>
@@ -71,7 +71,7 @@ export const PaymentHistoryDialog: React.FC<PaymentHistoryDialogProps> = ({ isOp
               <div key={i} className="h-24 rounded-xl bg-gray-100 dark:bg-gray-700 animate-pulse" />
             ))
           ) : history.length === 0 ? (
-            <p className="text-center py-8 text-gray-500 dark:text-gray-400 text-sm">No payments recorded yet.</p>
+            <p className="text-center py-8 text-gray-500 dark:text-gray-400 text-sm">{t('common:no_payments_yet')}</p>
           ) : (
             history.map(receipt => (
               <div key={receipt.id} className={`rounded-xl border p-3 ${receipt.status === 'REVERSED' ? 'border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/10' : 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800'}`}>
@@ -81,14 +81,14 @@ export const PaymentHistoryDialog: React.FC<PaymentHistoryDialogProps> = ({ isOp
                     <p className="text-lg font-bold text-gray-900 dark:text-white">₹{receipt.payment_amount}</p>
                   </div>
                   {receipt.status === 'REVERSED' && (
-                    <span className="text-xs font-bold bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 px-2 py-0.5 rounded">REVERSED</span>
+                    <span className="text-xs font-bold bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 px-2 py-0.5 rounded">{t('common:receipt_reversed')}</span>
                   )}
                 </div>
                 <div className="text-xs text-gray-500 dark:text-gray-400 space-y-0.5 mb-3">
-                  <p>Date: {new Date(receipt.payment_date).toLocaleDateString('en-IN')}</p>
-                  <p>Method: {receipt.payment_method}</p>
+                  <p>{t('common:date_label')}: {new Date(receipt.payment_date).toLocaleDateString('en-IN')}</p>
+                  <p>{t('common:method_label')}: {receipt.payment_method}</p>
                   {receipt.status === 'REVERSED' && receipt.reversal_reason && (
-                    <p className="text-red-600 dark:text-red-400 mt-1">Reason: {receipt.reversal_reason}</p>
+                    <p className="text-red-600 dark:text-red-400 mt-1">{t('common:reason_label')}: {receipt.reversal_reason}</p>
                   )}
                 </div>
 
@@ -103,17 +103,17 @@ export const PaymentHistoryDialog: React.FC<PaymentHistoryDialogProps> = ({ isOp
                       onClick={() => setReversingReceiptId(reversingReceiptId === receipt.id ? null : receipt.id)}
                       className="flex-1 flex justify-center items-center gap-1.5 py-1.5 text-xs font-semibold text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors"
                     >
-                      <CornerUpLeft size={12} /> Reverse
+                      <CornerUpLeft size={12} /> {t('common:reverse')}
                     </button>
                   )}
                 </div>
 
                 {reversingReceiptId === receipt.id && (
                   <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
-                    <p className="text-xs font-bold text-red-700 dark:text-red-400 mb-2">Confirm Reversal</p>
+                    <p className="text-xs font-bold text-red-700 dark:text-red-400 mb-2">{t('common:confirm_reversal')}</p>
                     <input
                       type="text"
-                      placeholder="Reason for reversal..."
+                      placeholder={t('common:reversal_reason_placeholder')}
                       value={reversalReason}
                       onChange={e => setReversalReason(e.target.value)}
                       className="w-full px-3 py-2 text-sm rounded-lg border border-red-200 dark:border-red-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white mb-2 focus:outline-none focus:ring-2 focus:ring-red-400"
@@ -127,7 +127,7 @@ export const PaymentHistoryDialog: React.FC<PaymentHistoryDialogProps> = ({ isOp
                         onClick={() => handleReverse(receipt.id)}
                         className="px-3 py-1 text-xs font-bold text-white bg-red-600 hover:bg-red-700 rounded-lg"
                       >
-                        Confirm Reversal
+                        {t('common:confirm_reversal')}
                       </button>
                     </div>
                   </div>

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 export const ReportsDashboard = () => {
-  const { t } = useTranslation(['dashboard', 'collections', 'reports']);
+  const { t } = useTranslation(['reports', 'common']);
 
   const [metrics, setMetrics] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -25,11 +25,11 @@ export const ReportsDashboard = () => {
   }, []);
 
   if (loading) {
-    return <div className="p-8 text-center text-gray-500">Loading metrics...</div>;
+    return <div className="p-8 text-center text-gray-500">{t('reports:reports_loading_metrics')}</div>;
   }
 
   if (!metrics) {
-    return <div className="p-8 text-center text-red-500">Failed to load metrics.</div>;
+    return <div className="p-8 text-center text-red-500">{t('reports:reports_metrics_failed')}</div>;
   }
 
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
@@ -37,7 +37,7 @@ export const ReportsDashboard = () => {
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6 pb-24">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Reports & Analytics</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('reports:reports_analytics_title')}</h1>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -54,14 +54,14 @@ export const ReportsDashboard = () => {
           <p className="text-2xl font-bold text-green-600 dark:text-green-400">₹{metrics.total_winner_payouts.toLocaleString()}</p>
         </div>
         <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-          <p className="text-sm text-gray-500 dark:text-gray-400">Net Cash Flow</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">{t('reports:reports_net_cash_flow')}</p>
           <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">₹{metrics.net_cash_flow.toLocaleString()}</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
         <div className="md:col-span-2 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-          <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Collection vs Expected</h2>
+          <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">{t('reports:reports_collection_vs_expected')}</h2>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={[
@@ -79,15 +79,15 @@ export const ReportsDashboard = () => {
         </div>
 
         <div className="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col justify-between">
-          <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Detailed Reports</h2>
+          <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">{t('reports:reports_detailed')}</h2>
           <div className="flex flex-col gap-2">
-            <Link to="/organizer/reports/collections" className="text-blue-600 dark:text-blue-400 hover:underline">Collection Report &rarr;</Link>
-            <Link to="/organizer/reports/pending-collections" className="text-blue-600 dark:text-blue-400 hover:underline">Pending Collections &rarr;</Link>
-            <Link to="/organizer/reports/auctions" className="text-blue-600 dark:text-blue-400 hover:underline">Auction Report &rarr;</Link>
-            <Link to="/organizer/reports/winner-payouts" className="text-blue-600 dark:text-blue-400 hover:underline">Winner Payout Report &rarr;</Link>
-            <Link to="/organizer/reports/member-financial" className="text-blue-600 dark:text-blue-400 hover:underline">Member Financial Report &rarr;</Link>
-            <Link to="/organizer/reports/organizer-financial" className="text-blue-600 dark:text-blue-400 hover:underline">Organizer Financial Report &rarr;</Link>
-            <Link to="/organizer/reports/chit-performance" className="text-blue-600 dark:text-blue-400 hover:underline">Chit Performance Report &rarr;</Link>
+            <Link to="/organizer/reports/collections" className="text-blue-600 dark:text-blue-400 hover:underline">{t('reports:reports_collection_link')}</Link>
+            <Link to="/organizer/reports/pending-collections" className="text-blue-600 dark:text-blue-400 hover:underline">{t('reports:reports_pending_link')}</Link>
+            <Link to="/organizer/reports/auctions" className="text-blue-600 dark:text-blue-400 hover:underline">{t('reports:reports_auction')} →</Link>
+            <Link to="/organizer/reports/winner-payouts" className="text-blue-600 dark:text-blue-400 hover:underline">{t('reports:reports_winner_payout')} →</Link>
+            <Link to="/organizer/reports/member-financial" className="text-blue-600 dark:text-blue-400 hover:underline">{t('reports:reports_member_financial')} →</Link>
+            <Link to="/organizer/reports/organizer-financial" className="text-blue-600 dark:text-blue-400 hover:underline">{t('reports:reports_organiser_financial')} →</Link>
+            <Link to="/organizer/reports/chit-performance" className="text-blue-600 dark:text-blue-400 hover:underline">{t('reports:reports_chit_performance')} →</Link>
           </div>
         </div>
       </div>

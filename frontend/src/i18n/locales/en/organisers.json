@@ -17,7 +17,7 @@
   "organisers_active": "Active",
   "organisers_inactive": "Inactive",
   "organisers_suspended": "Suspended",
-  "organisers_search_placeholder": "Search organisers by name or email",
+  "organisers_search_placeholder": "Search by name, code or mobile...",
   "organisers_filter_status": "Filter by Status",
   "organisers_add_success": "Organiser added successfully",
   "organisers_add_error": "Failed to add organiser",
@@ -36,5 +36,16 @@
   "organisers_action": "Actions",
   "organisers_view": "View",
   "organisers_edit_button": "Edit",
-  "organisers_delete_button": "Delete"
+  "organisers_delete_button": "Delete",
+  "organisers_manage_subtitle": "Manage all chit fund organizers in the system",
+  "organisers_add": "Add Organizer",
+  "organisers_loading": "Loading organizers...",
+  "organisers_created": "Organizer Created!",
+  "organisers_code": "Organizer Code",
+  "organisers_login_mobile": "Login Mobile",
+  "organisers_create_title": "Create Organizer",
+  "organisers_create_subtitle": "Register a new chit fund organizer",
+  "organisers_name_required": "Organizer Name *",
+  "organisers_mobile_required": "Mobile Number *",
+  "organisers_village_city": "Village/City"
 }

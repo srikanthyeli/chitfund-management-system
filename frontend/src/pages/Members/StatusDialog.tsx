@@ -21,7 +21,7 @@ export const StatusDialog: React.FC<StatusDialogProps> = ({
   memberName,
   onSuccess,
 }) => {
-  const { t } = useTranslation(['common']);
+  const { t } = useTranslation(['members', 'common']);
 
   const [remarks, setRemarks] = useState('');
   const [loading, setLoading] = useState(false);
@@ -65,7 +65,7 @@ export const StatusDialog: React.FC<StatusDialogProps> = ({
           <div className="flex items-start space-x-3 p-3 bg-amber-50 dark:bg-amber-950/20 text-amber-800 dark:text-amber-300 rounded-xl border border-amber-100 dark:border-amber-900/30 text-sm">
             <AlertTriangle className="mt-0.5 shrink-0" size={18} />
             <div>
-              <p className="font-semibold">Confirm Status Change</p>
+              <p className="font-semibold">{t('members:members_confirm_status')}</p>
               <p className="mt-0.5 opacity-90">
                 Are you sure you want to {currentStatus ? 'deactivate' : 'activate'}{' '}
                 <span className="font-bold">{memberName}</span>?
@@ -79,7 +79,7 @@ export const StatusDialog: React.FC<StatusDialogProps> = ({
               Reason / Remarks (Optional)
             </label>
             <textarea
-              placeholder="e.g. Left village, unpaid dues, etc."
+              placeholder={t('members:members_status_reason_placeholder')}
               rows={3}
               value={remarks}
               onChange={(e) => setRemarks(e.target.value)}

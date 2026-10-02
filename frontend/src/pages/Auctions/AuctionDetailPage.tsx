@@ -78,7 +78,7 @@ const fmt = (v: string | number | null | undefined) => {
 };
 
 export const AuctionDetailPage: React.FC = () => {
-  const { t } = useTranslation(['collections', 'reports']);
+  const { t } = useTranslation(['common', 'collections', 'reports']);
 
   const { id: chitGroupId, auctionId } = useParams<{ id: string; auctionId: string }>();
   const navigate = useNavigate();
@@ -153,10 +153,10 @@ export const AuctionDetailPage: React.FC = () => {
         {/* Summary Cards */}
         <div className="grid grid-cols-2 gap-3">
           {[
-            { label: 'Gross Amount', value: fmt(auction.gross_chit_amount), icon: <IndianRupee size={16} />, color: 'text-purple-600 dark:text-purple-400' },
-            { label: 'Maintenance', value: fmt(auction.maintenance_charge), icon: <TrendingUp size={16} />, color: 'text-amber-600 dark:text-amber-400' },
-            { label: 'Highest Bid', value: highestBid != null ? fmt(highestBid) : '—', icon: <Gavel size={16} />, color: 'text-emerald-600 dark:text-emerald-400' },
-            { label: 'Est. Payout', value: estimatedPayout != null ? fmt(estimatedPayout) : '—', icon: <Crown size={16} />, color: 'text-pink-500 dark:text-pink-400' },
+            { label: t('auctions:auctions_gross_amount'), value: fmt(auction.gross_chit_amount), icon: <IndianRupee size={16} />, color: 'text-purple-600 dark:text-purple-400' },
+            { label: t('common:maintenance'), value: fmt(auction.maintenance_charge), icon: <TrendingUp size={16} />, color: 'text-amber-600 dark:text-amber-400' },
+            { label: t('auctions:auctions_highest_bid'), value: highestBid != null ? fmt(highestBid) : '—', icon: <Gavel size={16} />, color: 'text-emerald-600 dark:text-emerald-400' },
+            { label: t('auctions:auctions_payout_label'), value: estimatedPayout != null ? fmt(estimatedPayout) : '—', icon: <Crown size={16} />, color: 'text-pink-500 dark:text-pink-400' },
           ].map(card => (
             <div key={card.label} className="rounded-2xl p-4 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
               <div className={`flex items-center gap-2 mb-2 ${card.color}`}>
@@ -179,21 +179,21 @@ export const AuctionDetailPage: React.FC = () => {
           <div className="rounded-2xl p-5 border border-yellow-400/30 bg-yellow-400/5 dark:bg-yellow-400/10">
             <div className="flex items-center gap-2 mb-3">
               <Trophy size={18} className="text-yellow-500" />
-              <span className="font-bold text-gray-900 dark:text-white">Auction Winner</span>
+              <span className="font-bold text-gray-900 dark:text-white">{t('auctions:auctions_winner_section')}</span>
             </div>
             <p className="font-bold text-xl mb-1 text-gray-900 dark:text-white">{auction.winner.member_name}</p>
             <p className="text-xs mb-3 text-gray-500 dark:text-gray-400">{auction.winner.member_code}</p>
             <div className="grid grid-cols-3 gap-3">
               <div>
-                <p className="text-xs mb-0.5 text-gray-500 dark:text-gray-400">Discount</p>
+                <p className="text-xs mb-0.5 text-gray-500 dark:text-gray-400">{t('common:discount')}</p>
                 <p className="font-semibold text-sm text-red-500 dark:text-red-400">{fmt(auction.winner.winning_discount)}</p>
               </div>
               <div>
-                <p className="text-xs mb-0.5 text-gray-500 dark:text-gray-400">Payout</p>
+                <p className="text-xs mb-0.5 text-gray-500 dark:text-gray-400">{t('auctions:auctions_payout_label')}</p>
                 <p className="font-semibold text-sm text-emerald-600 dark:text-emerald-400">{fmt(auction.winner.winner_payout_amount)}</p>
               </div>
               <div>
-                <p className="text-xs mb-0.5 text-gray-500 dark:text-gray-400">Bonus/Share</p>
+                <p className="text-xs mb-0.5 text-gray-500 dark:text-gray-400">{t('common:bonus_per_share')}</p>
                 <p className="font-semibold text-sm text-purple-600 dark:text-purple-400">{fmt(auction.winner.bonus_per_share)}</p>
               </div>
             </div>
@@ -264,7 +264,7 @@ export const AuctionDetailPage: React.FC = () => {
           {activeBids.length === 0 ? (
             <div className="rounded-2xl p-8 text-center border" style={{ background: 'var(--surface-card)', borderColor: 'var(--border-subtle)' }}>
               <Gavel size={24} className="mx-auto mb-2" style={{ color: 'var(--text-secondary)' }} />
-              <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>No bids yet</p>
+              <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{t('auctions:auctions_no_bids')}</p>
             </div>
           ) : (
             <div className="space-y-2">

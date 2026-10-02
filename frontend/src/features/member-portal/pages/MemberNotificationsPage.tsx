@@ -29,7 +29,7 @@ export const MemberNotificationsPage: React.FC = () => {
       <h1 className="text-2xl font-bold flex items-center"><Bell className="mr-2 text-purple-600"/>{t('common:navigation_notifications')}</h1>
       {loading ? <p>{t('common:loading')}</p> : (
         <div className="space-y-4">
-          {notifications.length === 0 ? <p>No notifications.</p> : notifications.map(n => (
+          {notifications.length === 0 ? <p>{t('common:no_notifications')}</p> : notifications.map(n => (
             <div key={n.id} className={`p-4 rounded-xl border ${n.is_read ? 'bg-white border-gray-200' : 'bg-purple-50 border-purple-200'}`}>
               <h3 className="font-bold">{n.title}</h3>
               <p className="text-sm text-gray-600">{n.message}</p>

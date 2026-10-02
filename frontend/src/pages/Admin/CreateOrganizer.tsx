@@ -60,7 +60,7 @@ export const CreateOrganizer = () => {
           <div className="flex justify-center mb-6">
             <CheckCircle2 className="w-16 h-16 text-green-500" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Organizer Created!</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{t('organisers:organisers_created')}</h2>
           <p className="text-gray-500 dark:text-gray-400 mb-8">
             Please share these credentials with the organizer. They can log in using their mobile number and an OTP.
           </p>
@@ -68,13 +68,13 @@ export const CreateOrganizer = () => {
           <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-6 space-y-4 text-left">
             <div className="flex justify-between items-center pb-4 border-b border-gray-200 dark:border-gray-700">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Organizer Code</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{t('organisers:organisers_code')}</p>
                 <p className="font-mono font-medium text-gray-900 dark:text-white mt-1">{successData.organizer_code}</p>
               </div>
             </div>
             <div className="flex justify-between items-center pb-4 border-b border-gray-200 dark:border-gray-700">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Login Mobile</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{t('organisers:organisers_login_mobile')}</p>
                 <p className="font-mono font-medium text-gray-900 dark:text-white mt-1">{successData.login_mobile}</p>
               </div>
             </div>
@@ -101,8 +101,8 @@ export const CreateOrganizer = () => {
           <ArrowLeft size={24} />
         </button>
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Create Organizer</h1>
-          <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">Register a new chit fund organizer</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('organisers:organisers_create_title')}</h1>
+          <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">{t('organisers:organisers_create_subtitle')}</p>
         </div>
       </div>
 
@@ -110,7 +110,7 @@ export const CreateOrganizer = () => {
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Organizer Name *</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('organisers:organisers_name_required')}</label>
               <input
                 type="text"
                 name="name"
@@ -122,7 +122,7 @@ export const CreateOrganizer = () => {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Mobile Number *</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('organisers:organisers_mobile_required')}</label>
               <input
                 type="tel"
                 name="mobile"
@@ -158,7 +158,7 @@ export const CreateOrganizer = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Village/City</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('organisers:organisers_village_city')}</label>
               <input
                 type="text"
                 name="village"

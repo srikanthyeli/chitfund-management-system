@@ -82,7 +82,7 @@ export const MemberDetail: React.FC = () => {
   }, [id]);
 
   if (loading) {
-    return <div className="flex justify-center p-8">Loading member profile...</div>;
+    return <div className="flex justify-center p-8">{t('members:members_loading_profile')}</div>;
   }
 
   if (!member) return null;
@@ -192,7 +192,7 @@ export const MemberDetail: React.FC = () => {
               <div className="flex items-start space-x-3">
                 <User className="text-slate-400 mt-0.5" size={18} />
                 <div>
-                  <p className="text-xs text-slate-500">Full Name</p>
+                  <p className="text-xs text-slate-500">{t('members:members_full_name')}</p>
                   <p className="font-medium text-slate-800 dark:text-gray-200">{member.full_name}</p>
                 </div>
               </div>
@@ -200,7 +200,7 @@ export const MemberDetail: React.FC = () => {
               <div className="flex items-start space-x-3">
                 <FileText className="text-slate-400 mt-0.5" size={18} />
                 <div>
-                  <p className="text-xs text-slate-500">Member Code</p>
+                  <p className="text-xs text-slate-500">{t('members:members_member_code')}</p>
                   <p className="font-mono font-bold text-slate-800 dark:text-gray-200">{member.member_code}</p>
                 </div>
               </div>
@@ -210,7 +210,7 @@ export const MemberDetail: React.FC = () => {
               <div className="flex items-start space-x-3">
                 <Phone className="text-slate-400 mt-0.5" size={18} />
                 <div>
-                  <p className="text-xs text-slate-500">Primary Mobile</p>
+                  <p className="text-xs text-slate-500">{t('members:members_primary_mobile')}</p>
                   <p className="font-medium text-slate-800 dark:text-gray-200">{member.mobile}</p>
                 </div>
               </div>
@@ -218,7 +218,7 @@ export const MemberDetail: React.FC = () => {
               <div className="flex items-start space-x-3">
                 <Phone className="text-slate-400 mt-0.5" size={18} />
                 <div>
-                  <p className="text-xs text-slate-500">Alternate Mobile</p>
+                  <p className="text-xs text-slate-500">{t('members:members_alternate_mobile')}</p>
                   <p className="font-medium text-slate-800 dark:text-gray-200">{member.alternate_mobile || '-'}</p>
                 </div>
               </div>
@@ -228,7 +228,7 @@ export const MemberDetail: React.FC = () => {
               <div className="flex items-start space-x-3">
                 <FileText className="text-slate-400 mt-0.5" size={18} />
                 <div>
-                  <p className="text-xs text-slate-500">Aadhaar (Last 4)</p>
+                  <p className="text-xs text-slate-500">{t('members:members_aadhaar_last4')}</p>
                   <p className="font-medium text-slate-800 dark:text-gray-200">{member.aadhaar_last4 ? `xxxx xxxx ${member.aadhaar_last4}` : '-'}</p>
                 </div>
               </div>
@@ -250,19 +250,19 @@ export const MemberDetail: React.FC = () => {
                   <p className="font-medium text-slate-800 dark:text-gray-200">{member.address || '-'}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-slate-500">Village / Mandal</p>
+                  <p className="text-xs text-slate-500">{t('members:members_village_mandal')}</p>
                   <p className="font-medium text-slate-800 dark:text-gray-200">
                     {member.village || '-'}{member.mandal ? `, ${member.mandal}` : ''}
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-slate-500">District / State</p>
+                  <p className="text-xs text-slate-500">{t('members:members_district_state')}</p>
                   <p className="font-medium text-slate-800 dark:text-gray-200">
                     {member.district || '-'}{member.state ? `, ${member.state}` : ''}
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-slate-500">Pincode</p>
+                  <p className="text-xs text-slate-500">{t('members:members_pincode')}</p>
                   <p className="font-medium text-slate-800 dark:text-gray-200">{member.pincode || '-'}</p>
                 </div>
               </div>
@@ -270,7 +270,7 @@ export const MemberDetail: React.FC = () => {
 
             {member.notes && (
               <div className="border-t border-slate-50 dark:border-gray-700/50 pt-4">
-                <p className="text-xs text-slate-500">Remarks / Notes</p>
+                <p className="text-xs text-slate-500">{t('members:members_remarks_notes')}</p>
                 <p className="font-medium text-slate-700 dark:text-gray-300 mt-1 bg-slate-50 dark:bg-gray-900 p-3 rounded-xl border border-slate-100 dark:border-gray-800 text-sm">
                   {member.notes}
                 </p>
@@ -282,7 +282,7 @@ export const MemberDetail: React.FC = () => {
         {activeTab === 'chits' && (
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-slate-100 dark:border-gray-700 p-6 text-center">
             <FileText className="mx-auto text-slate-300 dark:text-gray-600 mb-3" size={40} />
-            <h3 className="font-bold text-slate-800 dark:text-white">No Chit Groups</h3>
+            <h3 className="font-bold text-slate-800 dark:text-white">{t('members:members_no_chit_groups')}</h3>
             <p className="text-slate-500 text-xs mt-1 max-w-xs mx-auto">
               This member is not enrolled in any chit groups. Chit allocations and group operations will be implemented in the next phase.
             </p>
@@ -297,7 +297,7 @@ export const MemberDetail: React.FC = () => {
 
             {activities.length === 0 ? (
               <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-slate-100 dark:border-gray-700 text-center">
-                <p className="text-slate-500 text-xs">No activity logs recorded yet.</p>
+                <p className="text-slate-500 text-xs">{t('members:members_no_activity')}</p>
               </div>
             ) : (
               <div className="relative pl-6 border-l-2 border-slate-200 dark:border-gray-700 space-y-6 py-2 ml-3">
@@ -334,7 +334,7 @@ export const MemberDetail: React.FC = () => {
                       {/* Display Change Details */}
                       {act.action_type === 'MEMBER_UPDATED' && act.new_values && (
                         <div className="bg-slate-50 dark:bg-gray-900/50 p-2.5 rounded-lg border border-slate-100 dark:border-gray-850 text-xs space-y-1 mt-2">
-                          <p className="font-semibold text-slate-500">Changed fields:</p>
+                          <p className="font-semibold text-slate-500">{t('members:members_changed_fields')}</p>
                           {Object.keys(act.new_values).map((key) => (
                             <div key={key} className="grid grid-cols-3 gap-2 py-0.5">
                               <span className="font-mono text-slate-400 capitalize">{key.replace('_', ' ')}</span>

@@ -174,7 +174,7 @@ export const ChitGroupEdit: React.FC = () => {
   };
 
   if (loading) {
-    return <div className="text-center py-12 text-slate-500">Loading chit group details...</div>;
+    return <div className="text-center py-12 text-slate-500">{t('chitGroups:chitgroups_loading_details')}</div>;
   }
 
   return (
@@ -185,7 +185,7 @@ export const ChitGroupEdit: React.FC = () => {
         </Link>
         <div>
           <h1 className="text-xl font-bold text-slate-800 dark:text-white">{t('chitGroups:chitgroups_edit')}</h1>
-          <p className="text-sm text-slate-500">Update configuration settings of this chit group</p>
+          <p className="text-sm text-slate-500">{t('chitGroups:chitgroups_edit_subtitle')}</p>
         </div>
       </div>
 
@@ -193,7 +193,7 @@ export const ChitGroupEdit: React.FC = () => {
         
         {/* Core Details */}
         <div className="space-y-4">
-          <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider border-b pb-1">Group Details</h3>
+          <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider border-b pb-1">{t('chitGroups:chitgroups_group_details')}</h3>
           
           <div>
             <label className="block text-xs font-medium text-slate-600 dark:text-slate-400 mb-1">
@@ -230,7 +230,7 @@ export const ChitGroupEdit: React.FC = () => {
 
         {/* Financial Configurations */}
         <div className="space-y-4">
-          <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider border-b pb-1">Financial Configurations</h3>
+          <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider border-b pb-1">{t('chitGroups:chitgroups_financial_config')}</h3>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -317,8 +317,8 @@ export const ChitGroupEdit: React.FC = () => {
                 onChange={handleChange}
                 className="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-gray-700 dark:bg-gray-900 text-slate-900 dark:text-white text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary"
               >
-                <option value="FIXED">Fixed Amount (₹)</option>
-                <option value="PERCENTAGE">Percentage (%)</option>
+                <option value="FIXED">{t('chitGroups:chitgroups_fixed_amount')}</option>
+                <option value="PERCENTAGE">{t('chitGroups:chitgroups_percentage')}</option>
               </select>
             </div>
 
@@ -344,7 +344,7 @@ export const ChitGroupEdit: React.FC = () => {
 
         {/* Schedule */}
         <div className="space-y-4">
-          <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider border-b pb-1">Timeline & Schedule</h3>
+          <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider border-b pb-1">{t('chitGroups:chitgroups_timeline')}</h3>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -387,7 +387,7 @@ export const ChitGroupEdit: React.FC = () => {
         <div className="p-3 bg-amber-50 dark:bg-amber-950/20 text-amber-800 dark:text-amber-300 rounded-xl flex items-start space-x-2 text-xs">
           <ShieldAlert size={16} className="shrink-0 mt-0.5" />
           <div>
-            <p className="font-semibold">Financial Settings Lock</p>
+            <p className="font-semibold">{t('chitGroups:chitgroups_financial_lock')}</p>
             <p className="mt-0.5">Configurations are locked once you start allocating member shares. Once the chit becomes ACTIVE, details cannot be changed.</p>
           </div>
         </div>

@@ -127,7 +127,7 @@ export const ReceiptShareModal: React.FC<ReceiptShareModalProps> = ({
       className="fixed inset-0 z-[80] flex items-end sm:items-center justify-center"
       role="dialog"
       aria-modal="true"
-      aria-label="Share Receipt"
+      aria-label={t('common:share_receipt')}
     >
       {/* Backdrop */}
       <div
@@ -154,12 +154,12 @@ export const ReceiptShareModal: React.FC<ReceiptShareModalProps> = ({
         {/* Header */}
         <div className="flex items-start justify-between mb-1">
           <div>
-            <h2 className="text-base font-bold text-gray-900 dark:text-white">Share Receipt</h2>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Choose an app to share a receipt image.</p>
+            <h2 className="text-base font-bold text-gray-900 dark:text-white">{t('common:share_receipt')}</h2>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{t('common:share_choose_app')}</p>
           </div>
           <button
             onClick={onClose}
-            aria-label="Close share sheet"
+            aria-label={t('common:close_share_sheet')}
             className="p-1.5 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
           >
             <X size={18} />

@@ -63,7 +63,7 @@ const BidEntryDialog: React.FC<Props> = ({ auctionId, maxBid, auctionMonth, elig
       >
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="font-bold text-lg text-gray-900 dark:text-white">Submit Bid</h2>
+            <h2 className="font-bold text-lg text-gray-900 dark:text-white">{t('auctions:auctions_submit_bid')}</h2>
             <p className="text-xs text-gray-500">Month {auctionMonth} · Max {fmt(maxBid)}</p>
           </div>
           <button onClick={onClose} className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-gray-500">
@@ -73,7 +73,7 @@ const BidEntryDialog: React.FC<Props> = ({ auctionId, maxBid, auctionMonth, elig
 
         {eligible.length === 0 ? (
           <div className="text-center py-8">
-            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>No eligible members available to bid.</p>
+            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>{t('auctions:auctions_no_eligible')}</p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -128,7 +128,7 @@ const BidEntryDialog: React.FC<Props> = ({ auctionId, maxBid, auctionMonth, elig
                 type="text"
                 value={remarks}
                 onChange={e => setRemarks(e.target.value)}
-                placeholder="e.g. Urgent medical need"
+                placeholder={t('auctions:auctions_reason_placeholder')}
                 className="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-sm outline-none focus:ring-2 focus:ring-purple-600 text-gray-900 dark:text-white"
               />
             </div>

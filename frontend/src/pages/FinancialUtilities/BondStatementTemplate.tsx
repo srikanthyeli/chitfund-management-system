@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { BadgeIndianRupee, ShieldCheck, Calendar, TrendingUp, AlertTriangle } from 'lucide-react';
 import type { BondInterestResponse } from '../../core/bondInterestApi';
 
@@ -21,6 +22,7 @@ const durationStr = (r: BondInterestResponse) => {
 };
 
 export const BondStatementTemplate: React.FC<Props> = ({ result }) => {
+  const { t } = useTranslation(['bondCalculator', 'common']);
   const isExpired = result.bond_status === 'EXPIRED';
 
   return (
@@ -37,9 +39,9 @@ export const BondStatementTemplate: React.FC<Props> = ({ result }) => {
               <BadgeIndianRupee size={36} color="#ffffff" />
             </div>
           </div>
-          <h1 className="text-2xl font-bold tracking-wider leading-tight">CHITFUND</h1>
-          <h2 className="text-xs font-semibold tracking-[0.2em] mb-3">MANAGEMENT</h2>
-          <p className="text-xs" style={{ color: '#e9d5ff' }}>Bond Interest Statement</p>
+          <h1 className="text-2xl font-bold tracking-wider leading-tight">{t('common:receipt_brand_line1')}</h1>
+          <h2 className="text-xs font-semibold tracking-[0.2em] mb-3">{t('common:receipt_brand_line2')}</h2>
+          <p className="text-xs" style={{ color: '#e9d5ff' }}>{t('bondCalculator:calculator_statement_title')}</p>
           {/* Jagged bottom */}
           <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
             <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="relative block w-full h-[15px]">
@@ -51,7 +53,7 @@ export const BondStatementTemplate: React.FC<Props> = ({ result }) => {
         <div className="px-6 pt-6 pb-4">
           {/* Total Amount Hero */}
           <div className="text-center mb-6">
-            <p className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: '#9333ea' }}>Total Amount Payable</p>
+            <p className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: '#9333ea' }}>{t('bondCalculator:calculator_total_payable')}</p>
             <div className="text-4xl font-bold mb-1" style={{ color: '#4a1c72' }}>{fmt(result.total_amount)}</div>
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold mt-1"
               style={{
@@ -68,13 +70,13 @@ export const BondStatementTemplate: React.FC<Props> = ({ result }) => {
             <div className="flex items-center gap-2">
               <Calendar size={18} color="#9333ea" />
               <div>
-                <div className="text-[10px] font-semibold uppercase" style={{ color: '#6b7280' }}>Bond Date</div>
+                <div className="text-xs font-semibold uppercase" style={{ color: '#6b7280' }}>{t('bondCalculator:calculator_bond_date')}</div>
                 <div className="text-xs font-bold" style={{ color: '#374151' }}>{fmtDate(result.bond_start_date)}</div>
               </div>
             </div>
             <div className="w-px h-8" style={{ backgroundColor: '#e9d5ff' }} />
             <div className="text-right">
-              <div className="text-[10px] font-semibold uppercase" style={{ color: '#6b7280' }}>Calc Date</div>
+              <div className="text-xs font-semibold uppercase" style={{ color: '#6b7280' }}>{t('bondCalculator:calculator_calc_date_short')}</div>
               <div className="text-xs font-bold" style={{ color: '#374151' }}>{fmtDate(result.calculation_date)}</div>
             </div>
           </div>
@@ -99,7 +101,7 @@ export const BondStatementTemplate: React.FC<Props> = ({ result }) => {
 
           {/* Breakdown */}
           <div className="mt-4 rounded-xl p-4" style={{ backgroundColor: '#faf5ff' }}>
-            <p className="text-[10px] font-bold uppercase tracking-widest mb-3" style={{ color: '#7e22ce' }}>Calculation Breakdown</p>
+            <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: '#7e22ce' }}>{t('bondCalculator:calculator_breakdown')}</p>
             {[
               { label: 'Monthly Interest', value: fmt(result.monthly_interest) },
               { label: 'Daily Interest', value: fmt(result.daily_interest) },
@@ -118,20 +120,20 @@ export const BondStatementTemplate: React.FC<Props> = ({ result }) => {
             <div className="mt-4 rounded-xl p-4 border" style={{ backgroundColor: '#fff7ed', borderColor: '#fed7aa' }}>
               <div className="flex items-center gap-2 mb-2">
                 <TrendingUp size={16} color="#ea580c" />
-                <p className="text-xs font-bold" style={{ color: '#c2410c' }}>Bond Expired — Renewal Info</p>
+                <p className="text-xs font-bold" style={{ color: '#c2410c' }}>{t('bondCalculator:calculator_expired_renewal')}</p>
               </div>
               <div className="flex justify-between text-xs">
                 <span style={{ color: '#9a3412' }}>Suggested New Principal</span>
                 <span className="font-bold" style={{ color: '#9a3412' }}>{fmt(result.suggested_new_principal)}</span>
               </div>
-              <p className="text-[10px] mt-2" style={{ color: '#c2410c' }}>
+              <p className="text-xs mt-2" style={{ color: '#c2410c' }}>
                 Prepare a new Bond using the suggested principal amount.
               </p>
             </div>
           )}
 
           {/* Generated date */}
-          <p className="text-center text-[10px] mt-5 mb-4" style={{ color: '#9ca3af' }}>
+          <p className="text-center text-xs mt-5 mb-4" style={{ color: '#9ca3af' }}>
             Generated on {new Date().toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' })}
           </p>
         </div>
@@ -140,7 +142,7 @@ export const BondStatementTemplate: React.FC<Props> = ({ result }) => {
         <div className="py-3 px-4 flex justify-between items-center" style={{ backgroundColor: '#faf5ff' }}>
           {['Secure', 'Transparent', 'Reliable'].map((t, i) => (
             <React.Fragment key={t}>
-              <div className="flex items-center gap-1 text-[10px] font-medium" style={{ color: '#7e22ce' }}>
+              <div className="flex items-center gap-1 text-xs font-medium" style={{ color: '#7e22ce' }}>
                 <ShieldCheck size={12} color="#7e22ce" />{t}
               </div>
               {i < 2 && <div className="w-1 h-1 rounded-full" style={{ backgroundColor: '#d8b4fe' }} />}

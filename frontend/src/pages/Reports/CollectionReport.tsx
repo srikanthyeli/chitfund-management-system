@@ -67,7 +67,7 @@ export const CollectionReport = () => {
       <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">{t('reports:reports_collection')}</h1>
-          <p className="text-sm text-gray-500">View and export all collection receipts.</p>
+          <p className="text-sm text-gray-500">{t('reports:reports_collection_subtitle')}</p>
         </div>
         <ExportActions data={data} filename="collection_report_page" onExportBackend={handleExportBackend} />
       </div>
@@ -80,14 +80,14 @@ export const CollectionReport = () => {
             onChange={e => setParams(p => ({ ...p, month: e.target.value ? parseInt(e.target.value) : undefined, page: 1 }))}
             className="w-32 border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
           >
-            <option value="">All</option>
+            <option value="">{t('common:all')}</option>
             {[...Array(12)].map((_, i) => (
               <option key={i+1} value={i+1}>{i+1}</option>
             ))}
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Year</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">{t('common:year')}</label>
           <select 
             value={params.year || ''} 
             onChange={e => setParams(p => ({ ...p, year: e.target.value ? parseInt(e.target.value) : undefined, page: 1 }))}
@@ -105,12 +105,12 @@ export const CollectionReport = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Receipt No</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('reports:reports_receipt_no')}</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('collections:collections_member')}</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Group</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mode</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('common:group')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('common:amount')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('common:date_label')}</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('reports:reports_mode')}</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">

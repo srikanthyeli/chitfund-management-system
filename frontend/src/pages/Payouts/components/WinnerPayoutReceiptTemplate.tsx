@@ -47,7 +47,7 @@ export const WinnerPayoutReceiptTemplate: React.FC<Props> = ({ receiptData }) =>
             alignItems: 'center', justifyContent: 'center', pointerEvents: 'none', opacity: 0.2,
           }}>
             <span style={{ fontSize: '60px', fontWeight: 'bold', transform: 'rotate(-45deg)', color: '#dc2626' }}>
-              REVERSED
+              {t('receipt_reversed')}
             </span>
           </div>
         )}
@@ -59,7 +59,7 @@ export const WinnerPayoutReceiptTemplate: React.FC<Props> = ({ receiptData }) =>
               <BadgeIndianRupee size={36} color="#ffffff" />
             </div>
           </div>
-          <h1 style={{ fontSize: '24px', fontWeight: 'bold', letterSpacing: '0.1em', margin: 0 }}>CHITFUND</h1>
+          <h1 style={{ fontSize: '24px', fontWeight: 'bold', letterSpacing: '0.1em', margin: 0 }}>{t('receipt_brand_line1')}</h1>
           <h2 style={{ fontSize: '11px', fontWeight: '600', letterSpacing: '0.2em', margin: '2px 0 12px' }}>{t('receipt_winner')}</h2>
           <p style={{ fontSize: '11px', color: '#a7f3d0', margin: 0 }}>{t('receipt_congratulations', { name: receiptData.winner_name.split(' ')[0] })}</p>
           <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', overflow: 'hidden', lineHeight: 0 }}>

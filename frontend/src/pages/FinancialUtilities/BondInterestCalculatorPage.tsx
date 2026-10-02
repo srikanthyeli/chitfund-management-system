@@ -98,14 +98,14 @@ export const BondInterestCalculatorPage: React.FC = () => {
 
         {/* Principal */}
         <div>
-          <label className={labelCls}>Principal Amount</label>
+          <label className={labelCls}>{t('bondCalculator:calculator_principal')}</label>
           <div className="relative">
             <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-semibold text-sm pointer-events-none">₹</span>
             <input
               type="number"
               min="1"
               step="any"
-              placeholder="e.g. 100000"
+              placeholder={t('bondCalculator:calculator_principal_placeholder')}
               value={principal}
               onChange={(e) => { setPrincipal(e.target.value); setErrors((p) => ({ ...p, principal: '' })); }}
               className={`${inputCls} pl-8`}
@@ -116,7 +116,7 @@ export const BondInterestCalculatorPage: React.FC = () => {
 
         {/* Interest Rate chips */}
         <div>
-          <label className={labelCls}>Interest Rate (₹ per ₹100 per month)</label>
+          <label className={labelCls}>{t('bondCalculator:calculator_interest_rate')}</label>
           <div className="flex flex-wrap gap-2 mb-2">
             {RATE_CHIPS.map((r) => (
               <button
@@ -147,7 +147,7 @@ export const BondInterestCalculatorPage: React.FC = () => {
               type="number"
               min="0.01"
               step="any"
-              placeholder="Enter custom rate"
+              placeholder={t('bondCalculator:calculator_custom_rate')}
               value={customRate}
               onChange={(e) => { setCustomRate(e.target.value); setErrors((p) => ({ ...p, rate: '' })); }}
               className={inputCls}
@@ -162,7 +162,7 @@ export const BondInterestCalculatorPage: React.FC = () => {
 
         {/* Bond Start Date */}
         <div>
-          <label className={labelCls}>Bond Start Date</label>
+          <label className={labelCls}>{t('bondCalculator:calculator_bond_start')}</label>
           <input
             type="date"
             value={bondStartDate}
@@ -174,7 +174,7 @@ export const BondInterestCalculatorPage: React.FC = () => {
 
         {/* Calculation Date */}
         <div>
-          <label className={labelCls}>Calculation Date</label>
+          <label className={labelCls}>{t('bondCalculator:calculator_calc_date')}</label>
           <input
             type="date"
             value={calcDate}
@@ -187,7 +187,7 @@ export const BondInterestCalculatorPage: React.FC = () => {
 
         {/* Bond Validity read-only */}
         <div className="flex items-center justify-between px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-700">
-          <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Bond Validity</span>
+          <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">{t('bondCalculator:calculator_bond_validity')}</span>
           <span className="text-sm font-bold text-purple-700 dark:text-purple-400">3 Years</span>
         </div>
       </div>
@@ -224,7 +224,7 @@ export const BondInterestCalculatorPage: React.FC = () => {
           {/* Summary Cards */}
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-4">
-              <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">Principal</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">{t('bondCalculator:calculator_principal_short')}</p>
               <p className="text-xl font-bold text-gray-900 dark:text-white">{fmt(result.principal)}</p>
             </div>
             <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-4">

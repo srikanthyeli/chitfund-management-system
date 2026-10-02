@@ -8,7 +8,7 @@ import type { WinnerPayoutReceiptData } from './components/WinnerPayoutReceiptTe
 import { useTranslation } from 'react-i18next';
 
 export const WinnerPayoutDetailPage: React.FC = () => {
-  const { t } = useTranslation(['collections', 'bondCalculator', 'common']);
+  const { t } = useTranslation(['payouts', 'common']);
 
   const { payoutId } = useParams<{ payoutId: string }>();
   const navigate = useNavigate();
@@ -101,7 +101,7 @@ export const WinnerPayoutDetailPage: React.FC = () => {
 
       <div className="flex justify-between items-start mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Winner Payout Details</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('payouts:payouts_details_title')}</h1>
           <p className="text-gray-500 text-sm mt-1">{payout.chit_name} - Month {payout.month_number}</p>
         </div>
         <div className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-bold uppercase">
@@ -110,18 +110,18 @@ export const WinnerPayoutDetailPage: React.FC = () => {
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 mb-6">
-        <h2 className="font-bold border-b pb-2 mb-4">Calculation</h2>
+        <h2 className="font-bold border-b pb-2 mb-4">{t('payouts:payouts_calculation')}</h2>
         <div className="space-y-3">
           <div className="flex justify-between text-sm">
             <span className="text-gray-500">{t('common:receipt_gross_chit_amount')}</span>
             <span>{fmt(payout.gross_chit_amount)}</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-gray-500">Winning Discount</span>
+            <span className="text-gray-500">{t('payouts:payouts_winning_discount')}</span>
             <span className="text-red-500">-{fmt(payout.winning_bid_discount_amount)}</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-gray-500">Maintenance</span>
+            <span className="text-gray-500">{t('payouts:payouts_maintenance')}</span>
             <span className="text-red-500">-{fmt(payout.maintenance_charge_amount)}</span>
           </div>
           <div className="pt-3 border-t font-bold flex justify-between text-lg">
@@ -142,10 +142,10 @@ export const WinnerPayoutDetailPage: React.FC = () => {
         </div>
       ) : (
         <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 mb-6">
-          <h2 className="font-bold border-b pb-2 mb-4">Payment Details</h2>
+          <h2 className="font-bold border-b pb-2 mb-4">{t('payouts:payouts_payment_details')}</h2>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="text-xs text-gray-500">Receipt No</p>
+              <p className="text-xs text-gray-500">{t('payouts:payouts_receipt_no')}</p>
               <p className="font-medium">{payout.payout_receipt_number}</p>
             </div>
             <div>
@@ -157,7 +157,7 @@ export const WinnerPayoutDetailPage: React.FC = () => {
               <p className="font-medium">{payout.transaction_reference || 'N/A'}</p>
             </div>
             <div>
-              <p className="text-xs text-gray-500">Paid Date</p>
+              <p className="text-xs text-gray-500">{t('payouts:payouts_paid_date')}</p>
               <p className="font-medium">{new Date(payout.payout_date).toLocaleDateString()}</p>
             </div>
           </div>
@@ -200,7 +200,7 @@ export const WinnerPayoutDetailPage: React.FC = () => {
       {showMarkPaid && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full p-6">
-            <h2 className="text-xl font-bold mb-4">Mark Payout as Paid</h2>
+            <h2 className="text-xl font-bold mb-4">{t('payouts:payouts_mark_paid')}</h2>
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1">{t('common:receipt_payment_mode')}</label>

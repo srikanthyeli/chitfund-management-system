@@ -57,8 +57,8 @@ const CreateAuctionDialog: React.FC<Props> = ({ chitGroupId, onClose, onCreated 
                 <Gavel size={22} className="text-white" />
               </div>
               <div>
-                <h2 className="font-bold text-lg text-white">New Auction</h2>
-                <p className="text-xs text-purple-200">Create a monthly chit auction</p>
+                <h2 className="font-bold text-lg text-white">{t('auctions:auctions_new')}</h2>
+                <p className="text-xs text-purple-200">{t('auctions:auctions_new_subtitle')}</p>
               </div>
             </div>
             <button
@@ -83,7 +83,7 @@ const CreateAuctionDialog: React.FC<Props> = ({ chitGroupId, onClose, onCreated 
               min={1}
               value={form.auction_month_number}
               onChange={e => setForm(f => ({ ...f, auction_month_number: e.target.value }))}
-              placeholder="e.g. 1"
+              placeholder={t('auctions:auctions_month_placeholder')}
               required
               className={inputClass}
             />
@@ -115,7 +115,7 @@ const CreateAuctionDialog: React.FC<Props> = ({ chitGroupId, onClose, onCreated 
                 step="0.01"
                 value={form.maintenance_charge}
                 onChange={e => setForm(f => ({ ...f, maintenance_charge: e.target.value }))}
-                placeholder="e.g. 4000"
+                placeholder={t('auctions:auctions_amount_placeholder')}
                 required
                 className={`${inputClass} pl-8`}
               />
@@ -130,7 +130,7 @@ const CreateAuctionDialog: React.FC<Props> = ({ chitGroupId, onClose, onCreated 
             <textarea
               value={form.notes}
               onChange={e => setForm(f => ({ ...f, notes: e.target.value }))}
-              placeholder="Any notes for this auction..."
+              placeholder={t('auctions:auctions_notes_placeholder')}
               rows={2}
               className={`${inputClass} resize-none`}
             />
