@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Search, IndianRupee, TrendingUp, CheckCircle2, Clock, X, Share2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { chitCollectionApi } from '../../core/chitCollectionApi';
 import { MemberDueCard } from './components/MemberDueCard';
 import { CollectPaymentDialog } from './components/CollectPaymentDialog';
 import { PaymentHistoryDialog } from './components/PaymentHistoryDialog';
 import { PaymentReceiptTemplate } from './components/PaymentReceiptTemplate';
 import { ReceiptShareModal } from '../../components/receipt/ReceiptShareModal';
+import { MoneyText } from '../../components/common/MoneyText';
+import { StatusChip } from '../../components/common/StatusChip';
 import toast from 'react-hot-toast';
 
 export const CollectionDetailsPage: React.FC = () => {
   const { chitGroupId, auctionId } = useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation(['collections', 'common']);
 
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -33,7 +37,7 @@ export const CollectionDetailsPage: React.FC = () => {
       const result = await chitCollectionApi.getCollectionSummary(chitGroupId!, auctionId!);
       setData(result);
     } catch {
-      toast.error('Failed to load collections data');
+      toast.error(t('collections:collections_details_load_error'));
     } finally {
       setLoading(false);
     }
@@ -48,7 +52,7 @@ export const CollectionDetailsPage: React.FC = () => {
       status: receipt.status,
       member_name: updatedDue.member_name,
       member_phone: updatedDue.member_phone,
-      chit_name: data?.chit_name || 'Chit Fund',
+      chit_name: data?.chit_name || t('common:receipt_chit_fund'),
       month_number: data?.month_number,
       share_count: updatedDue.share_count,
       gross_installment_amount: updatedDue.gross_installment_amount,
@@ -73,7 +77,7 @@ export const CollectionDetailsPage: React.FC = () => {
       status: receipt.status,
       member_name: due.member_name,
       member_phone: due.member_phone,
-      chit_name: data?.chit_name || 'Chit Fund',
+      chit_name: data?.chit_name || t('common:receipt_chit_fund'),
       month_number: data?.month_number,
       share_count: due.share_count,
       gross_installment_amount: due.gross_installment_amount,
@@ -88,11 +92,6 @@ export const CollectionDetailsPage: React.FC = () => {
     setIsHistoryOpen(false);
   };
 
-  const fmt = (v: any) => {
-    if (v == null) return '₹0';
-    return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 2 }).format(Number(v));
-  };
-
   if (loading) {
     return (
       <div className="p-4 space-y-3 max-w-2xl mx-auto">
@@ -105,7 +104,7 @@ export const CollectionDetailsPage: React.FC = () => {
 
   if (!data) return (
     <div className="p-4 text-center mt-10 text-red-500 dark:text-red-400">
-      Failed to load collection data.
+      {t('collections:collections_details_load_error')}
     </div>
   );
 
@@ -118,23 +117,24 @@ export const CollectionDetailsPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-24">
-      {/* Header — matches AuctionsPage style */}
+      {/* Header */}
       <div className="sticky top-0 z-10 px-4 py-3 border-b bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 shadow-sm">
         <div className="flex items-center gap-3 max-w-2xl mx-auto">
           <button
             onClick={() => navigate(-1)}
-            className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            className="touch-target p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex items-center justify-center"
+            aria-label={t('common:back')}
           >
-            <ArrowLeft size={20} className="text-gray-600 dark:text-gray-400" />
+            <ArrowLeft size={22} className="text-gray-600 dark:text-gray-400" />
           </button>
           <div className="flex-1 min-w-0">
-            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{data.chit_name || 'Chit Fund'}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{data.chit_name || t('common:receipt_chit_fund')}</p>
             <h1 className="font-bold text-lg leading-tight text-gray-900 dark:text-white">
-              Month {data.month_number} Collections
+              {t('collections:collections_month_collections', { month: data.month_number })}
             </h1>
           </div>
           <span className="px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-500/30">
-            FINALIZED
+            {t('collections:collections_finalized')}
           </span>
         </div>
       </div>
@@ -143,40 +143,36 @@ export const CollectionDetailsPage: React.FC = () => {
         {/* Summary Stats */}
         <div className="grid grid-cols-3 gap-3">
           {[
-            { label: 'Expected', value: fmt(summary.total_net_payable), icon: <IndianRupee size={14} />, color: 'text-purple-600 dark:text-purple-400', bg: 'bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800' },
-            { label: 'Collected', value: fmt(summary.total_collected), icon: <CheckCircle2 size={14} />, color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800' },
-            { label: 'Remaining', value: fmt(summary.total_remaining), icon: <Clock size={14} />, color: 'text-red-500 dark:text-red-400', bg: 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800' },
+            { label: t('collections:collections_expected'), value: summary.total_net_payable, icon: <IndianRupee size={14} />, color: 'text-purple-600 dark:text-purple-400', bg: 'bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800' },
+            { label: t('collections:collections_collected'), value: summary.total_collected, icon: <CheckCircle2 size={14} />, color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800' },
+            { label: t('collections:collections_remaining'), value: summary.total_remaining, icon: <Clock size={14} />, color: 'text-red-500 dark:text-red-400', bg: 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800' },
           ].map(card => (
             <div key={card.label} className={`rounded-2xl p-3 ${card.bg}`}>
               <div className={`flex items-center gap-1 mb-1 ${card.color}`}>
                 {card.icon}
                 <span className="text-xs font-medium text-gray-500 dark:text-gray-400">{card.label}</span>
               </div>
-              <p className={`font-bold text-sm ${card.color}`}>{card.value}</p>
+              <MoneyText amount={card.value} size="sm" showPaise className={card.color} />
             </div>
           ))}
         </div>
 
         {/* Status pills */}
-        <div className="flex gap-2 text-xs flex-wrap">
-          {[
-            { label: `${summary.paid_count || 0} Paid`, color: 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400' },
-            { label: `${summary.partial_count || 0} Partial`, color: 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400' },
-            { label: `${summary.pending_count || 0} Pending`, color: 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400' },
-          ].map(pill => (
-            <span key={pill.label} className={`px-2 py-1 rounded-full font-semibold ${pill.color}`}>{pill.label}</span>
-          ))}
+        <div className="flex gap-2 flex-wrap">
+          <StatusChip status="PAID" count={summary.paid_count || 0} />
+          <StatusChip status="PARTIALLY_PAID" count={summary.partial_count || 0} />
+          <StatusChip status="PENDING" count={summary.pending_count || 0} />
         </div>
 
         {/* Search */}
         <div className="relative">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
             type="text"
-            placeholder="Search by name or phone..."
+            placeholder={t('collections:collections_search_member')}
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="touch-target w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
           />
         </div>
 
@@ -184,7 +180,7 @@ export const CollectionDetailsPage: React.FC = () => {
         {filteredDues.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 gap-3">
             <TrendingUp size={32} className="text-gray-300 dark:text-gray-600" />
-            <p className="text-sm text-gray-500 dark:text-gray-400">No dues found.</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{t('collections:collections_no_dues')}</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -217,9 +213,10 @@ export const CollectionDetailsPage: React.FC = () => {
 
       {viewReceiptData && (
         <div className="fixed inset-0 z-[60] bg-black/80 flex flex-col items-center p-4 overflow-y-auto">
-          <button 
-            onClick={() => { setViewReceiptData(null); setIsShareOpen(false); }} 
-            className="absolute top-4 right-4 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors z-[70]"
+          <button
+            onClick={() => { setViewReceiptData(null); setIsShareOpen(false); }}
+            className="touch-target absolute top-4 right-4 p-2 bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors z-[70] flex items-center justify-center"
+            aria-label={t('common:close')}
           >
             <X size={24} />
           </button>
@@ -228,10 +225,10 @@ export const CollectionDetailsPage: React.FC = () => {
             <div className="w-full max-w-sm mx-auto mt-4 px-4 pb-4">
               <button
                 onClick={() => setIsShareOpen(true)}
-                className="w-full flex items-center justify-center gap-2 px-5 py-4 rounded-2xl font-semibold text-base bg-purple-600 hover:bg-purple-700 active:scale-95 text-white shadow-md shadow-purple-200 transition-all"
+                className="touch-target w-full flex items-center justify-center gap-2 px-5 py-4 rounded-2xl font-semibold text-base bg-purple-600 hover:bg-purple-700 active:scale-95 text-white shadow-md shadow-purple-200 transition-all"
               >
                 <Share2 size={18} />
-                Share Receipt
+                {t('collections:collections_share_receipt')}
               </button>
             </div>
           </div>

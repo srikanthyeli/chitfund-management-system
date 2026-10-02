@@ -4,6 +4,8 @@ export interface SharePayload {
   file: File;
   title: string;
   text: string;
+  /** Localized hint appended on WhatsApp URL fallback */
+  fallbackHint?: string;
 }
 
 const downloadFile = (file: File) => {
@@ -46,8 +48,10 @@ export const shareService = {
     if (await nativeShare(payload)) return;
 
     downloadFile(payload.file);
+    const hint = payload.fallbackHint
+      || '(Receipt image downloaded. Attach it manually from your downloads if WhatsApp did not open the image directly.)';
     const link = `https://wa.me/?text=${encodeURIComponent(
-      `${payload.text}\n\n(Receipt image downloaded. Attach it manually from your downloads if WhatsApp did not open the image directly.)`
+      `${payload.text}\n\n${hint}`
     )}`;
     setTimeout(() => openFallbackUrl(link), 400);
   },

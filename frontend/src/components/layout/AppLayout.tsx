@@ -131,7 +131,7 @@ export const AppLayout: React.FC = () => {
             <div className="flex items-center space-x-3 overflow-hidden">
               <img src="/logo.png" alt="Logo" className="w-8 h-8 rounded-lg shadow-sm border border-purple-100 dark:border-purple-900/30 shrink-0" />
               <div className="min-w-0">
-                <h1 className="text-lg font-bold text-purple-600 dark:text-purple-400 truncate">ChitMate</h1>
+                <h1 className="text-lg font-bold text-purple-600 dark:text-purple-400 truncate">{t('app_brand')}</h1>
                 <p className="text-xs text-gray-500 dark:text-gray-400 truncate mt-0.5">
                   {role === 'ADMIN' ? t('portal_admin') : role === 'MEMBER' ? t('portal_member') : t('portal_organizer')}
                 </p>
@@ -145,14 +145,14 @@ export const AppLayout: React.FC = () => {
             <button
               onClick={toggleTheme}
               className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700/50 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
-              title={theme === 'dark' ? 'Switch to Light' : 'Switch to Dark'}
+              title={theme === 'dark' ? t('switch_to_light') : t('switch_to_dark')}
             >
               {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
             </button>
             <button
               onClick={toggleSidebar}
               className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700/50 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
-              title={isSidebarCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
+              title={isSidebarCollapsed ? t('expand_sidebar') : t('collapse_sidebar')}
             >
               {isSidebarCollapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
             </button>
@@ -168,7 +168,7 @@ export const AppLayout: React.FC = () => {
               className={({ isActive }) =>
                 clsx(
                   'flex items-center rounded-xl transition-all font-medium',
-                  isSidebarCollapsed ? 'justify-center p-3' : 'space-x-3 px-4 py-3',
+                  isSidebarCollapsed ? 'justify-center p-3 min-h-[48px]' : 'space-x-3 px-4 py-3 min-h-[48px]',
                   isActive
                     ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400'
                     : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700/50 hover:text-gray-900 dark:hover:text-gray-200'
@@ -190,10 +190,10 @@ export const AppLayout: React.FC = () => {
               </div>
               <button
                 onClick={logout}
-                className="flex items-center w-full space-x-3 px-4 py-3 rounded-xl text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all font-medium"
+                className="touch-target flex items-center w-full space-x-3 px-4 py-3 rounded-xl text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all font-medium"
               >
                 <LogOut size={22} className="shrink-0" />
-                <span className="truncate">Sign Out</span>
+                <span className="truncate">{t('sign_out')}</span>
               </button>
             </>
           ) : (
@@ -203,7 +203,7 @@ export const AppLayout: React.FC = () => {
               </div>
               <button
                 onClick={logout}
-                title="Sign Out"
+                title={t('sign_out')}
                 className="p-3 rounded-xl text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all flex items-center justify-center"
               >
                 <LogOut size={22} className="shrink-0" />
@@ -220,28 +220,28 @@ export const AppLayout: React.FC = () => {
         <header className="md:hidden bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 h-14 sticky top-0 z-20 flex justify-between items-center shadow-sm">
           <div className="flex items-center space-x-2">
             <img src="/logo.png" alt="Logo" className="w-7 h-7 rounded-lg border border-purple-100 dark:border-purple-900/30 shrink-0" />
-            <h1 className="text-base font-bold text-purple-600 dark:text-purple-400">ChitMate</h1>
+            <h1 className="text-base font-bold text-purple-600 dark:text-purple-400">{t('app_brand')}</h1>
           </div>
           <div className="flex items-center gap-1">
             <LanguageSwitcher />
             <button
               onClick={toggleTheme}
-              className="p-2 text-gray-500 dark:text-gray-400"
-              aria-label="Toggle theme"
+              className="touch-target p-2 text-gray-500 dark:text-gray-400 flex items-center justify-center"
+              aria-label={t('toggle_theme')}
             >
               {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
             </button>
             <button
-              className="relative p-2 text-gray-500 dark:text-gray-400"
-              aria-label="Notifications"
+              className="relative touch-target p-2 text-gray-500 dark:text-gray-400 flex items-center justify-center"
+              aria-label={t('notifications')}
             >
               <Bell size={22} />
               <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-gray-800" />
             </button>
             <button
               onClick={() => setIsMoreOpen(true)}
-              className="p-1 -mr-1 ml-1 text-gray-500 hover:text-purple-600 dark:text-gray-400 dark:hover:text-purple-400"
-              aria-label="Open menu"
+              className="touch-target p-1 -mr-1 ml-1 text-gray-500 hover:text-purple-600 dark:text-gray-400 dark:hover:text-purple-400 flex items-center justify-center"
+              aria-label={t('open_menu')}
             >
               <Menu size={26} />
             </button>

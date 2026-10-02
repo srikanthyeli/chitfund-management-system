@@ -10,11 +10,67 @@
   --color-error: #EF4444;
   --color-background: #F9FAFB;
   --color-surface: #FFFFFF;
-  --font-sans: "Inter", "Outfit", system-ui, sans-serif;
+  --font-sans: "Noto Sans Telugu", "Inter", "Outfit", system-ui, sans-serif;
+
+  /* Village UX tokens */
+  --touch-min: 48px;
+  --touch-primary: 56px;
+  --money-size: 1.5rem;
+  --money-size-lg: 1.75rem;
+  --body-size: 1.0625rem;
+  --label-size: 0.875rem;
+  --line-telugu: 1.55;
+
+  /* Semantic status */
+  --color-status-paid: #059669;
+  --color-status-paid-bg: #D1FAE5;
+  --color-status-due: #D97706;
+  --color-status-due-bg: #FEF3C7;
+  --color-status-late: #DC2626;
+  --color-status-late-bg: #FEE2E2;
+  --color-status-pending: #6B7280;
+  --color-status-pending-bg: #F3F4F6;
 }
 
 @layer base {
+  html {
+    font-size: 16px;
+  }
+
   body {
     @apply bg-background text-slate-800 antialiased font-sans;
+    font-size: var(--body-size);
+    line-height: var(--line-telugu);
+  }
+
+  /* Telugu script readability */
+  :lang(te),
+  [lang="te"] {
+    line-height: var(--line-telugu);
+  }
+}
+
+@layer utilities {
+  .touch-target {
+    min-height: var(--touch-min);
+    min-width: var(--touch-min);
+  }
+
+  .touch-target-lg {
+    min-height: var(--touch-primary);
+    min-width: var(--touch-primary);
+  }
+
+  .money-text {
+    font-size: var(--money-size);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+
+  .money-text-lg {
+    font-size: var(--money-size-lg);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
   }
 }

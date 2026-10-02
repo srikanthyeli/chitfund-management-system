@@ -77,18 +77,33 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
-    fallbackLng: 'en',
+    // Prefer Telugu when no language is stored in localStorage
+    fallbackLng: 'te',
+    supportedLngs: ['te', 'en'],
+    nonExplicitSupportedLngs: true,
     defaultNS: 'common',
     interpolation: {
       escapeValue: false, // React already escapes values
     },
     detection: {
-      order: ['localStorage', 'navigator'],
+      // localStorage first; if nothing stored, fall through to fallbackLng (te)
+      order: ['localStorage'],
       caches: ['localStorage'],
+      lookupLocalStorage: 'i18nextLng',
     },
     react: {
       useSuspense: false, // Disable suspense to prevent hydration mismatch
     },
   });
+
+// Keep <html lang> in sync for typography / a11y
+const applyHtmlLang = (lng: string) => {
+  const code = (lng || 'te').split('-')[0];
+  if (typeof document !== 'undefined') {
+    document.documentElement.lang = code === 'en' ? 'en' : 'te';
+  }
+};
+applyHtmlLang(i18n.language);
+i18n.on('languageChanged', applyHtmlLang);
 
 export default i18n;

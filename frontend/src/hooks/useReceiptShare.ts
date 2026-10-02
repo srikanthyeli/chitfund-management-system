@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import html2canvas from 'html2canvas';
+import { useTranslation } from 'react-i18next';
 import { shareService, type ShareApp } from '../services/shareService';
 import toast from 'react-hot-toast';
 
@@ -16,12 +17,15 @@ export const useReceiptShare = ({
   receiptNumber,
   memberName,
   amount,
-  chitName = 'Chit Fund',
+  chitName,
 }: UseReceiptShareOptions) => {
+  const { t } = useTranslation('common');
   const [isCapturing, setIsCapturing] = useState(false);
   const [receiptBlob, setReceiptBlob] = useState<Blob | null>(null);
 
-  const safeMemberName = memberName?.trim() ? memberName : 'Member';
+  const safeMemberName = memberName?.trim() ? memberName : t('receipt_member');
+  const safeChitName = chitName?.trim() ? chitName : t('receipt_chit_fund');
+  const amountFormatted = Number(amount || 0).toLocaleString('en-IN');
 
   const captureReceipt = useCallback(async (): Promise<Blob | null> => {
     if (receiptBlob) return receiptBlob;
@@ -48,8 +52,14 @@ export const useReceiptShare = ({
     });
   }, [captureElementId, receiptBlob]);
 
-  const shareText =
-    `Hello ${safeMemberName},\n\nYour chit payment receipt is ready.\n\nReceipt No: ${receiptNumber}\nPaid: ₹${amount.toLocaleString('en-IN')}\nChit: ${chitName}\n\nThank you!`;
+  const shareText = t('receipt_share_text', {
+    name: safeMemberName,
+    receiptNumber,
+    amount: amountFormatted,
+    chitName: safeChitName,
+  });
+
+  const shareTitle = t('receipt_share_title', { receiptNumber });
 
   const handleShare = useCallback(async (app: ShareApp): Promise<boolean> => {
     setIsCapturing(true);
@@ -57,7 +67,12 @@ export const useReceiptShare = ({
       const blob = await captureReceipt();
       if (!blob) return false;
       const file = new File([blob], `Receipt_${receiptNumber}.png`, { type: 'image/png' });
-      const payload = { file, title: `Receipt - ${receiptNumber}`, text: shareText };
+      const payload = {
+        file,
+        title: shareTitle,
+        text: shareText,
+        fallbackHint: t('receipt_share_fallback_hint'),
+      };
 
       switch (app) {
         case 'whatsapp': await shareService.shareToWhatsApp(payload); break;
@@ -69,13 +84,13 @@ export const useReceiptShare = ({
       return true;
     } catch (err: any) {
       if (err?.name !== 'AbortError') {
-        toast.error('Failed to share receipt. Please try again.');
+        toast.error(t('receipt_share_failed'));
       }
       return false;
     } finally {
       setIsCapturing(false);
     }
-  }, [captureReceipt, receiptNumber, shareText]);
+  }, [captureReceipt, receiptNumber, shareText, shareTitle, t]);
 
   const resetBlob = useCallback(() => setReceiptBlob(null), []);
 
