@@ -26,6 +26,7 @@ const fmt = (v: number) =>
   new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 2 }).format(v);
 
 const BidEntryDialog: React.FC<Props> = ({ auctionId, maxBid, auctionMonth, eligibleMembers, onClose, onBidPlaced }) => {
+  const { t } = useTranslation(['auctions', 'common', 'reports']);
   const [membershipId, setMembershipId] = useState('');
   const [bidAmount, setBidAmount] = useState('');
   const [remarks, setRemarks] = useState('');
@@ -140,7 +141,7 @@ const BidEntryDialog: React.FC<Props> = ({ auctionId, maxBid, auctionMonth, elig
                 disabled={loading}
                 className="flex-1 py-3 rounded-xl text-sm font-semibold transition-all active:scale-95 disabled:opacity-50 bg-purple-600 hover:bg-purple-700 text-white"
               >
-                {loading ? 'Submitting...' : 'Submit Bid'}
+                {loading ? t('common:loading') : t('auctions:auctions_submit_bid')}
               </button>
             </div>
           </form>

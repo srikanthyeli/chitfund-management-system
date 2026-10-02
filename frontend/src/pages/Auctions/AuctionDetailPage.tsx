@@ -78,7 +78,7 @@ const fmt = (v: string | number | null | undefined) => {
 };
 
 export const AuctionDetailPage: React.FC = () => {
-  const { t } = useTranslation(['common', 'collections', 'reports']);
+  const { t } = useTranslation(['common', 'auctions', 'collections', 'reports']);
 
   const { id: chitGroupId, auctionId } = useParams<{ id: string; auctionId: string }>();
   const navigate = useNavigate();
@@ -226,7 +226,9 @@ export const AuctionDetailPage: React.FC = () => {
               onClick={() => navigate(`/organizer/chit-groups/${chitGroupId}/auctions/${auctionId}/collections`)}
               className="flex-1 flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold text-sm transition-all active:scale-95 bg-purple-600 hover:bg-purple-700 text-white shadow-sm"
             >
-              <IndianRupee size={16} />{t('collections:collections_title')}</button>
+              <IndianRupee size={16} />
+              {t('collections:collections_title')}
+            </button>
             <button
               disabled={creatingPayout}
               onClick={async () => {

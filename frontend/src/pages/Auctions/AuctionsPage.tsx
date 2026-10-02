@@ -113,7 +113,7 @@ export const AuctionsPage: React.FC = () => {
           auctions.map(auction => {
             const cfg = STATUS_CONFIG[auction.status] || STATUS_CONFIG.DRAFT;
             return (
-              <Link key={auction.id} to={`/organizer/chit-groups/${chitGroupId}/auctions/${auction.id}`}>
+              <Link key={auction.id} to={`/organizer/chit-groups/${chitGroupId}/auctions/${auction.id}`} className="block">
                 <div
                   className="rounded-2xl p-4 border transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer"
                   style={{ background: 'var(--surface-card)', borderColor: 'var(--border-subtle)' }}
@@ -156,7 +156,7 @@ export const AuctionsPage: React.FC = () => {
                     <div className="mt-3 pt-3 border-t flex items-center gap-2" style={{ borderColor: 'var(--border-subtle)' }}>
                       <CheckCircle2 size={14} className="text-emerald-400" />
                       <span className="text-xs" style={{ color: 'var(--text-secondary)' }}>
-                        Winner payout: <span className="font-semibold text-emerald-400">{fmt(auction.winner_payout_amount)}</span>
+                        {t('auctions:auctions_winner_payout')}: <span className="font-semibold text-emerald-400">{fmt(auction.winner_payout_amount)}</span>
                       </span>
                     </div>
                   )}

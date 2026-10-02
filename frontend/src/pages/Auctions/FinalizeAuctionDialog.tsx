@@ -26,6 +26,7 @@ const FinalizeAuctionDialog: React.FC<Props> = ({
   grossAmount, maintenanceCharge, winnerPayout, bonusPerShare,
   totalShares, onClose, onFinalized,
 }) => {
+  const { t } = useTranslation(['auctions', 'common']);
   const [loading, setLoading] = useState(false);
 
   const handleFinalize = async () => {

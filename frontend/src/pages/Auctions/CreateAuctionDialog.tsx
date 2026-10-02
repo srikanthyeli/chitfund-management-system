@@ -11,6 +11,7 @@ interface Props {
 }
 
 const CreateAuctionDialog: React.FC<Props> = ({ chitGroupId, onClose, onCreated }) => {
+  const { t } = useTranslation(['auctions', 'common']);
   const [form, setForm] = useState({
     auction_month_number: '',
     auction_date: new Date().toISOString().split('T')[0],
@@ -92,7 +93,9 @@ const CreateAuctionDialog: React.FC<Props> = ({ chitGroupId, onClose, onCreated 
           {/* Auction Date */}
           <div>
             <label className={labelClass}>
-              <Calendar size={12} />{t('auctions:auctions_date')}</label>
+              <Calendar size={12} />
+              {t('auctions:auctions_date')}
+            </label>
             <input
               type="date"
               value={form.auction_date}
